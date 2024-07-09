@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Saidbar from "./components/saidbar/saidbar";
 import Navbar from "./components/navbar/navbar";
-
+import { useEffect } from "react";
 //dashboard
 const Dashboard = React.lazy(() => import("./interface/dashboard/layout"));
 const NearestOvents = React.lazy(() =>
@@ -16,6 +16,7 @@ const Auktion = React.lazy(() => import("./interface/auktsion/layout"));
 const CheckList = React.lazy(() => import("./interface/checklist/layout"));
 //home work
 const Homework = React.lazy(() => import("./interface/home-work/layout"));
+const Project = React.lazy(() => import("./interface/home-work/project"));
 //requirements
 const Requirements = React.lazy(() =>
   import("./interface/requirements/layout")
@@ -29,6 +30,17 @@ const Register = React.lazy(() => import("./components/register/register"));
 
 const App = () => {
   const { pathname } = useLocation();
+  const selectedTheme = localStorage.getItem("theme");
+
+  useEffect(() => {
+    if (selectedTheme) {
+      document.body.classList.add(selectedTheme);
+    } else if (window.matchMedia("(prefers-color-scheme: light)").matches) {
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.add("light");
+    }
+  }, [selectedTheme]);
 
   return (
     <>
@@ -81,6 +93,14 @@ const App = () => {
               element={
                 <Suspense fallback={<h1>Loading...</h1>}>
                   <Homework />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/project/:id"
+              element={
+                <Suspense fallback={<h1>Loading...</h1>}>
+                  <Project />
                 </Suspense>
               }
             />

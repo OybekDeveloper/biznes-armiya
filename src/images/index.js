@@ -11,11 +11,15 @@ import greenarrow from "./green-arrow.svg";
 import yellowarrow from "./yellow-arrow.svg";
 import time from "./time.svg";
 import arrowleft from "./arrow-left.svg";
-import close from './close.svg'
-import addeventbg from './add-event-bg.png'
-import plus from './plus.svg'
-import calendar from './calendar.svg'
-import finishimg from './finish-register.svg'
+import close from "./close.svg";
+import addeventbg from "./add-event-bg.png";
+import plus from "./plus.svg";
+import calendar from "./calendar.svg";
+import finishimg from "./finish-register.svg";
+import darkLogo from "./dark-logo.png";
+import lightLogo from "./light-logo.png";
+import smile from "./smail.svg";
+
 export {
   search,
   notification,
@@ -34,5 +38,8 @@ export {
   addeventbg,
   plus,
   calendar,
-  finishimg
+  finishimg,
+  darkLogo,
+  lightLogo,
+  smile,
 };

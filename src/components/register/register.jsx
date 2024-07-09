@@ -6,17 +6,23 @@ import EmailValid from "./email-valid";
 import YourName from "./your-name";
 import GenerateCode from "./generate-code";
 import Finish from "./finish";
-
+import { useDispatch, useSelector } from "react-redux";
+import * as Action from "../../reducer/event";
+import { ApiService } from "../api.server";
 const Register = () => {
+  const { registerData, registerCode, generateCode } = useSelector(
+    (state) => state.event
+  );
+  const dispatch = useDispatch();
   const [currentStep, setCurrentStep] = useState(1);
   const steps = ["Valid your email", "Your name", "Generate code", "Finish"];
 
   const displaySteps = (step) => {
     switch (step) {
       case 1:
-        return <EmailValid />;
-      case 2:
         return <YourName />;
+      case 2:
+        return <EmailValid />;
       case 3:
         return <GenerateCode />;
       case 4:
@@ -24,9 +30,112 @@ const Register = () => {
       default:
     }
   };
+  console.log(registerCode);
+  const fetchData = async (data) => {
+    try {
+      dispatch(Action.registerLoadingSlice(true));
+      const res = await ApiService.postData("/register", data);
+      localStorage.setItem("register", JSON.stringify(res));
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+      const newErrors = {};
+      newErrors["email"] = error?.response?.data?.email[0];
+      dispatch(Action.postRegisterError(newErrors));
+    } finally {
+      dispatch(Action.registerLoadingSlice(false));
+    }
+  };
+  const fetchVerifyEmail = async (code) => {
+    try {
+      await ApiService.postData("/verify-email", { code });
+      setCurrentStep(3);
+    } catch (error) {
+      const newErrors = {};
+      newErrors["register_code"] = error?.response?.data?.detail;
+      dispatch(Action.postRegisterError(newErrors));
+      console.log(error);
+    }
+  };
+
+  const fetchGenerateCode = async () => {
+    try {
+      const res = await ApiService.postData("/check-gr/", {
+        code: generateCode,
+      });
+      localStorage.setItem("your-group",JSON.stringify(res));
+      setCurrentStep(4);
+    } catch (error) {
+      const newErrors = {};
+      newErrors["generate_code"] = error?.response?.data?.detail;
+      dispatch(Action.postRegisterError(newErrors));
+      console.log(error);
+    }
+  };
 
   const handleClick = (direction) => {
+    const newErrors = {};
     let newStep = currentStep;
+
+    if (newStep === 1) {
+      Object.keys(registerData).forEach((key) => {
+        if (!registerData["first_name"]) {
+          newErrors["first_name"] = `First Name is required`;
+        }
+        if (!registerData["last_name"]) {
+          newErrors["last_name"] = `Last Name is required`;
+        }
+        if (!registerData["phone_number"]) {
+          newErrors["phone_number"] = `Phone is required`;
+        }
+      });
+
+      if (Object.keys(newErrors).length > 0) {
+        dispatch(Action.postRegisterError(newErrors));
+        return;
+      } else {
+        dispatch(Action.postRegisterError({}));
+      }
+    } else if (newStep === 2) {
+      Object.keys(registerData).forEach((key) => {
+        if (!registerData["email"]) {
+          newErrors["email"] = `Email Name is required`;
+        }
+        if (!registerData["password"]) {
+          newErrors["password"] = `Password is required`;
+        }
+      });
+      if (Object.keys(newErrors).length > 0) {
+        dispatch(Action.postRegisterError(newErrors));
+        return;
+      } else {
+        const register = localStorage.getItem("register");
+        if (!register) {
+          fetchData(registerData);
+        } else {
+          if (!registerCode) {
+            newErrors["register_code"] = `Code is required`;
+            dispatch(Action.postRegisterError(newErrors));
+            return;
+          } else {
+            fetchVerifyEmail(registerCode);
+          }
+        }
+        dispatch(Action.postRegisterError({}));
+        return;
+      }
+    } else if (newStep === 3) {
+      if (!generateCode) {
+        newErrors["generate_code"] = `Code is required`;
+        dispatch(Action.postRegisterError(newErrors));
+        return;
+      } else {
+        fetchGenerateCode(generateCode);
+      }
+      dispatch(Action.postRegisterError({}));
+      return;
+    }
+
     direction === "next" ? newStep++ : newStep--;
     newStep > 0 && newStep <= steps.length && setCurrentStep(newStep);
   };
@@ -49,7 +158,9 @@ const Register = () => {
         </section>
         <section className="w-full h-full  col-span-3 px-6 py-4">
           <div className="relative w-full h-full bg-white rounded-[24px] flex flex-col p-6 items-center pt-[70px] gap-4">
-            <h1 className="font-bold text-primary clamp3 w-full text-center">Step {currentStep}/4</h1>
+            <h1 className="font-bold text-primary clamp3 w-full text-center">
+              Step {currentStep}/4
+            </h1>
             {displaySteps(currentStep)}
             <ControlSteps handleClick={handleClick} currentStep={currentStep} />
           </div>

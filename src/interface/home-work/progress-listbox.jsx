@@ -15,7 +15,7 @@ export default function SelectListBox() {
   const [selected, setSelected] = useState(people[1])
 
   return (
-    <div className="mx-auto w-full h-full z-[999]">
+    <div className="h-full z-[999]">
       <Listbox value={selected} onChange={setSelected}>
         <ListboxButton
           className={clsx(
@@ -32,7 +32,7 @@ export default function SelectListBox() {
         <Transition leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
           <ListboxOptions
             anchor="bottom"
-            className="w-[var(--button-width)] rounded-xl shadow-custom border-[1px] border-border bg-card p-1 mt-1 focus:outline-none z-[1000]"
+            className="w-[200px] rounded-xl shadow-custom border-[1px] border-border bg-card p-1 mt-1 focus:outline-none z-[1000]"
           >
             {people.map((person) => (
               <ListboxOption

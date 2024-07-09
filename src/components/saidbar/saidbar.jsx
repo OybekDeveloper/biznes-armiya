@@ -1,60 +1,20 @@
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { logo, messageicon, supportimg } from "../../images";
+import { lightLogo, logo, messageicon, supportimg } from "../../images";
 import { FiLogOut } from "react-icons/fi";
+
 import "./saidbar.scss";
+import { saidbarData } from "../data";
 
 const Saidbar = () => {
   const { pathname } = useLocation();
-  const saidbarData = [
-    {
-      id: 1,
-      title: "Dashboard",
-      icon: DashboardSVG(pathname === "/" ? "#3F8CFF" : "#7D8592"),
-      link: "/",
-    },
-    {
-      id: 2,
-      title: "Vazifalar",
-      icon: DashboardSVG(pathname === "/homework" ? "#3F8CFF" : "#7D8592"),
-      link: "/homework",
-    },
-    {
-      id: 3,
-      title: "VAB tarixi",
-      icon: DashboardSVG(pathname === "/history" ? "#3F8CFF" : "#7D8592"),
-      link: "/history",
-    },
-    {
-      id: 4,
-      title: "Auktsion",
-      icon: DashboardSVG(pathname === "/auktsion" ? "#3F8CFF" : "#7D8592"),
-      link: "/auktsion",
-    },
-    {
-      id: 5,
-      title: "Talablar",
-      icon: DashboardSVG(pathname === "/requirements" ? "#3F8CFF" : "#7D8592"),
-      link: "/requirements",
-    },
-    {
-      id: 6,
-      title: "Tekshirish ro'yxati",
-      icon: DashboardSVG(pathname === "/checklist" ? "#3F8CFF" : "#7D8592"),
-      link: "/checklist",
-    },
-    {
-      id: 7,
-      title: "Yangiliklar",
-      icon: DashboardSVG(pathname === "/news" ? "#3F8CFF" : "#7D8592"),
-      link: "/news",
-    },
-  ];
+
   return (
-    <main className="max-md:hidden pt-[29px] w-full h-full bg-white rounded-[24px] flex flex-col justify-between overflow-y-scroll saidbar-scrolbar pr-1">
+    <main className="max-md:hidden pt-[29px] w-full h-full bg-card rounded-[24px] flex flex-col justify-between overflow-y-scroll saidbar-scrolbar pr-1 shadow-btn_shadow">
       <div>
-        <section className="px-[16px]">
-          <img className="w-[60px] bg-primary" src={logo} alt="" />
+        <section className="px-[16px] flex justify-start items-center gap-2 font-bold ">
+          <img className="w-[60px]" src={lightLogo} alt="" />
+          <h1 className="text-xl">BIZNES ARMIYA</h1>
         </section>
         <section className="mt-[50px] flex justify-start items-start flex-col gap-2 text-[16ppx] font-[600]">
           {saidbarData.map((item, idx) => (
@@ -68,31 +28,23 @@ const Saidbar = () => {
               <div
                 className={`${
                   pathname === item.link
-                    ? "text-primary bg-[#ebf3ff]"
-                    : "text-thin hover:bg-[#faf9fd]"
+                    ? "bg-active-card text-primary"
+                    : "hover:bg-hover-card text-thin-color"
                 } w-full rounded-[10px] flex justify-start items-center gap-[16px] py-[11px] px-[8px]`}
               >
-                {item.icon}
+                <h1 className="text-[24px]">{item.icon}</h1>
                 <h1>{item.title}</h1>
               </div>
               {pathname === item.link && (
-                <div className="w-[4px] rounded-[4px] h-[44px] bg-primary"></div>
+                <div className="w-[4px] bg-primary rounded-[2px] h-[42px]"></div>
               )}
             </NavLink>
           ))}
         </section>
       </div>
-      <section className="px-[16px] w-full flex justify-end items-end flex-col mb-[45px] gap-[24px] pt-[50px]">
-        <div className="w-full ">
-          <div className="bg-[#ebf3ff] w-full p-[18px] relative rounded-[24px]">
-            <img className="absolute top-[-40px] " src={supportimg} alt="" />
-            <button className="mt-[100px] rounded-[14px] shadow-btn_shadow bg-primary py-[13px] w-full flex justify-center items-center gap-[8px]">
-              <img src={messageicon} alt="" />
-              <h1 className="text-[14px] font-[700] text-white">Support</h1>
-            </button>
-          </div>
-        </div>
-        <button className="w-full flex justify-center items-center gap-[16px] cursor-pointer hover:bg-primary hover:text-white py-[13px] text-thin transition-all duration-300 rounded-[14px] shadow-btn_shadow">
+      <section className="px-[16px] w-full flex justify-end items-end flex-col mb-[20px] gap-[24px] pt-[50px]">
+      
+        <button className="w-full flex justify-center items-center gap-[16px] cursor-pointer hover:bg-hover-card py-[13px] text-thin transition-all duration-300 rounded-[14px] shadow-btn_shadow">
           <FiLogOut className="text-[24px]" />
           <h1 className="text-[16px] font-[600]">Logout</h1>
         </button>

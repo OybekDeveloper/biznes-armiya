@@ -19,12 +19,12 @@ const NearestOvents = () => {
         <link rel="icon" href="/" />
       </Helmet>
       <main className="relative">
-      <button
-            onClick={handleCloseEvent}
-            className="sm:hidden bg-blue-500 text-white p-[10px] rounded-full fixed bottom-[20px] right-[16px] "
-          >
-            <img src={plus} alt="" />
-          </button>
+        <button
+          onClick={handleCloseEvent}
+          className="sm:hidden bg-blue-500 text-text-primary p-[10px] rounded-full fixed bottom-[20px] right-[16px] "
+        >
+          <img src={plus} alt="" />
+        </button>
         <article className="flex w-full justify-between items-center mb-[20px]">
           <div className="flex flex-col items-start justify-start">
             <NavLink
@@ -32,9 +32,11 @@ const NearestOvents = () => {
               to={"/"}
             >
               <img className="w-[24px] h-[24px]" src={arrowleft} alt="" />
-              <p className="text-primary text-[14px]">Back to Dashboard</p>
+              <p className="text-text-primary text-[14px]">Back to Dashboard</p>
             </NavLink>
-            <h1 className="font-bold clamp2 text-black">Nearest Events</h1>
+            <h1 className="font-bold clamp2 text-text-primary">
+              Nearest Events
+            </h1>
           </div>
           <button
             onClick={handleCloseEvent}
@@ -46,12 +48,12 @@ const NearestOvents = () => {
         <div className="grid grid-cols-2 max-sm:grid-cols-1 w-full gap-[15px] flex-1">
           {[1, 2, 3].map((item, idx) => (
             <div
-              className="flex h-[150px] w-full rounded-[24px] p-[24px] justify-between items-center bg-white gap-2"
+              className="flex h-[150px] w-full rounded-[24px] p-[24px] justify-between items-center bg-card gap-2"
               key={idx}
             >
               <div className="w-[4px] h-full bg-primary rounded-[4px]"></div>
               <div className="h-full flex flex-col justify-between">
-                <h1 className="w-[90%] lg:clamp3 max-lg:clamp4 text-black font-bold">
+                <h1 className="w-[90%] lg:clamp3 max-lg:clamp4 text-text-primary font-bold">
                   Presentation of the new department
                 </h1>
                 <p className="text-thin text-[14px]">Today | 5:00 PM</p>

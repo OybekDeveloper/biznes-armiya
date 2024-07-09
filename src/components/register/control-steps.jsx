@@ -8,11 +8,9 @@ const ControlSteps = ({ handleClick, currentStep }) => {
         <div></div>
       ) : (
         <button
-          onClick={() => handleClick("prev")}
           className={`flex justify-start items-center gap-3`}
         >
-          <GrFormPreviousLink className="text-[32px] text-primary font-bold" />
-          <h1 className="text-primary font-[500] clamp3">Previous</h1>
+         
         </button>
       )}
 
