@@ -66,21 +66,23 @@ const Dashboard = () => {
                 <MdOutlineKeyboardArrowRight className="text-primary" />
               </NavLink>
             </div>
-            <div className="flex flex-col w-full gap-[15px] flex-1">
+            <div className="flex flex-col w-full gap-[20px]">
               {[1, 2, 3].map((item, idx) => (
                 <div
-                  className="flex h-[100px] w-full rounded-[24px] justify-between items-center gap-1"
+                  className="flex w-full justify-between items-center gap-1 border-l-[2px] border-hr-color pl-2"
                   key={idx}
                 >
-                  <div className="w-[5px] h-full bg-primary rounded-[2px]"></div>
                   <div className="h-full flex flex-col justify-between">
-                    <h1 className="w-[90%] clamp4 lg:clamp3 text-text-primary font-bold">
+                    <h1 className="w-[90%] clamp3 text-text-primary font-bold">
                       Presentation of the new department
                     </h1>
                     <p className="text-thin text-[14px]">Today | 5:00 PM</p>
                   </div>
-                  <div className="w-full h-full flex flex-col justify-between items-end">
-                    <img src={yellowarrow} alt="" />
+                  <div className="w-full h-full flex flex-col justify-between items-end gap-3">
+                    <div className="text-yellow-500 flex justify-between items-center">
+                      <h1>Midium</h1>
+                      <img src={yellowarrow} alt="" />
+                    </div>
                     <div className="flex -space-x-1">
                       <img
                         className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
@@ -119,10 +121,10 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 gap-[15px]">
               {[1, 2, 3].map((item, idx) => (
                 <div
-                  className="bg-card shadow-btn_shadow w-full h-full rounded-[24px] grid grid-cols-11"
+                  className="bg-card shadow-btn_shadow w-full h-full rounded-[24px] grid xl:grid-cols-11 md:grid-cols-5 grid-cols-1"
                   key={idx}
                 >
-                  <div className="col-span-5 p-[18px] flex flex-col gap-[24px]">
+                  <div className="max-md:col-span-1 col-span-5 p-[18px] flex flex-col gap-[24px]">
                     <div className="flex justify-start items-center gap-[18px]">
                       <img
                         className="w-[40px] h-[40px]"
@@ -147,10 +149,10 @@ const Dashboard = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-span-1 flex justify-center items-center h-full">
-                    <div className="h-full w-[1px] bg-hr-color"></div>
+                  <div className="col-span-1  max-xl:col-span-5 flex justify-center items-center w-full">
+                    <div className="h-[1px] w-full xl:h-full xl:w-[1px] bg-hr-color"></div>
                   </div>
-                  <div className="col-span-5 p-[18px] flex flex-col gap-[24px]">
+                  <div className="max-md:col-span-1 col-span-5 p-[18px] flex flex-col gap-[24px]">
                     <div>
                       <h1 className="text-text-primary font-bold clamp3">
                         Project Data

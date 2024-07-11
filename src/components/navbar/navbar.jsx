@@ -198,10 +198,10 @@ const Navbar = () => {
               </section>
             </div>
             <section className="px-[16px] w-full flex justify-end items-end flex-col mb-[45px] gap-[24px] pt-[50px]">
-              <button className="w-full flex justify-center items-center gap-[16px] cursor-pointer hover:bg-hover-card hover:text-white py-[13px] text-thin transition-all duration-300 rounded-[14px] shadow-btn_shadow">
+              <NavLink to={'/register'} className="w-full flex justify-center items-center gap-[16px] cursor-pointer hover:bg-hover-card hover:text-white py-[13px] text-thin transition-all duration-300 rounded-[14px] shadow-btn_shadow">
                 <FiLogOut className="text-[24px]" />
                 <h1 className="text-[16px] font-[600]">Logout</h1>
-              </button>
+              </NavLink>
             </section>
           </main>
         </motion.div>
