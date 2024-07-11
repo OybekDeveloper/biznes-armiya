@@ -3,6 +3,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import Saidbar from "./components/saidbar/saidbar";
 import Navbar from "./components/navbar/navbar";
 import { useEffect } from "react";
+import Loader1 from "./components/loader/loader1";
 //dashboard
 const Dashboard = React.lazy(() => import("./interface/dashboard/layout"));
 const NearestOvents = React.lazy(() =>
@@ -23,6 +24,8 @@ const Requirements = React.lazy(() =>
 );
 //news
 const News = React.lazy(() => import("./interface/news/layout"));
+//Profile
+const Profile = React.lazy(() => import("./interface/profile/layout"));
 //login
 const Login = React.lazy(() => import("./components/login/login"));
 //register
@@ -55,17 +58,23 @@ const App = () => {
         className={`${
           pathname === "/login" || pathname === "/register"
             ? "w-screen h-screen"
-            : "app mx-auto max-md:w-11/12 md:w-[calc(100vw - 300px)] md:pl-[310px] min-h-screen pb-[20px] lg:pr-[40px]"
+            : "app mx-auto max-md:w-11/12 md:w-[calc(100vw - 300px)] md:pl-[310px] min-h-screen pb-[20px] lg:pr-[20px]"
         } `}
       >
-        <Navbar />
+        <Navbar />  
         <div id="routes" className="">
           <Routes>
             {/* dashboard */}
             <Route
               path="/"
               element={
-                <Suspense fallback={<h1>Loading...</h1>}>
+                <Suspense
+                  fallback={
+                    <div className="w-full h-screen flex justify-center items-center ">
+                      <Loader1 />
+                    </div>
+                  }
+                >
                   <Dashboard />
                 </Suspense>
               }
@@ -73,7 +82,13 @@ const App = () => {
             <Route
               path="nearest"
               element={
-                <Suspense fallback={<h1>Loading...</h1>}>
+                <Suspense
+                  fallback={
+                    <div className="w-full h-screen flex justify-center items-center ">
+                      <Loader1 />
+                    </div>
+                  }
+                >
                   <NearestOvents />
                 </Suspense>
               }
@@ -82,7 +97,13 @@ const App = () => {
             <Route
               path="/history"
               element={
-                <Suspense fallback={<h1>Loading...</h1>}>
+                <Suspense
+                  fallback={
+                    <div className="w-full h-screen flex justify-center items-center ">
+                      <Loader1 />
+                    </div>
+                  }
+                >
                   <History />
                 </Suspense>
               }
@@ -91,7 +112,13 @@ const App = () => {
             <Route
               path="/homework"
               element={
-                <Suspense fallback={<h1>Loading...</h1>}>
+                <Suspense
+                  fallback={
+                    <div className="w-full h-screen flex justify-center items-center ">
+                      <Loader1 />
+                    </div>
+                  }
+                >
                   <Homework />
                 </Suspense>
               }
@@ -99,7 +126,13 @@ const App = () => {
             <Route
               path="/project/:id"
               element={
-                <Suspense fallback={<h1>Loading...</h1>}>
+                <Suspense
+                  fallback={
+                    <div className="w-full h-screen flex justify-center items-center ">
+                      <Loader1 />
+                    </div>
+                  }
+                >
                   <Project />
                 </Suspense>
               }
@@ -108,7 +141,13 @@ const App = () => {
             <Route
               path="/auktsion"
               element={
-                <Suspense fallback={<h1>Loading...</h1>}>
+                <Suspense
+                  fallback={
+                    <div className="w-full h-screen flex justify-center items-center ">
+                      <Loader1 />
+                    </div>
+                  }
+                >
                   <Auktion />
                 </Suspense>
               }
@@ -117,7 +156,13 @@ const App = () => {
             <Route
               path="/requirements"
               element={
-                <Suspense fallback={<h1>Loading...</h1>}>
+                <Suspense
+                  fallback={
+                    <div className="w-full h-screen flex justify-center items-center ">
+                      <Loader1 />
+                    </div>
+                  }
+                >
                   <Requirements />
                 </Suspense>
               }
@@ -126,7 +171,13 @@ const App = () => {
             <Route
               path="/checklist"
               element={
-                <Suspense fallback={<h1>Loading...</h1>}>
+                <Suspense
+                  fallback={
+                    <div className="w-full h-screen flex justify-center items-center ">
+                      <Loader1 />
+                    </div>
+                  }
+                >
                   <CheckList />
                 </Suspense>
               }
@@ -135,8 +186,29 @@ const App = () => {
             <Route
               path="/news"
               element={
-                <Suspense fallback={<h1>Loading...</h1>}>
+                <Suspense
+                  fallback={
+                    <div className="w-full h-screen flex justify-center items-center ">
+                      <Loader1 />
+                    </div>
+                  }
+                >
                   <News />
+                </Suspense>
+              }
+            />
+            {/* profile */}
+            <Route
+              path="/profile"
+              element={
+                <Suspense
+                  fallback={
+                    <div className="w-full h-screen flex justify-center items-center ">
+                      <Loader1 />
+                    </div>
+                  }
+                >
+                  <Profile />
                 </Suspense>
               }
             />
@@ -144,7 +216,13 @@ const App = () => {
             <Route
               path="/login"
               element={
-                <Suspense fallback={<h1>Loading...</h1>}>
+                <Suspense
+                  fallback={
+                    <div className="w-full h-screen flex justify-center items-center ">
+                      <Loader1 />
+                    </div>
+                  }
+                >
                   <Login />
                 </Suspense>
               }
@@ -153,7 +231,13 @@ const App = () => {
             <Route
               path="/register"
               element={
-                <Suspense fallback={<h1>Loading...</h1>}>
+                <Suspense
+                  fallback={
+                    <div className="w-full h-screen flex justify-center items-center ">
+                      <Loader1 />
+                    </div>
+                  }
+                >
                   <Register />
                 </Suspense>
               }

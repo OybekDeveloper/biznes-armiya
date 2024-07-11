@@ -76,6 +76,8 @@ body {
   --background: 244, 249, 253, 1;
   --background-secondary: 232, 242, 248;
 
+  --hr-color: 228, 230, 232, 1;
+
   --active-card: 232, 242, 248;
   --hover-card: 244, 250, 253;
 
@@ -91,7 +93,7 @@ body {
   --cta-active: 124, 58, 237;
   --cta-text: 255, 255, 255;
 
-  --button-color:59,130,246;
+  --button-color: 59, 130, 246;
 
   background: rgba(var(--background));
   color: rgba(var(--text-primary));
@@ -102,6 +104,9 @@ body {
 
   --background: 15, 18, 45;
   --background-secondary: 20, 24, 58;
+
+  --hr-color: 56, 59, 83;
+
   --text-primary: 255, 255, 255, 1;
   --thin-color: 125, 133, 146, 1;
 
@@ -118,7 +123,7 @@ body {
   --cta-active: 79, 70, 229;
   --cta-text: 255, 255, 255;
 
-  --button-color:30,37,71;
+  --button-color: 30, 37, 71;
   color: rgba(var(--text-primary));
 
   background-color: rgba(var(--background));
@@ -129,5 +134,15 @@ body {
 }
 
 .dfaf {
-  color: rgb(114, 125, 209);
+  color: rgb(56, 59, 83);
+}
+
+.scrollScrolbar::-webkit-scrollbar {
+  height: 4px;
+}
+.scrollScrolbar::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+.scrollScrolbar::-webkit-scrollbar-thumb {
+  background-color: #6a9ce6;
 }

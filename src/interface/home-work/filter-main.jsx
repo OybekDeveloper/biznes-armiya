@@ -24,7 +24,7 @@ const filterData = [
 
 const FilterMain = () => {
   return (
-    <main className="sticky top-[88px] col-span-1 bg-card shadow-btn_shadow rounded-[14px] flex flex-col gap-3">
+    <main className="sticky top-[88px] bg-card shadow-btn_shadow rounded-[14px] flex flex-col gap-3">
       <button className="w-full px-[24px] py-[16px] text-text-primary flex justify-start gap-5 items-center clamp4">
         <h1 className="font-bold">Current Projects</h1>
         <FaAngleDown className="text-[18px]" />

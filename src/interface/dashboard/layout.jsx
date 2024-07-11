@@ -148,7 +148,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <div className="col-span-1 flex justify-center items-center h-full">
-                    <div className="h-full w-[1px] bg-thin-color"></div>
+                    <div className="h-full w-[1px] bg-hr-color"></div>
                   </div>
                   <div className="col-span-5 p-[18px] flex flex-col gap-[24px]">
                     <div>

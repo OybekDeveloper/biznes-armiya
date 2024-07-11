@@ -10,6 +10,7 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import { MdDarkMode } from "react-icons/md";
 import { MdOutlineLightMode } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
+import NotificationModal from "./notification-modal";
 
 const Navbar = () => {
   const selectedTheme = localStorage.getItem("theme");
@@ -17,7 +18,12 @@ const Navbar = () => {
   const { pathname } = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [theme, setTheme] = useState(selectedTheme ? selectedTheme : "light");
+  const [isNotif, setIsNotif] = useState(false);
   const mobileNavRef = useRef(null);
+
+  const handleOpenNotification = () => {
+    setIsNotif(!isNotif);
+  };
 
   const handleToggleTheme = () => {
     if (theme === "light") {
@@ -103,7 +109,7 @@ const Navbar = () => {
             )}
           </div>
           <div className="p-[12px] rounded-[14px] bg-card cursor-pointer shadow-btn_shadow flex justify-center items-center">
-            <button>
+            <button onClick={handleOpenNotification}>
               <IoMdNotificationsOutline className="text-xl text-text-primary" />
             </button>
           </div>
@@ -116,7 +122,7 @@ const Navbar = () => {
       <div
         className={`${
           (pathname === "/login" || pathname === "/register") && "hidden"
-        } md:hidden w-full h-[88px] sticky top-0 left-0 flex items-center py-[10px]`}
+        } md:hidden w-full h-[88px] sticky top-0 left-0 flex items-center py-[10px] z-[700]`}
       >
         <nav className="bg-card w-full h-full rounded-[24px] px-[12px] py-[8px] flex justify-between">
           <div
@@ -138,7 +144,7 @@ const Navbar = () => {
                 <MdDarkMode className="text-xl text-text-primary" />
               </button>
             )}
-            <button>
+            <button onClick={handleOpenNotification}>
               <IoMdNotificationsOutline className="text-xl text-text-primary" />
             </button>
             <div>
@@ -200,6 +206,10 @@ const Navbar = () => {
           </main>
         </motion.div>
       </div>
+      <NotificationModal
+        isOpen={isNotif}
+        handleClose={handleOpenNotification}
+      />
     </>
   );
 };

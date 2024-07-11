@@ -13,7 +13,7 @@ import ChatMessage from "./chat-message";
 
 const Project = () => {
   return (
-    <main className="px-[16px] flex flex-col gap-3">
+    <main className="md:px-[16px] flex flex-col gap-3">
       <NavLink
         to={"/homework"}
         className="flex justify-start items-center gap-2 text-blue-500"
@@ -30,8 +30,8 @@ const Project = () => {
           </button>
         </div>
       </section>
-      <section className="grid max-md:grid-cols-2 lg:grid-cols-7 grid-cols-8 gap-3 mt-2">
-        <div className="max-md:col-span-2 lg:col-span-2 col-span-3 bg-card rounded-[24px] p-[24px] flex flex-col gap-4">
+      <section className="grid max-lg:grid-cols-2 lg:grid-cols-8 gap-3 mt-2">
+        <div className="max-lg:col-span-2 lg:col-span-3 bg-card rounded-[24px] p-[24px] flex flex-col gap-4">
           <div className="flex justify-between items-start w-full">
             <div className="flex flex-col">
               <h1 className="text-thin-color">Project Number</h1>
@@ -111,7 +111,7 @@ const Project = () => {
           </div>
         </div>
         {/* Project details */}
-        <div className="max-md:col-span-2 lg:col-span-5 col-span-5 bg-card rounded-[24px] p-[24px] flex flex-col gap-4">
+        <div className="max-lg:col-span-2 lg:col-span-5 bg-card rounded-[24px] p-[24px] flex flex-col gap-4">
           <div className="flex justify-between items-center gap-3">
             <div className="flex flex-col justify-start items-start">
               <p className="text-thin-color">PN0001245</p>
@@ -134,24 +134,25 @@ const Project = () => {
               <GoLink className="text-[#15C0E6]" />
             </div>
           </div>
-          <div>
-            <h1>Task Attachments (3)</h1>
-            <div className="grid grid-cols-5 gap-3">
+          <div className="flex flex-col gap-3">
+            <h1 className="text-text-primary font-bold">Task Attachments (3)</h1>
+            <div className="whitespace-nowrap overflow-x-scroll w-full scrollScrolbar">
               {[1, 2, 3, 4, ].map((item, idx) => (
                 <div
                   key={idx}
-                  className="inline-flex w-full object-cover relative rounded-t-[12px] overflow-hidden"
+                  className="inline-flex w-[100px] object-cover relative rounded-t-[12px] overflow-hidden mr-[10px]"
                 >
                   <img
                     src="https://media.istockphoto.com/id/1303877287/vector/paper-checklist-and-pencil-flat-pictogram.jpg?s=612x612&w=0&k=20&c=NoqPzn94VH2Pm7epxF8P5rCcScMEAiGQ8Hv_b2ZwRjY="
                     alt="img"
+                    className="object-cover w-full h-full"
                   />
                   <div className="absolute top-0 left-0 w-full h-full backdrop-brightness-50 flex justify-end items-end">
                     <div className="w-full h-[60px] rounded-t-[14px] p-2 bg-background">
-                      <h1 className="text-text-primary font-bold clamp4">
+                      <h1 className="text-text-primary font-bold text-[12px]">
                         site screens.png
                       </h1>
-                      <p className="text-thin-color">Sep 19, 2020 | 10:52 AM</p>
+                      <p className="text-thin-color text-[12px]">Sep 19, 2020 | 10:52 AM</p>
                     </div>
                   </div>
                 </div>

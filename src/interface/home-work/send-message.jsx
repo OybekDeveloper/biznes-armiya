@@ -15,7 +15,7 @@ const SendMessage = () => {
     setIsOpenEmoji(false);
   };
   return (
-    <div className="flex start items-center h-[40px] shadow-btn_shadow rounded-[12px]">
+    <div className="relative flex start items-center h-[40px] shadow-btn_shadow rounded-[12px]">
       <div className="relative h-full w-full">
         <input
           value={message}
@@ -27,7 +27,7 @@ const SendMessage = () => {
           <GrAttachment className="text-[#6D5DD3]" />
         </div>
       </div>
-      <div className="relative cursor-pointer p-3 bg-background-secondary">
+      <div className="md:relative cursor-pointer p-3 bg-background-secondary">
         <FaRegFaceSmile
           onClick={handleOpenEmoji}
           className="text-yellow-500 text-[18px]"
@@ -36,7 +36,7 @@ const SendMessage = () => {
           <EmojiPicker
             onEmojiClick={handleClickEmoji}
             open={isOpenEmoji}
-            className=""
+            width={250}
           />
         </div>
       </div>

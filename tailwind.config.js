@@ -29,6 +29,7 @@ module.exports = {
         "cta-text": "rgba(var(--cta-text))",
 
         "button-color":"rgba(var(--button-color))",
+        "hr-color":"rgba(var(--hr-color))",
         grape: "rgba(var(--grape))",
       },
     },
