@@ -2,7 +2,7 @@ import React from "react";
 const ChatMessage = () => {
   return (
     <main className="flex flex-col gap-4 max-h-[400px] overflow-y-scroll px-1">
-      {[1, 2, 3, 4,5,6,7,8,9,10].map((message, idx) => (
+      {[1, 2, 3, 4].map((message, idx) => (
         <div
           key={idx}
           className={`w-full flex gap-3 ${

@@ -25,8 +25,8 @@ const filterData = [
 const FilterMain = () => {
   return (
     <main className="sticky top-[88px] bg-card shadow-btn_shadow rounded-[14px] flex flex-col gap-3">
-      <button className="w-full px-[24px] py-[16px] text-text-primary flex justify-start gap-5 items-center clamp4">
-        <h1 className="font-bold">Current Projects</h1>
+      <button className="w-full px-[24px] py-[16px] text-text-primary flex justify-between gap-5 items-center clamp4">
+        <h1 className="text-[14px] font-bold">Current Projects</h1>
         <FaAngleDown className="text-[18px]" />
       </button>
       <div className="w-full h-[1px] bg-[#E4E6E8]" />
@@ -44,7 +44,7 @@ const FilterMain = () => {
           flex justify-start items-start flex-col px-[16px] rounded-[14px] w-full`}
             >
               <p className="text-thin-color clamp4">PN0001245</p>
-              <h1 className="font-bold clamp4 text-text-primary">{item.title}</h1>
+              <h1 className="font-bold clamp3 text-text-primary">{item.title}</h1>
               <NavLink
                 to={"/nearest"}
                 className="flex justify-center items-center"

@@ -13,7 +13,6 @@ const EmailValid = () => {
     dispatch(Action.postRegisterSlice({ name, value }));
     localStorage.removeItem("register");
   };
-  console.log(regsiterDataError);
   return (
     <main className="flex flex-col gap-4">
       <h1 className="text-black clamp2 font-bold text-center">

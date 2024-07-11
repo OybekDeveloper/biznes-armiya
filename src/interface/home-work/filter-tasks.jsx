@@ -31,7 +31,7 @@ export default function FilterTask({ isOpen, handleClose }) {
               leaveFrom="opacity-100 transform-[scale(100%)]"
               leaveTo="opacity-0 transform-[scale(95%)]"
             >
-              <DialogPanel className="w-full h-screen max-w-md rounded-xl p-6 backdrop-blur-2xl">
+              <DialogPanel className="w-full h-screen max-w-md rounded-xl p-2 sm:p-6 backdrop-blur-2xl">
                 <main className="bg-card w-full h-full p-4 rounded-[14px]">
                   <DialogTitle
                     as="h3"

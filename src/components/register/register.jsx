@@ -30,15 +30,12 @@ const Register = () => {
       default:
     }
   };
-  console.log(registerCode);
   const fetchData = async (data) => {
     try {
       dispatch(Action.registerLoadingSlice(true));
       const res = await ApiService.postData("/register", data);
       localStorage.setItem("register", JSON.stringify(res));
-      console.log(res);
     } catch (error) {
-      console.log(error);
       const newErrors = {};
       newErrors["email"] = error?.response?.data?.email[0];
       dispatch(Action.postRegisterError(newErrors));
@@ -54,7 +51,6 @@ const Register = () => {
       const newErrors = {};
       newErrors["register_code"] = error?.response?.data?.detail;
       dispatch(Action.postRegisterError(newErrors));
-      console.log(error);
     }
   };
 
@@ -69,7 +65,6 @@ const Register = () => {
       const newErrors = {};
       newErrors["generate_code"] = error?.response?.data?.detail;
       dispatch(Action.postRegisterError(newErrors));
-      console.log(error);
     }
   };
 

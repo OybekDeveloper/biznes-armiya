@@ -22,9 +22,7 @@ const Login = () => {
   //         "password": "st1ring"
   //       }
   //     });
-  //     console.log(res)
   //   } catch (error) {
-  //     console.log(error);
   //   }
   // };
   // fetchData();

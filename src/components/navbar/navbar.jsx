@@ -14,7 +14,6 @@ import NotificationModal from "./notification-modal";
 
 const Navbar = () => {
   const selectedTheme = localStorage.getItem("theme");
-  console.log(selectedTheme);
   const { pathname } = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [theme, setTheme] = useState(selectedTheme ? selectedTheme : "light");
@@ -77,7 +76,6 @@ const Navbar = () => {
     };
   }, [isOpen]);
 
-  console.log(theme);
   return (
     <>
       {/* desktop */}

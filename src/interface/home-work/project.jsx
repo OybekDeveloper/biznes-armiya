@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FaPlus } from "react-icons/fa";
 import { BiEdit } from "react-icons/bi";
 import { FaArrowDown } from "react-icons/fa";
@@ -12,6 +12,9 @@ import SendMessage from "./send-message";
 import ChatMessage from "./chat-message";
 
 const Project = () => {
+ useEffect(()=>{
+    window.scrollTo(0,0);
+ },[])
   return (
     <main className="md:px-[16px] flex flex-col gap-3">
       <NavLink
@@ -31,7 +34,7 @@ const Project = () => {
         </div>
       </section>
       <section className="grid max-lg:grid-cols-2 lg:grid-cols-8 gap-3 mt-2">
-        <div className="max-lg:col-span-2 lg:col-span-3 bg-card rounded-[24px] p-[24px] flex flex-col gap-4">
+        <div className="max-lg:col-span-2 lg:col-span-3 bg-card rounded-[24px] p-3 sm:p-[24px] flex flex-col gap-4">
           <div className="flex justify-between items-start w-full">
             <div className="flex flex-col">
               <h1 className="text-thin-color">Project Number</h1>
@@ -111,7 +114,7 @@ const Project = () => {
           </div>
         </div>
         {/* Project details */}
-        <div className="max-lg:col-span-2 lg:col-span-5 bg-card rounded-[24px] p-[24px] flex flex-col gap-4">
+        <div className="max-lg:col-span-2 lg:col-span-5 bg-card rounded-[24px] p-3 sm:p-[24px] flex flex-col gap-4">
           <div className="flex justify-between items-center gap-3">
             <div className="flex flex-col justify-start items-start">
               <p className="text-thin-color">PN0001245</p>
