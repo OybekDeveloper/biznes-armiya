@@ -31,7 +31,7 @@ export default function NotificationModal({ isOpen, handleClose }) {
               leaveFrom="opacity-100 transform-[scale(100%)]"
               leaveTo="opacity-0 transform-[scale(95%)]"
             >
-              <DialogPanel className="w-full h-screen max-w-md rounded-xl p-6 backdrop-blur-2xl">
+              <DialogPanel className="w-full h-screen max-w-md rounded-xl sm:p-6 p-2 backdrop-blur-2xl">
                 <main className="bg-card w-full h-full rounded-[14px]">
                   <DialogTitle
                     as="h3"
@@ -54,11 +54,10 @@ export default function NotificationModal({ isOpen, handleClose }) {
                   <div className="overflow-y-scroll max-h-[calc(100vh-135px)]">
                     {[1, 2, 3, 4, 5, 62, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2].map(
                       (item, idx) => (
-                        <>
+                        <div key={idx}>
                           <div className="w-full h-[2px] bg-hr-color" />
                           <div
-                            key={idx}
-                            className="px-4 flex justify-start items-start gap-3 py-2 my-2 cursor-pointer hover:bg-hover-card"
+                                className="px-4 flex justify-start items-start gap-3 py-2 my-2 cursor-pointer hover:bg-hover-card"
                           >
                             <div>
                               <img
@@ -74,7 +73,7 @@ export default function NotificationModal({ isOpen, handleClose }) {
                               <p className="text-thin-color">2h ago</p>
                             </div>
                           </div>
-                        </>
+                        </div>
                       )
                     )}
                   </div>

@@ -14,7 +14,7 @@ const YourName = () => {
   return (
     <main className="flex flex-col gap-4">
       <h1 className="text-black clamp2 font-bold text-center">
-        Valid your email
+        Valid your F.I.SH & Phone
       </h1>
       <form className="w-full flex flex-col gap-[20px]">
         <div>
@@ -27,7 +27,7 @@ const YourName = () => {
           <input
             onChange={handleChange}
             id="first_name"
-            className="px-[18px] py-[12px] w-full border-[2px] border-solid border-[#D8E0F0] rounded-[14px] outline-none focus:border-primary"
+            className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
             type="text"
             placeholder="Oybek"
             name="first_name"
@@ -46,7 +46,7 @@ const YourName = () => {
           </label>
           <input
             onChange={handleChange}
-            className="px-[18px] py-[12px] w-full border-[2px] border-solid border-[#D8E0F0] rounded-[14px] outline-none focus:border-primary"
+            className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
             type="text"
             placeholder="Baxtiyorov"
             id="last_name"
@@ -66,7 +66,7 @@ const YourName = () => {
           </label>
           <input
             onChange={handleChange}
-            className="px-[18px] py-[12px] w-full border-[2px] border-solid border-[#D8E0F0] rounded-[14px] outline-none focus:border-primary"
+            className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
             type="text"
             placeholder="+998919998090"
             id="phone_number"

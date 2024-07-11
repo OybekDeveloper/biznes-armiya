@@ -25,7 +25,7 @@ const GenerateCode = () => {
           </label>
           <input
             onChange={handleCheckGenerateCode}
-            className="px-[18px] py-[12px] w-full border-[2px] border-solid border-[#D8E0F0] rounded-[14px] outline-none focus:border-primary"
+            className="px-[18px] py-[12px] w-full border-[2px] border-solid border-primary rounded-[14px] outline-none focus:border-primary"
             type="text"
             placeholder="dsd2Afg..."
             id="generate"

@@ -31,7 +31,7 @@ const EmailValid = () => {
               </label>
               <input
                 onChange={handleChange}
-                className="px-[18px] py-[12px] w-full border-[2px] border-solid border-[#D8E0F0] rounded-[14px] outline-none focus:border-primary"
+                className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
                 type="email"
                 id="email"
                 value={registerData?.email}
@@ -51,7 +51,7 @@ const EmailValid = () => {
               </label>
               <input
                 onChange={handleChange}
-                className="px-[18px] py-[12px] w-full border-[2px] border-solid border-[#D8E0F0] rounded-[14px] outline-none focus:border-primary"
+                className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
                 type="text"
                 placeholder="oybek1234"
                 id="password"
@@ -68,9 +68,9 @@ const EmailValid = () => {
         {!registerLoading ? (
           register && (
             <>
-              <div className="flex bg-[#faf9fd] py-[21px] px-[12px] rounded-[14px] justify-around items-center">
+              <div className="flex bg-background-secondary py-[21px] px-[12px] rounded-[14px] justify-around items-center">
                 <MdInfo className="clamp3 text-primary" />
-                <h1 className="clamp4 text-primary font-[500]">
+                <h1 className="text-[14px] text-primary font-[500]">
                   SMS has been sent to your email
                 </h1>
               </div>
@@ -86,7 +86,7 @@ const EmailValid = () => {
                     dispatch(Action.verifyEmailSlices(e.target.value))
                   }
                   id="register_code"
-                  className="px-[18px] py-[12px] w-full border-[2px] border-solid border-[#D8E0F0] rounded-[14px] outline-none focus:border-primary"
+                  className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
                   type="text"
                   placeholder="123456"
                   name="register_code"
