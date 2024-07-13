@@ -19,7 +19,7 @@ import finishimg from "./finish-register.svg";
 import darkLogo from "./dark-logo.png";
 import lightLogo from "./light-logo.png";
 import smile from "./smail.svg";
-
+import addGroupBg from './add-group-bg.svg'
 export {
   search,
   notification,
@@ -42,4 +42,5 @@ export {
   darkLogo,
   lightLogo,
   smile,
+  addGroupBg
 };

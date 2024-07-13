@@ -32,9 +32,8 @@ const FilterMain = () => {
       <div className="w-full h-[1px] bg-[#E4E6E8]" />
       <section className="w-full p-[8px] flex flex-col gap-[16px]">
         {filterData.map((item, idx) => (
-          <div className="flex justify-between items-center gap-2 cursor-pointer">
+          <div key={idx} className="flex justify-between items-center gap-2 cursor-pointer">
             <div
-              key={idx}
               className={`
           ${
             item.id === 1

@@ -29,10 +29,13 @@ const HomeWork = () => {
           <div className="flex justify-start items-center gap-2">
             <button
               onDoubleClick={handleDoubleClick}
-              className="bg-button-color  flex justify-start items-center gap-2 rounded-[14px] p-2 text-white shadow-btn_shadow"
+              className="max-md:hidden bg-button-color  flex justify-start items-center gap-2 rounded-[14px] p-2 text-white shadow-btn_shadow"
             >
               <FaPlus />
               <h1>Add Project</h1>
+            </button>
+            <button className="z-[800] md:hidden fixed bottom-[16px] right-[16px] bg-button-color  flex justify-start items-center gap-2 rounded-full p-4 text-white shadow-btn_shadow">
+              <FaPlus />
             </button>
           </div>
         </section>

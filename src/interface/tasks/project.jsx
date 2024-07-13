@@ -12,9 +12,9 @@ import SendMessage from "./send-message";
 import ChatMessage from "./chat-message";
 
 const Project = () => {
- useEffect(()=>{
-    window.scrollTo(0,0);
- },[])
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <main className="md:px-[16px] flex flex-col gap-3">
       <NavLink
@@ -27,9 +27,12 @@ const Project = () => {
       <section className="w-full flex justify-between items-center">
         <h1 className="font-bold text-text-primary clamp2">Task</h1>
         <div className="flex justify-start items-center gap-2">
-          <button className="bg-button-color  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow">
+          <button className="max-md:hidden bg-button-color  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow">
             <FaPlus />
             <h1>Add Task</h1>
+          </button>
+          <button className="z-[800] md:hidden fixed bottom-[80px] right-[16px] bg-button-color  flex justify-start items-center gap-2 rounded-full p-4 text-white shadow-btn_shadow">
+            <FaPlus />
           </button>
         </div>
       </section>
@@ -138,9 +141,11 @@ const Project = () => {
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            <h1 className="text-text-primary font-bold">Task Attachments (3)</h1>
+            <h1 className="text-text-primary font-bold">
+              Task Attachments (3)
+            </h1>
             <div className="whitespace-nowrap overflow-x-scroll w-full scrollScrolbar">
-              {[1, 2, 3, 4, ].map((item, idx) => (
+              {[1, 2, 3, 4].map((item, idx) => (
                 <div
                   key={idx}
                   className="inline-flex w-[100px] object-cover relative rounded-t-[12px] overflow-hidden mr-[10px]"
@@ -155,7 +160,9 @@ const Project = () => {
                       <h1 className="text-text-primary font-bold text-[12px]">
                         site screens.png
                       </h1>
-                      <p className="text-thin-color text-[12px]">Sep 19, 2020 | 10:52 AM</p>
+                      <p className="text-thin-color text-[12px]">
+                        Sep 19, 2020 | 10:52 AM
+                      </p>
                     </div>
                   </div>
                 </div>

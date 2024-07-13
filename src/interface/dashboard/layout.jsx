@@ -29,10 +29,10 @@ const Dashboard = () => {
           <div className="lg:flex-1 bg-card shadow-btn_shadow rounded-[24px] p-[18px] flex flex-col">
             <div className="w-full flex justify-between items-center mb-[20px]">
               <h1 className="text-text-primary text-xl font-bold">Workload</h1>
-              <div className="flex justify-center items-center">
+              <NavLink to={'/groups'} className="flex justify-center items-center">
                 <h1 className="text-primary cursor-pointer">View all</h1>
                 <MdOutlineKeyboardArrowRight className="text-primary" />
-              </div>
+              </NavLink>
             </div>
             <div className="grid xl:grid-cols-4 lg:grid-cols-2 max-sm:grid-cols-1 sm:grid-cols-2 flex-1 gap-2">
               {[1, 2, 3, 4, 5, 6, 7, 8].map((item, idx) => (

@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Saidbar from "./components/saidbar/saidbar";
 import Navbar from "./components/navbar/navbar";
 import { useEffect } from "react";
@@ -16,14 +16,16 @@ const Auktion = React.lazy(() => import("./interface/auktsion/layout"));
 //checklist
 const CheckList = React.lazy(() => import("./interface/checklist/layout"));
 //home work
-const Homework = React.lazy(() => import("./interface/home-work/layout"));
-const Project = React.lazy(() => import("./interface/home-work/project"));
+const Homework = React.lazy(() => import("./interface/tasks/layout"));
+const Project = React.lazy(() => import("./interface/tasks/project"));
 //requirements
 const Requirements = React.lazy(() =>
   import("./interface/requirements/layout")
 );
 //news
 const News = React.lazy(() => import("./interface/news/layout"));
+//groups
+const Groups = React.lazy(() => import("./interface/groups/layout"));
 //Profile
 const Profile = React.lazy(() => import("./interface/profile/layout"));
 //login
@@ -33,7 +35,9 @@ const Register = React.lazy(() => import("./components/register/register"));
 
 const App = () => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const selectedTheme = localStorage.getItem("theme");
+  const register = localStorage.getItem("register");
 
   useEffect(() => {
     if (selectedTheme) {
@@ -44,6 +48,11 @@ const App = () => {
       document.body.classList.add("light");
     }
   }, [selectedTheme]);
+  useEffect(() => {
+    if (!register && pathname !== "/login" && pathname !== "/register") {
+      navigate("/login");
+    }
+  }, [register]);
 
   return (
     <>
@@ -61,7 +70,7 @@ const App = () => {
             : "app mx-auto max-md:w-11/12 md:w-[calc(100vw - 300px)] md:pl-[310px] min-h-screen pb-[20px] lg:pr-[20px]"
         } `}
       >
-        <Navbar />  
+        <Navbar />
         <div id="routes" className="">
           <Routes>
             {/* dashboard */}
@@ -194,6 +203,21 @@ const App = () => {
                   }
                 >
                   <News />
+                </Suspense>
+              }
+            />
+            {/* news */}
+            <Route
+              path="/groups"
+              element={
+                <Suspense
+                  fallback={
+                    <div className="w-full h-screen flex justify-center items-center ">
+                      <Loader1 />
+                    </div>
+                  }
+                >
+                  <Groups />
                 </Suspense>
               }
             />

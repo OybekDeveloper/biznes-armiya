@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import Stepper from "./stepper";
 import ControlSteps from "./control-steps";
@@ -9,7 +9,12 @@ import Finish from "./finish";
 import { useDispatch, useSelector } from "react-redux";
 import * as Action from "../../reducer/event";
 import { ApiService } from "../api.server";
+import { useNavigate } from "react-router-dom";
+import Loader1 from "../loader/loader1";
 const Register = () => {
+  const register = localStorage.getItem("register");
+  const yourGroup = localStorage.getItem("your-group");
+  const navigate = useNavigate();
   const { registerData, registerCode, generateCode } = useSelector(
     (state) => state.event
   );
@@ -59,10 +64,12 @@ const Register = () => {
       const res = await ApiService.postData("/check-gr/", {
         code: generateCode,
       });
-      localStorage.setItem("your-group",JSON.stringify(res));
+      localStorage.setItem("your-group", JSON.stringify(res));
       setCurrentStep(4);
     } catch (error) {
       const newErrors = {};
+      console.log(generateCode);
+      console.log(error);
       newErrors["generate_code"] = error?.response?.data?.detail;
       dispatch(Action.postRegisterError(newErrors));
     }
@@ -134,6 +141,20 @@ const Register = () => {
     direction === "next" ? newStep++ : newStep--;
     newStep > 0 && newStep <= steps.length && setCurrentStep(newStep);
   };
+
+  useEffect(() => {
+    if (register && yourGroup) {
+      navigate("/");
+    }
+  }, [register, yourGroup]);
+
+  if (register && yourGroup) {
+    return (
+      <div className="flex justify-center items-center w-screen h-screen">
+        <Loader1 />
+      </div>
+    );
+  }
 
   return (
     <>

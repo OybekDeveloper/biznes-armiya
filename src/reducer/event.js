@@ -12,6 +12,7 @@ export const initialState = {
   regsiterDataError: {},
   registerLoading: false,
   generateCode: "",
+  userData: {},
 };
 
 export const eventSlice = createSlice({
@@ -51,6 +52,12 @@ export const eventSlice = createSlice({
         generateCode: action.payload,
       };
     },
+    userDetailSlice: (state, action) => {
+      return {
+        ...state,
+        userData: action.payload,
+      };
+    },
   },
 });
 
@@ -61,6 +68,7 @@ export const {
   registerLoadingSlice,
   verifyEmailSlices,
   verifyGemerateCode,
+  userDetailSlice,
 } = eventSlice.actions;
 
 export default eventSlice.reducer;

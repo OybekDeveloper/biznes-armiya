@@ -13,16 +13,23 @@ import {
   TrashIcon,
 } from "@heroicons/react/16/solid";
 import { ImExit } from "react-icons/im";
+import { useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 
-export default function DropDown() {
-  const navigate = useNavigate()
+export default function DropDown({ handleLogOut }) {
+  const { userData } = useSelector((state) => state.event);
+
+  const navigate = useNavigate();
   return (
     <div className="">
-      <Menu >
-        <MenuButton   className="inline-flex items-center gap-2 bg-card shadow-btn_shadow py-[12px] px-[12px] rounded-[14px] z-10">
-          <img className="cursor-pointer w-[24px] h-[24px] object-cover rounded-full" src="https://png.pngtree.com/png-vector/20191101/ourmid/pngtree-cartoon-color-simple-male-avatar-png-image_1934459.jpg" alt="" />
-          <h1 className="text-text_primary font-bold">user name</h1>
+      <Menu>
+        <MenuButton className="inline-flex items-center gap-2 bg-card shadow-btn_shadow py-[12px] px-[12px] rounded-[14px] z-10">
+          <img
+            className="cursor-pointer w-[24px] h-[24px] object-cover rounded-full"
+            src="https://png.pngtree.com/png-vector/20191101/ourmid/pngtree-cartoon-color-simple-male-avatar-png-image_1934459.jpg"
+            alt=""
+          />
+          <h1 className="text-text_primary font-bold">{userData.first_name}</h1>
           <ChevronDownIcon className="size-7 text-thin" />
         </MenuButton>
         <Transition
@@ -38,7 +45,10 @@ export default function DropDown() {
             className="w-52 origin-top-right rounded-xl shadow-custom bg-card mt-[5px] z-[999]"
           >
             <MenuItem>
-              <NavLink to={'/profile'} className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+              <NavLink
+                to={"/profile"}
+                className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10"
+              >
                 <PencilIcon className="size-4 fill-thin" />
                 My Profile
                 <kbd className="ml-auto hidden font-sans text-xs text-thin group-data-[focus]:inline">
@@ -47,7 +57,10 @@ export default function DropDown() {
               </NavLink>
             </MenuItem>
             <MenuItem>
-              <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+              <button
+                onClick={handleLogOut}
+                className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10"
+              >
                 <ImExit className="size-4 fill-thin" />
                 Exit
                 <kbd className="ml-auto hidden font-sans text-xs text-thin group-data-[focus]:inline">

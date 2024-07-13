@@ -3,15 +3,15 @@ import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 
 const ControlSteps = ({ handleClick, currentStep }) => {
   return (
-    <div className="absolute bottom-0 left-0 p-4 border-t-hr-color border-t-[2px] w-full flex justify-between items-center">
+    <div
+      className={`${
+        currentStep === 4 && "hidden"
+      } absolute bottom-0 left-0 p-4 border-t-hr-color border-t-[2px] w-full flex justify-between items-center`}
+    >
       {currentStep === 1 ? (
         <div></div>
       ) : (
-        <button
-          className={`flex justify-start items-center gap-3`}
-        >
-         
-        </button>
+        <button className={`flex justify-start items-center gap-3`}></button>
       )}
 
       <button

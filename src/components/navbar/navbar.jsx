@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { lightLogo } from "../../images";
 import DropDown from "./dropdown";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import DropDownMobile from "./dropdown-mobile";
 import { motion } from "framer-motion";
 import { FiLogOut } from "react-icons/fi";
@@ -11,11 +11,20 @@ import { MdDarkMode } from "react-icons/md";
 import { MdOutlineLightMode } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
 import NotificationModal from "./notification-modal";
+import { ApiService } from "../api.server";
+import { useDispatch, useSelector } from "react-redux";
+import { userDetailSlice } from "../../reducer/event";
+import ExitModal from "../exit-modal";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { userData } = useSelector((state) => state.event);
+  const register = JSON.parse(localStorage.getItem("register"));
   const selectedTheme = localStorage.getItem("theme");
   const { pathname } = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const [isExit, setIsExit] = useState(false);
   const [theme, setTheme] = useState(selectedTheme ? selectedTheme : "light");
   const [isNotif, setIsNotif] = useState(false);
   const mobileNavRef = useRef(null);
@@ -23,6 +32,7 @@ const Navbar = () => {
   const handleOpenNotification = () => {
     setIsNotif(!isNotif);
   };
+  console.log(register);
 
   const handleToggleTheme = () => {
     if (theme === "light") {
@@ -36,6 +46,11 @@ const Navbar = () => {
       localStorage.setItem("theme", "light");
       setTheme("light");
     }
+  };
+
+  const handleLogOut = () => {
+    setIsExit(!isExit);
+    navigate("/login");
   };
 
   useEffect(() => {
@@ -53,9 +68,7 @@ const Navbar = () => {
     } else {
       body.style.overflow = "visible";
     }
-  }, [isOpen]);
 
-  useEffect(() => {
     const handleClickOutside = (event) => {
       if (
         mobileNavRef.current &&
@@ -76,9 +89,24 @@ const Navbar = () => {
     };
   }, [isOpen]);
 
+  useEffect(() => {
+    if (register) {
+      const fetchUserData = async () => {
+        try {
+          const res = await ApiService.getData(`/users/${register.user_id}`);
+          console.log(res);
+          dispatch(userDetailSlice(res));
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchUserData();
+    }
+  }, [register, pathname]);
+
   return (
     <>
-      {/* desktop */}
+        {/* desktop */}
       <div
         className={`${
           (pathname === "/login" || pathname === "/register") && "hidden"
@@ -112,7 +140,7 @@ const Navbar = () => {
             </button>
           </div>
           <div className="">
-            <DropDown />
+            <DropDown handleLogOut={handleLogOut} />
           </div>
         </div>
       </div>
@@ -146,7 +174,7 @@ const Navbar = () => {
               <IoMdNotificationsOutline className="text-xl text-text-primary" />
             </button>
             <div>
-              <DropDownMobile />
+              <DropDownMobile handleLogOut={handleLogOut} />
             </div>
           </div>
         </nav>
@@ -172,6 +200,7 @@ const Navbar = () => {
               <section className="mt-[30px] flex justify-start items-start flex-col gap-2 text-[16ppx] font-[600]">
                 {saidbarData.map((item, idx) => (
                   <NavLink
+                    onClick={() => setIsOpen(false)}
                     to={item.link}
                     key={idx}
                     className={
@@ -196,7 +225,10 @@ const Navbar = () => {
               </section>
             </div>
             <section className="px-[16px] w-full flex justify-end items-end flex-col mb-[45px] gap-[24px] pt-[50px]">
-              <NavLink to={'/register'} className="w-full flex justify-center items-center gap-[16px] cursor-pointer hover:bg-hover-card hover:text-white py-[13px] text-thin transition-all duration-300 rounded-[14px] shadow-btn_shadow">
+              <NavLink
+                to={"/register"}
+                className="w-full flex justify-center items-center gap-[16px] cursor-pointer hover:bg-hover-card hover:text-white py-[13px] text-thin transition-all duration-300 rounded-[14px] shadow-btn_shadow"
+              >
                 <FiLogOut className="text-[24px]" />
                 <h1 className="text-[16px] font-[600]">Logout</h1>
               </NavLink>
@@ -204,6 +236,7 @@ const Navbar = () => {
           </main>
         </motion.div>
       </div>
+      <ExitModal isOpen={isExit} handleClose={handleLogOut} />
       <NotificationModal
         isOpen={isNotif}
         handleClose={handleOpenNotification}
