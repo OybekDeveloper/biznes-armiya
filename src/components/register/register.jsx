@@ -9,7 +9,7 @@ import Finish from "./finish";
 import { useDispatch, useSelector } from "react-redux";
 import * as Action from "../../reducer/event";
 import { ApiService } from "../api.server";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Loader1 from "../loader/loader1";
 const Register = () => {
   const register = localStorage.getItem("register");
@@ -163,7 +163,7 @@ const Register = () => {
         <title>Register | Biznes Armiya</title>
         <link rel="icon" href="/" />
       </Helmet>
-      <main className="w-screen h-screen flex justify-center items-center max-md:grid grid-cols-4 max-lg:grid-cols-5 max-md:grid-cols-1">
+      <main className="w-screen h-screen flex justify-center items-center md:grid grid-cols-4 max-lg:grid-cols-5 max-md:grid-cols-1">
         <section className="max-md:hidden w-full h-full col-span-1 max-lg:col-span-2 p-4">
           <div className="w-full h-full bg-primary rounded-[24px] p-t pt-[150px] flex justify-center">
             <div className="flex flex-col gap-3">
@@ -178,6 +178,10 @@ const Register = () => {
               Step {currentStep}/4
             </h1>
             {displaySteps(currentStep)}
+            <NavLink className={"font-[500]"} to={"/login"}>
+              Do you already have an account?{" "}
+              <span className="text-primary font-bold">Sign in</span>
+            </NavLink>
             <ControlSteps handleClick={handleClick} currentStep={currentStep} />
           </div>
         </section>
