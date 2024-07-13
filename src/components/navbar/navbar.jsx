@@ -17,10 +17,7 @@ import { userDetailSlice } from "../../reducer/event";
 import ExitModal from "../exit-modal";
 
 const Navbar = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { userData } = useSelector((state) => state.event);
-  const register = JSON.parse(localStorage.getItem("register"));
   const selectedTheme = localStorage.getItem("theme");
   const { pathname } = useLocation();
   const [isOpen, setIsOpen] = useState(false);
@@ -32,7 +29,6 @@ const Navbar = () => {
   const handleOpenNotification = () => {
     setIsNotif(!isNotif);
   };
-  console.log(register);
 
   const handleToggleTheme = () => {
     if (theme === "light") {
@@ -89,18 +85,7 @@ const Navbar = () => {
     };
   }, [isOpen]);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const res = await ApiService.getData(`/users/${register.user_id}`);
-        console.log(res);
-        dispatch(userDetailSlice(res));
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchUserData();
-  }, [pathname]);
+
 
   return (
     <>

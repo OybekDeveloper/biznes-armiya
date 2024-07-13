@@ -4,6 +4,9 @@ import Saidbar from "./components/saidbar/saidbar";
 import Navbar from "./components/navbar/navbar";
 import { useEffect } from "react";
 import Loader1 from "./components/loader/loader1";
+import { userDetailSlice } from "./reducer/event";
+import { ApiService } from "./components/api.server";
+import { useDispatch } from "react-redux";
 //dashboard
 const Dashboard = React.lazy(() => import("./interface/dashboard/layout"));
 const NearestOvents = React.lazy(() =>
@@ -37,7 +40,8 @@ const App = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const selectedTheme = localStorage.getItem("theme");
-  const register = localStorage.getItem("register");
+  const register = JSON.parse(localStorage.getItem("register"));
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (selectedTheme) {
@@ -52,7 +56,19 @@ const App = () => {
     if (!register && pathname !== "/login" && pathname !== "/register") {
       navigate("/login");
     }
-  }, [register]);
+    if (register) {
+      const fetchUserData = async () => {
+        try {
+          const res = await ApiService.getData(`/users/${register.user_id}`);
+          console.log(res);
+          dispatch(userDetailSlice(res));
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchUserData();
+    }
+  }, [register, pathname]);
 
   return (
     <>
