@@ -163,7 +163,7 @@ const Register = () => {
         <title>Register | Biznes Armiya</title>
         <link rel="icon" href="/" />
       </Helmet>
-      <main className="w-screen h-screen grid grid-cols-4 max-lg:grid-cols-5 max-md:grid-cols-1">
+      <main className="w-screen h-screen flex justify-center items-center max-md:grid grid-cols-4 max-lg:grid-cols-5 max-md:grid-cols-1">
         <section className="max-md:hidden w-full h-full col-span-1 max-lg:col-span-2 p-4">
           <div className="w-full h-full bg-primary rounded-[24px] p-t pt-[150px] flex justify-center">
             <div className="flex flex-col gap-3">
@@ -172,8 +172,8 @@ const Register = () => {
             </div>
           </div>
         </section>
-        <section className="w-full h-full  col-span-3 px-6 py-4 max-md:col-span-1">
-          <div className="relative w-full h-full md:bg-white rounded-[24px] flex flex-col p-6 items-center pt-[70px] gap-4">
+        <section className="w-full h-full  col-span-3 md:px-6 md:py-4 max-md:col-span-1">
+          <div className="relative w-full h-full md:bg-white rounded-[24px] flex flex-col p-6 items-center md:pt-[70px] gap-4">
             <h1 className="font-bold text-primary clamp3 w-full text-center">
               Step {currentStep}/4
             </h1>
