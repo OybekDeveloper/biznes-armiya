@@ -90,23 +90,21 @@ const Navbar = () => {
   }, [isOpen]);
 
   useEffect(() => {
-    if (register) {
-      const fetchUserData = async () => {
-        try {
-          const res = await ApiService.getData(`/users/${register.user_id}`);
-          console.log(res);
-          dispatch(userDetailSlice(res));
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      fetchUserData();
-    }
-  }, [register, pathname]);
+    const fetchUserData = async () => {
+      try {
+        const res = await ApiService.getData(`/users/${register.user_id}`);
+        console.log(res);
+        dispatch(userDetailSlice(res));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUserData();
+  }, [pathname]);
 
   return (
     <>
-        {/* desktop */}
+      {/* desktop */}
       <div
         className={`${
           (pathname === "/login" || pathname === "/register") && "hidden"
