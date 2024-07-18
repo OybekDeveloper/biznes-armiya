@@ -38,7 +38,7 @@ const Register = () => {
   const fetchData = async (data) => {
     try {
       dispatch(Action.registerLoadingSlice(true));
-      const res = await ApiService.postData("/register", data);
+      const res = await ApiService.postRegister("/register", data);
       localStorage.setItem("register", JSON.stringify(res));
     } catch (error) {
       const newErrors = {};
@@ -50,7 +50,7 @@ const Register = () => {
   };
   const fetchVerifyEmail = async (code) => {
     try {
-      await ApiService.postData("/verify-email", { code });
+      await ApiService.postRegisterData("/verify-email", { code });
       setCurrentStep(3);
     } catch (error) {
       const newErrors = {};
@@ -61,7 +61,7 @@ const Register = () => {
 
   const fetchGenerateCode = async () => {
     try {
-      const res = await ApiService.postData("/check-gr/", {
+      const res = await ApiService.postRegister("/check-gr/", {
         code: generateCode,
       });
       localStorage.setItem("your-group", JSON.stringify(res));
@@ -145,6 +145,9 @@ const Register = () => {
   useEffect(() => {
     if (register && yourGroup) {
       navigate("/");
+    }
+    if(register){
+      setCurrentStep(3)
     }
   }, [register, yourGroup]);
 

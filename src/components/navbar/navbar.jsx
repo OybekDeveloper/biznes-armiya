@@ -17,7 +17,7 @@ import { userDetailSlice } from "../../reducer/event";
 import ExitModal from "../exit-modal";
 
 const Navbar = () => {
-  const navigate = useNavigate();
+  const register = JSON.parse(localStorage.getItem("register"));
   const selectedTheme = localStorage.getItem("theme");
   const { pathname } = useLocation();
   const [isOpen, setIsOpen] = useState(false);
@@ -25,6 +25,7 @@ const Navbar = () => {
   const [theme, setTheme] = useState(selectedTheme ? selectedTheme : "light");
   const [isNotif, setIsNotif] = useState(false);
   const mobileNavRef = useRef(null);
+  const dispatch = useDispatch();
 
   const handleOpenNotification = () => {
     setIsNotif(!isNotif);
@@ -44,9 +45,9 @@ const Navbar = () => {
     }
   };
 
-  const handleLogOut = () => {
+  const handleLogOut = (e) => {
     setIsExit(!isExit);
-    navigate("/login");
+    setIsOpen(false);
   };
 
   useEffect(() => {
@@ -85,7 +86,22 @@ const Navbar = () => {
     };
   }, [isOpen]);
 
-
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const res = await ApiService.getData(`/users/${register?.user_id}`,register?.access);
+        console.log(res);
+        dispatch(userDetailSlice(res));
+      } catch (error) {
+        console.error(error);
+        // localStorage.removeItem('register')
+        // localStorage.removeItem('your_group')
+      }
+    };
+    if (register) {
+      fetchUserData();
+    }
+  }, [register?.user_id, pathname]);
 
   return (
     <>

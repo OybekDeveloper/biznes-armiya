@@ -13,6 +13,7 @@ export const initialState = {
   registerLoading: false,
   generateCode: "",
   userData: {},
+  groupData: [],
 };
 
 export const eventSlice = createSlice({
@@ -58,6 +59,12 @@ export const eventSlice = createSlice({
         userData: action.payload,
       };
     },
+    groupDetailSlice: (state, action) => {
+      return {
+        ...state,
+        group: action.payload,
+      };
+    },
   },
 });
 
@@ -69,6 +76,7 @@ export const {
   verifyEmailSlices,
   verifyGemerateCode,
   userDetailSlice,
+  groupDetailSlice,
 } = eventSlice.actions;
 
 export default eventSlice.reducer;

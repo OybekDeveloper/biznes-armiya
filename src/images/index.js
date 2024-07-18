@@ -19,7 +19,14 @@ import finishimg from "./finish-register.svg";
 import darkLogo from "./dark-logo.png";
 import lightLogo from "./light-logo.png";
 import smile from "./smail.svg";
-import addGroupBg from './add-group-bg.svg'
+import addGroupBg from "./add-group-bg.svg";
+import coinimg from "./coin-img.png";
+import photoUrl from "./photo_url.jpg";
+import searchempty from "./search-empty.png";
+import dataempty from "./data-empty.png";
+import newsempty from "./page.png";
+import emptygrouplogo from "./empty-group-logo.webp";
+import emptyGroup from './empty-group1.svg'
 export {
   search,
   notification,
@@ -42,5 +49,12 @@ export {
   darkLogo,
   lightLogo,
   smile,
-  addGroupBg
+  addGroupBg,
+  coinimg,
+  photoUrl,
+  dataempty,
+  searchempty,
+  newsempty,
+  emptygrouplogo,
+  emptyGroup
 };

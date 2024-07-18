@@ -29,6 +29,7 @@ const Requirements = React.lazy(() =>
 const News = React.lazy(() => import("./interface/news/layout"));
 //groups
 const Groups = React.lazy(() => import("./interface/groups/layout"));
+const GroupItem = React.lazy(() => import("./interface/groups/group-item"));
 //Profile
 const Profile = React.lazy(() => import("./interface/profile/layout"));
 //login
@@ -41,7 +42,6 @@ const App = () => {
   const navigate = useNavigate();
   const selectedTheme = localStorage.getItem("theme");
   const register = JSON.parse(localStorage.getItem("register"));
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (selectedTheme) {
@@ -55,18 +55,6 @@ const App = () => {
   useEffect(() => {
     if (!register && pathname !== "/login" && pathname !== "/register") {
       navigate("/login");
-    }
-    if (register) {
-      const fetchUserData = async () => {
-        try {
-          const res = await ApiService.getData(`/users/${register.user_id}`);
-          console.log(res);
-          dispatch(userDetailSlice(res));
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      fetchUserData();
     }
   }, [register, pathname]);
 
@@ -222,7 +210,7 @@ const App = () => {
                 </Suspense>
               }
             />
-            {/* news */}
+            {/* groups */}
             <Route
               path="/groups"
               element={
@@ -234,6 +222,20 @@ const App = () => {
                   }
                 >
                   <Groups />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/groups/:id"
+              element={
+                <Suspense
+                  fallback={
+                    <div className="w-full h-screen flex justify-center items-center ">
+                      <Loader1 />
+                    </div>
+                  }
+                >
+                  <GroupItem />
                 </Suspense>
               }
             />

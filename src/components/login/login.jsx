@@ -22,7 +22,7 @@ const Login = () => {
 
     const fetchLogin = async () => {
       try {
-        const res = await ApiService.postData("/login", formData);
+        const res = await ApiService.postRegisterData("/login", formData);
         setErrorMessage();
         localStorage.setItem("register", JSON.stringify(res));
         navigate("/");
@@ -42,7 +42,6 @@ const Login = () => {
   ];
 
   useEffect(() => {
-    console.log(window.history);
     if (register) {
       navigate("/");
     }

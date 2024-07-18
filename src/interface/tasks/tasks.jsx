@@ -1,6 +1,7 @@
 import React from "react";
 import { LuFilter } from "react-icons/lu";
 import { NavLink } from "react-router-dom";
+import { dataempty } from "../../images";
 
 const Tasks = ({ toggleFilter }) => {
   return (
@@ -16,7 +17,17 @@ const Tasks = ({ toggleFilter }) => {
           </button>
         </div>
       </section>
-      <section className="flex flex-col gap-3">
+      <div className="w-full h-full flex justify-center items-center flex-col mt-4">
+        <div className="w-full h-[200px]">
+          <img
+            className="w-full h-full object-contain"
+            src={dataempty}
+            alt=""
+          />
+        </div>
+        <h1 className="clam3 font-bold">Tasks do not exist!</h1>
+      </div>
+      {/* <section className="flex flex-col gap-3">
         {[1, 2, 3, 4, 5, 6, 7].map((task, i) => (
           <NavLink to={`/project/${i}`}
             key={i}
@@ -53,7 +64,7 @@ const Tasks = ({ toggleFilter }) => {
             </div>
           </NavLink>
         ))}
-      </section>
+      </section> */}
     </main>
   );
 };
