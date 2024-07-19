@@ -146,9 +146,6 @@ const Register = () => {
     if (register && yourGroup) {
       navigate("/");
     }
-    if(register){
-      setCurrentStep(3)
-    }
   }, [register, yourGroup]);
 
   if (register && yourGroup) {

@@ -36,6 +36,7 @@ const Profile = React.lazy(() => import("./interface/profile/layout"));
 const Login = React.lazy(() => import("./components/login/login"));
 //register
 const Register = React.lazy(() => import("./components/register/register"));
+const NotFound = React.lazy(() => import("./components/not-found/not-found"));
 
 const App = () => {
   const { pathname } = useLocation();
@@ -281,6 +282,20 @@ const App = () => {
                   }
                 >
                   <Register />
+                </Suspense>
+              }
+            />
+            <Route
+              path="*"
+              element={
+                <Suspense
+                  fallback={
+                    <div className="w-full h-screen flex justify-center items-center ">
+                      <Loader1 />
+                    </div>
+                  }
+                >
+                  <NotFound />
                 </Suspense>
               }
             />

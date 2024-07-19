@@ -4,6 +4,7 @@ import {
   arrowright,
   calendar,
   dataempty,
+  emptygrouplogo,
   newsempty,
   time,
   yellowarrow,
@@ -76,11 +77,13 @@ const Dashboard = () => {
                       className="w-full bg-background rounded-[24px] p-[16px] flex flex-col justify-start items-center gap-1"
                       key={idx}
                     >
-                      {/* <img
-                        src="https://s3-alpha-sig.figma.com/img/e699/08ec/4d1a06f005fea30771b61b3a4f903dd3?Expires=1721606400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=hDp9zObNSJ2BfAdlkuLzg3man5qr~dTPNzqqOEBgQKt-Gf0LJYrAIOCbSbKTzk3A-9AVBGxQ4LA4KMGBYqlQqys~BNHwqOtsOi7sC1YCBs-h5yUnaLm0UfMntV2bRvWlSGN5WnsaHeQBXJdOWJGmIGTk0eamelE0XPrUh7isz7vo5kZykeVjj0uAGt8azfItg0A6jGT-tkr~I0ygXneGM3B8u8ik3tXhQeryDSmp7JJlI-VM-aZVeupxpIPERxAadw4gnAYiyKb2Dei0Hf2YETiHgetO1WoD9VeL17r2fEvbrOqzXLbnHq4hHBm8bKqglrLX8RUx0y32kNZalXYFLA__"
+                       <img
+                        src={
+                          item?.group_photo ? item.group_photo : emptygrouplogo
+                        }
                         alt="logo"
                         className="mb-[10px] w-16 h-16 rounded-full"
-                      /> */}
+                      />
                       <h1 className="text-text-primary font-medium">
                         {item?.name}
                       </h1>

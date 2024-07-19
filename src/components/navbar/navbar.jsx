@@ -17,6 +17,7 @@ import { userDetailSlice } from "../../reducer/event";
 import ExitModal from "../exit-modal";
 
 const Navbar = () => {
+  const navigate = useNavigate()
   const register = JSON.parse(localStorage.getItem("register"));
   const selectedTheme = localStorage.getItem("theme");
   const { pathname } = useLocation();
@@ -89,13 +90,21 @@ const Navbar = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await ApiService.getData(`/users/${register?.user_id}`,register?.access);
+        const res = await ApiService.getData(
+          `/users/${register?.user_id}`,
+          register?.access
+        );
         console.log(res);
         dispatch(userDetailSlice(res));
       } catch (error) {
-        console.error(error);
-        // localStorage.removeItem('register')
-        // localStorage.removeItem('your_group')
+        console.log(error);
+        if (error.response.status === 401) {
+          localStorage.removeItem("register");
+          localStorage.removeItem("your-group");
+        }
+        if(error.response.status ===500){
+          navigate('/not-found')
+        }
       }
     };
     if (register) {
@@ -133,8 +142,11 @@ const Navbar = () => {
               </button>
             )}
           </div>
-          <div className="p-[12px] rounded-[14px] bg-card cursor-pointer shadow-btn_shadow flex justify-center items-center">
-            <button onClick={handleOpenNotification}>
+          <div
+            onClick={handleOpenNotification}
+            className="p-[12px] rounded-[14px] bg-card cursor-pointer shadow-btn_shadow flex justify-center items-center"
+          >
+            <button>
               <IoMdNotificationsOutline className="text-xl text-text-primary" />
             </button>
           </div>
