@@ -80,7 +80,7 @@ const Groups = () => {
                           item?.group_photo ? item.group_photo : emptygrouplogo
                         }
                         alt="logo"
-                        className="mb-[10px] w-16 h-16 rounded-full"
+                        className="mb-[10px] w-16 h-16 rounded-full object-cover"
                       />
                     </div>
                     <h1 className="text-text-primary font-medium">

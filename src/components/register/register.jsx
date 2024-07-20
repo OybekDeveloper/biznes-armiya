@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
 import Stepper from "./stepper";
 import ControlSteps from "./control-steps";
 import EmailValid from "./email-valid";
@@ -11,6 +10,7 @@ import * as Action from "../../reducer/event";
 import { ApiService } from "../api.server";
 import { NavLink, useNavigate } from "react-router-dom";
 import Loader1 from "../loader/loader1";
+import toast from "react-hot-toast";
 const Register = () => {
   const register = localStorage.getItem("register");
   const yourGroup = localStorage.getItem("your-group");
@@ -42,6 +42,7 @@ const Register = () => {
       localStorage.setItem("register", JSON.stringify(res));
     } catch (error) {
       const newErrors = {};
+      toast.error("Something went wrong")
       newErrors["email"] = error?.response?.data?.email[0];
       dispatch(Action.postRegisterError(newErrors));
     } finally {
@@ -54,6 +55,7 @@ const Register = () => {
       setCurrentStep(3);
     } catch (error) {
       const newErrors = {};
+      toast.error("Something went wrong")
       newErrors["register_code"] = error?.response?.data?.detail;
       dispatch(Action.postRegisterError(newErrors));
     }
@@ -70,6 +72,7 @@ const Register = () => {
       const newErrors = {};
       console.log(generateCode);
       console.log(error);
+      toast.error("Something went wrong")
       newErrors["generate_code"] = error?.response?.data?.detail;
       dispatch(Action.postRegisterError(newErrors));
     }
@@ -157,12 +160,6 @@ const Register = () => {
   }
 
   return (
-    <>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Register | Biznes Armiya</title>
-        <link rel="icon" href="/" />
-      </Helmet>
       <main className="w-screen h-screen flex justify-center items-center md:grid grid-cols-4 max-lg:grid-cols-5 max-md:grid-cols-1">
         <section className="max-md:hidden w-full h-full col-span-1 max-lg:col-span-2 p-4">
           <div className="w-full h-full bg-primary rounded-[24px] p-t pt-[150px] flex justify-center">
@@ -186,7 +183,6 @@ const Register = () => {
           </div>
         </section>
       </main>
-    </>
   );
 };
 

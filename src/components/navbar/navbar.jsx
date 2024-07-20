@@ -17,7 +17,7 @@ import { userDetailSlice } from "../../reducer/event";
 import ExitModal from "../exit-modal";
 
 const Navbar = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const register = JSON.parse(localStorage.getItem("register"));
   const selectedTheme = localStorage.getItem("theme");
   const { pathname } = useLocation();
@@ -88,6 +88,7 @@ const Navbar = () => {
   }, [isOpen]);
 
   useEffect(() => {
+    if (!register && pathname !== "/register") navigate("/login");
     const fetchUserData = async () => {
       try {
         const res = await ApiService.getData(
@@ -98,13 +99,13 @@ const Navbar = () => {
         dispatch(userDetailSlice(res));
       } catch (error) {
         console.log(error);
-        if (error.response.status === 401) {
+        if (error?.response?.status === 401) {
           localStorage.removeItem("register");
           localStorage.removeItem("your-group");
+        } else {
+          // navigate("/not-found");
         }
-        if(error.response.status ===500){
-          navigate('/not-found')
-        }
+        console.log(error);
       }
     };
     if (register) {

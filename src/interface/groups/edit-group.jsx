@@ -15,17 +15,19 @@ import { ApiService } from "../../components/api.server";
 import toast from "react-hot-toast";
 import { IoAddCircleOutline } from "react-icons/io5";
 import axios from "axios";
-import ModalLoder from "../../components/loader/modal-loader";
+import ModalLoader from "../../components/loader/modal-loader";
 
-export default function AddGroup({ isOpen, handleClose }) {
-  const [errorMessage, setErrorMessage] = useState();
+export default function EditGroup({ isOpen, handleClose, group }) {
+  console.log(group);
+  const [errorMessage, setErrorMessage] = useState({});
   const [uploadPhoto, setUploadPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
+    name: group?.name || "",
     admin: "Captain",
     rate: 10,
-    shiori: "",
+    shiori: group?.shiori || "",
+    group_photo: group?.group_photo || "",
   });
   const fileInputRef = useRef(null);
 
@@ -57,7 +59,7 @@ export default function AddGroup({ isOpen, handleClose }) {
       setErrorMessage(newError);
       return;
     } else {
-      setErrorMessage(null);
+      setErrorMessage({});
     }
 
     const register = JSON.parse(localStorage.getItem("register"));
@@ -70,24 +72,19 @@ export default function AddGroup({ isOpen, handleClose }) {
         formD.append("shiori", formData.shiori);
         if (uploadPhoto) {
           formD.append("group_photo", uploadPhoto);
+        } else if (formData.group_photo) {
+          formD.append("group_photo", formData.group_photo);
         }
 
-        const res = await ApiService.postMediaData(
-          "/group",
+        const res = await ApiService.putMediaData(
+          `/group/${group?.id}`,
           formD,
           register?.access
         );
         setLoading(false);
-        toast.success("Group added successfully");
+        toast.success("Group updated successfully");
         console.log(res);
         handleClose();
-        setFormData({
-          name: "",
-          admin: "Captain",
-          rate: 10,
-          shiori: "",
-          group_photo: "",
-        });
       } catch (error) {
         console.log(error);
         setLoading(false);
@@ -98,19 +95,13 @@ export default function AddGroup({ isOpen, handleClose }) {
 
   const handleCloseModal = () => {
     handleClose();
-    setFormData({
-      name: "",
-      admin: "Captain",
-      rate: 10,
-      shiori: "",
-      group_photo: "",
-    });
-    setUploadPhoto();
+    setUploadPhoto(null);
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+  console.log(formData);
   return (
     <Transition appear show={isOpen}>
       <Dialog
@@ -133,7 +124,7 @@ export default function AddGroup({ isOpen, handleClose }) {
                   <div className="flex items-end justify-between cursor-pointer">
                     {loading && (
                       <div className="absolute top-0 left-0 w-full h-full bg-black/55 rounded-xl z-[1002] flex justify-center items-center">
-                        <ModalLoder />
+                        <ModalLoader />
                       </div>
                     )}
                     <h1 className="font-[600] clamp3">Add Group</h1>
@@ -150,7 +141,7 @@ export default function AddGroup({ isOpen, handleClose }) {
                     className="w-full h-[200px] rounded-md overflow-hidden my-2 relative"
                     onClick={handleFileInputClick}
                   >
-                    <div className="absolute top-0 left-0 w-full h-full text-white cursor-pointer bg-black/10 flex justify-center items-center gap-2 text-xl">
+                    <div className="absolute top-0 left-0 w-full h-full text-white cursor-pointer bg-black/40 flex justify-center items-center gap-2 text-xl">
                       <IoAddCircleOutline className="text-2xl" />
                       <h1>Add Foto</h1>
                     </div>
@@ -159,6 +150,8 @@ export default function AddGroup({ isOpen, handleClose }) {
                       src={
                         uploadPhoto
                           ? URL.createObjectURL(uploadPhoto)
+                          : group?.group_photo
+                          ? group?.group_photo
                           : addGroupBg
                       }
                       alt=""
@@ -182,14 +175,14 @@ export default function AddGroup({ isOpen, handleClose }) {
                     </label>
                     <input
                       onChange={handleChange}
-                      value={formData?.name}
+                      value={formData.name}
                       className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
                       type="text"
                       id="name"
                       name="name"
                       placeholder="Group name type"
                     />
-                    {errorMessage?.name && (
+                    {errorMessage.name && (
                       <p className="text-red-500">
                         The name field is not filled
                       </p>
@@ -203,7 +196,7 @@ export default function AddGroup({ isOpen, handleClose }) {
                       Slogan
                     </label>
                     <input
-                      value={formData?.shiori}
+                      value={formData.shiori}
                       onChange={handleChange}
                       className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
                       type="text"
@@ -211,7 +204,7 @@ export default function AddGroup({ isOpen, handleClose }) {
                       name="shiori"
                       placeholder="Strength is in unity"
                     />
-                    {errorMessage?.shiori && (
+                    {errorMessage.shiori && (
                       <p className="text-red-500">
                         The tagline field is not filled
                       </p>

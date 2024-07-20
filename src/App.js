@@ -286,6 +286,20 @@ const App = () => {
               }
             />
             <Route
+              path="/not-found"
+              element={
+                <Suspense
+                  fallback={
+                    <div className="w-full h-screen flex justify-center items-center ">
+                      <Loader1 />
+                    </div>
+                  }
+                >
+                  <NotFound />
+                </Suspense>
+              }
+            />
+            <Route
               path="*"
               element={
                 <Suspense

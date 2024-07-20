@@ -3,11 +3,20 @@ import { useDispatch, useSelector } from "react-redux";
 import * as Action from "../../reducer/event";
 
 const YourName = () => {
-  const { registerData ,regsiterDataError} = useSelector((state) => state.event);
+  const { registerData, regsiterDataError } = useSelector((state) => state.event);
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    // Validate phone number to only accept digits and + symbol
+    if (name === "phone_number") {
+      const phoneRegex = /^[+\d]*$/;
+      if (!phoneRegex.test(value)) {
+        return;
+      }
+    }
+
     dispatch(Action.postRegisterSlice({ name, value }));
   };
 
@@ -67,7 +76,7 @@ const YourName = () => {
           <input
             onChange={handleChange}
             className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
-            type="text"
+            type="tel"
             placeholder="+998919998090"
             id="phone_number"
             name="phone_number"
@@ -77,7 +86,6 @@ const YourName = () => {
             <p className="text-red-500">{regsiterDataError.phone_number}</p>
           )}
         </div>
-       
       </form>
     </main>
   );

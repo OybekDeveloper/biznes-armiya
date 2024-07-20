@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import GroupInfo from "./group-info";
 import { NavLink, useParams } from "react-router-dom";
 import { ApiService } from "../../components/api.server";
-import { emptyGroup } from "../../images";
+import { emptyGroup, photoUrl } from "../../images";
 import { FaPlus } from "react-icons/fa";
 import Loader1 from "../../components/loader/loader1";
 
@@ -11,6 +11,22 @@ const GroupItem = () => {
   const register = JSON.parse(localStorage.getItem("register"));
   const [loading, setLoading] = useState(true);
   const [group, setGroup] = useState();
+  const [users, setUsers] = useState([]);
+  const [isDelete, setIsDelete] = useState(false);
+  const [editGroup, setEditGroup] = useState(false);
+  const [isGenerate, setIsGenerate] = useState(false);
+
+  const handleGenerateCode = () => {
+    setIsGenerate(!isGenerate);
+  };
+
+  const handleEditGroup = () => {
+    setEditGroup(!editGroup);
+  };
+
+  const handleDelete = () => {
+    setIsDelete(!isDelete);
+  };
 
   useEffect(() => {
     const groupFetch = async () => {
@@ -19,7 +35,19 @@ const GroupItem = () => {
           `/group/${id}`,
           register?.access
         );
-        console.log(group);
+        const newUsers = await Promise.all(
+          group?.users?.map(async (item) => {
+            try {
+              return await ApiService.getData(
+                `/users/${item}`,
+                register?.access
+              );
+            } catch (error) {
+              console.log(error);
+            }
+          })
+        );
+        setUsers(newUsers.filter((user) => user)); // filter out undefined values
         setGroup(group);
         setLoading(false);
       } catch (error) {
@@ -28,8 +56,8 @@ const GroupItem = () => {
       }
     };
     groupFetch();
-  }, []);
-
+  }, [id, editGroup, isGenerate]);
+  console.log(users);
   return (
     <>
       {loading ? (
@@ -39,10 +67,22 @@ const GroupItem = () => {
       ) : (
         <main className="grid xl:grid-cols-4 lg:grid-cols-5 grid-cols-1 gap-4 md:px-[16px]">
           <section className="xl:col-span-1 lg:col-span-2 col-span-1 ">
-            <GroupInfo group={group} />
+            <GroupInfo
+              group={group}
+              handleEditGroup={handleEditGroup}
+              handleDelete={handleDelete}
+              isDelete={isDelete}
+              editGroup={editGroup}
+              isGenerate={isGenerate}
+              handleGenerateCode={handleGenerateCode}
+            />
           </section>
           <section className="lg:col-span-3 col-span-1 rounded-[14px] flex flex-col gap-3">
-            {!group?.users.length > 0 ? (
+            <div>
+              <h1 className="font-bold clamp3">Users</h1>
+              <button></button>
+            </div>
+            {!users.length > 0 ? (
               <div className="flex flex-col justify-center items-center w-full h-full mt-10 gap-4">
                 <img src={emptyGroup} alt="" />
                 <h1 className="font-bold clamp4">
@@ -54,39 +94,39 @@ const GroupItem = () => {
                 </button>
               </div>
             ) : (
-              group?.users?.map((task, i) => (
-                <NavLink
-                  to={`/project/${i}`}
-                  key={i}
-                  className="cursor-pointer hover:bg-hover-card bg-card shadow-btn_shadow rounded-[14px] w-full grid grid-cols-5 max-lg:grid-cols-3 max-xl:grid-cols-4 px-[24px] py-[16px] gap-3"
-                >
-                  <div className="col-span-1">
-                    <p className="text-thin-color clamp4">Task name</p>
-                    <h1 className="text-text-primary font-bold">Sick Leave</h1>
-                  </div>
-                  <div className="col-span-1">
-                    <p className="text-thin-color clamp4">Estimate</p>
-                    <h1 className="text-text-primary font-[500]">1d 2h </h1>
-                  </div>
-                  <div className="col-span-1">
-                    <p className="text-thin-color clamp4">Deadline</p>
-                    <h1 className="text-text-primary font-[500]">
-                      Sep 13, 2020
-                    </h1>
-                  </div>
-                  <div className="col-span-1">
-                    <p className="text-thin-color clamp4">Deadline</p>
-                    <h1 className="text-text-primary font-[500]">
-                      Sep 13, 2020
-                    </h1>
-                  </div>
-                  <div className="col-span-1 flex justify-start items-center ">
-                    <div className="text-[12px] px-2 py-1 rounded-[14px] bg-yellow-500 text-white">
-                      Bajarilmoqda
+              <div className="grid grid-cols-4 gap-4">
+                {users?.map((item, i) => (
+                  <div
+                    className="w-full h-full bg-card rounded-[24px] p-[16px] flex flex-col justify-start items-center gap-1"
+                    key={i}
+                  >
+                    <div className="flex flex-col gap-1 bg-background-secondary rounded-xl w-full py-2 justify-center items-center">
+                      <img
+                        src={
+                          item?.profile_photo ? item?.profile_photo : photoUrl
+                        }
+                        alt="logo"
+                        className="mb-[10px] w-16 h-16 rounded-full"
+                      />
+                      <h1 className="text-text-primary font-medium">
+                        {item?.first_name ? item.first_name : "Name"}
+                      </h1>
+                      <p className="text-gray-500 font-bold">
+                        {item.last_name ? item.last_name : "Familya"}
+                      </p>
+                      <p className="text-gray-500 py-1 px-2 border-border border-[1px] rounded-[4px] text-[12px]">
+                        {item.role}
+                      </p>
+                    </div>
+                    <div className="flex justify-center items-center gap-1 flex-col">
+                      <h1 className="font-bold clamp3">
+                        {item?.reyting ? item.reyting : 0}
+                      </h1>
+                      <p>Reyting</p>
                     </div>
                   </div>
-                </NavLink>
-              ))
+                ))}
+              </div>
             )}
           </section>
         </main>

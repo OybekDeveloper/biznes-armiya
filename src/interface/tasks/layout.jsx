@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
 import FilterMain from "./filter-main";
 import Tasks from "./tasks";
 import { FaPlus } from "react-icons/fa6";
@@ -7,6 +6,7 @@ import FilterTask from "./filter-tasks";
 import { ApiService } from "../../components/api.server";
 import AddTasks from "./add-task";
 import Loader1 from "../../components/loader/loader1";
+
 const HomeWork = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [tasks, setTasks] = useState([]);
@@ -42,11 +42,6 @@ const HomeWork = () => {
   }, [addTask]);
   return (
     <>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Vazifalar | Biznes Armiya</title>
-        <link rel="icon" href="/" />
-      </Helmet>
       {loading ? (
         <div className="w-full h-screen">
           <Loader1 />
@@ -77,7 +72,7 @@ const HomeWork = () => {
             </div>
             <div className="max-md:col-span-1 col-span-3 max-lg:mt-2">
               <Tasks
-                toggleFilter={toggleFilter}
+                to  ggleFilter={toggleFilter}
                 tasks={tasks}
                 status={filterStatus}
               />

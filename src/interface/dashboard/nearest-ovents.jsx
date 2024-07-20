@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Helmet } from "react-helmet";
 import { arrowleft, plus, time, yellowarrow } from "../../images";
 import { NavLink } from "react-router-dom";
 import AddEvent from "./add-event";
@@ -13,11 +12,6 @@ const NearestOvents = () => {
 
   return (
     <>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Nearest Ovents | Biznes Armiya</title>
-        <link rel="icon" href="/" />
-      </Helmet>
       <main className="relative">
         <button
           onClick={handleCloseEvent}

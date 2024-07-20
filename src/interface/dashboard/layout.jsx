@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
 import {
   arrowright,
   calendar,
@@ -37,11 +36,6 @@ const Dashboard = () => {
 
   return (
     <>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Dashboard | Biznes Armiya</title>
-        <link rel="icon" href="/" />
-      </Helmet>
       {loading ? (
         <div>
           <Loader1 />
@@ -82,7 +76,7 @@ const Dashboard = () => {
                           item?.group_photo ? item.group_photo : emptygrouplogo
                         }
                         alt="logo"
-                        className="mb-[10px] w-16 h-16 rounded-full"
+                        className="mb-[10px] object-cover w-16 h-16 rounded-full"
                       />
                       <h1 className="text-text-primary font-medium">
                         {item?.name}

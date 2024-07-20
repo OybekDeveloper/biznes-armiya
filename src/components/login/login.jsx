@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
 import { lightLogo, loginbgsvg, whiterightarrow } from "../../images";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
 import Loader1 from "../loader/loader1";
 import { ApiService } from "../api.server";
 import toast from "react-hot-toast";
@@ -10,6 +8,7 @@ import toast from "react-hot-toast";
 const Login = () => {
   const register = JSON.parse(localStorage.getItem("register"));
   const [errorMessage, setErrorMessage] = useState();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -19,15 +18,19 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const toastId = toast.loading("Logging in...");
-
+    setLoading(true);
     const fetchLogin = async () => {
       try {
         const res = await ApiService.postRegisterData("/login", formData);
         setErrorMessage();
         localStorage.setItem("register", JSON.stringify(res));
         navigate("/");
+        setLoading(false);
+
         toast.success("You have successfully logged in!", { id: toastId });
       } catch (error) {
+        setLoading(false);
+
         setErrorMessage(error?.response?.data);
         toast.error("Login failed, please try again.", {
           id: toastId,
@@ -55,12 +58,6 @@ const Login = () => {
     );
   }
   return (
-    <>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Login | Biznes Armiya</title>
-        <link rel="icon" href="/" />
-      </Helmet>
       <main className="flex max-md:flex-col max-md:justify-center max-md:h-screen max-md:items-center h-full md:h-[calc(100vh-40px)] px-[20px] md:px-[40px] py-[20px] bg-bg_primary">
         <section className="max-md:hidden w-1/2 h-full bg-primary rounded-l-[24px] flex flex-col justify-center items-center gap-[32px]">
           <div className="flex justify-start items-center">
@@ -143,8 +140,15 @@ const Login = () => {
             </NavLink>
           </div>
         </section>
+        {loading && (
+          <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex justify-center items-center flex-col">
+            <div className="flex justify-center items-center flex-col gap-4">
+              <h1 className="text-white font-bold">Loading</h1>
+              <Loader1 />
+            </div>
+          </div>
+        )}
       </main>
-    </>
   );
 };
 

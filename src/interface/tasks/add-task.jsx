@@ -28,7 +28,7 @@ export default function AddTasks({ isOpen, handleClose }) {
     start_time: "",
     stop_time: "",
     status: "",
-    user: "",
+    users: "",
   });
   const [newUsers, setNewUsers] = useState([]);
 
@@ -52,7 +52,7 @@ export default function AddTasks({ isOpen, handleClose }) {
           start_time: "",
           stop_time: "",
           status: "",
-          user: "",
+          users: "",
         });
         setNewUsers([]);
       } catch (error) {
@@ -81,7 +81,7 @@ export default function AddTasks({ isOpen, handleClose }) {
       start_time: "",
       stop_time: "",
       status: "",
-      user: "",
+      users: "",
     });
     setNewUsers([]);
   };
@@ -99,6 +99,11 @@ export default function AddTasks({ isOpen, handleClose }) {
         vab: 0,
       },
     ]);
+  };
+
+  const handleDeleteUser = (index) => {
+    const updatedUsers = newUsers.filter((_, i) => i !== index);
+    setNewUsers(updatedUsers);
   };
   const handleChangeNewUsers = (e, index) => {
     const { name, value } = e.target;
@@ -126,10 +131,10 @@ export default function AddTasks({ isOpen, handleClose }) {
   }, []);
 
   useEffect(() => {
-    setFormData({ ...formData, user: newUsers });
+    setFormData({ ...formData, users: newUsers });
   }, [newUsers]);
 
-  console.log(formData);
+  console.log(users);
   return (
     <Transition appear show={isOpen}>
       <Dialog
@@ -147,8 +152,10 @@ export default function AddTasks({ isOpen, handleClose }) {
               leaveFrom="opacity-100 transform-[scale(100%)]"
               leaveTo="opacity-0 transform-[scale(95%)]"
             >
-               <DialogPanel className="max-w-11/12 rounded-xl bg-card p-6 
-              ">
+              <DialogPanel
+                className="max-w-11/12 rounded-xl bg-card p-6 
+              "
+              >
                 <DialogTitle as="h3" className="text-base/7 font-medium">
                   <div className="flex items-end justify-between cursor-pointer">
                     <h1 className="font-[600] clamp3">Add Task</h1>
@@ -283,7 +290,8 @@ export default function AddTasks({ isOpen, handleClose }) {
                           Add a soldier
                         </label>
                         <AddListbox
-                          index={idx || 0}
+                          newUsers={newUsers}
+                          index={idx}
                           data={users}
                           handleChange={handleChangeNewUsers}
                         />
@@ -315,22 +323,31 @@ export default function AddTasks({ isOpen, handleClose }) {
                           </p>
                         )}
                       </div>
+                      <button
+                        onClick={() => handleDeleteUser(idx)}
+                        className="col-span-3 flex justify-end items-center gap-2 text-red-500"
+                      >
+                        <FaPlus />
+                        <h1>Delete Tab</h1>
+                      </button>
                     </div>
                   ))}
-                  <button
-                    onClick={handleAddUser}
-                    className="col-span-3 flex justify-end items-center gap-2 text-primary"
-                  >
-                    <FaPlus />
-                    <h1>Add new user</h1>
-                  </button>
-                  <div className="w-full flex justify-end items-center">
+                  <div className="flex justify-end items-center gap-3">
                     <button
-                      onClick={handleSubmit}
-                      className="px-[20px] py-[13px] rounded-[14px] bg-button-color text-white clamp4 font-bold"
+                      onClick={handleAddUser}
+                      className="w-full flex justify-start items-center gap-2 text-primary"
                     >
-                      Add Task
+                      <FaPlus />
+                      <h1>Add new user</h1>
                     </button>
+                    <div className="w-full flex justify-end items-center">
+                      <button
+                        onClick={handleSubmit}
+                        className="px-[20px] py-[13px] rounded-[14px] bg-button-color text-white clamp4 font-bold"
+                      >
+                        Add Task
+                      </button>
+                    </div>
                   </div>
                 </form>
               </DialogPanel>

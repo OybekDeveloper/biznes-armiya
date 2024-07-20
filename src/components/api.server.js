@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "http://13.60.80.160:8000/api";
+const baseUrl = "https://biznes-armiya-api.uz/api";
 export const ApiService = {
   async postData(url, data, token) {
     const response = await axios({
@@ -11,6 +11,30 @@ export const ApiService = {
         Authorization: `Bearer ${token}`,
       },
       data: JSON.stringify(data),
+    });
+    return response.data;
+  },
+  async postMediaData(url, data, token) {
+    const response = await axios({
+      method: "POST",
+      url: `${baseUrl}${url}`,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+      data: data,
+    });
+    return response.data;
+  },
+  async putMediaData(url, data, token) {
+    const response = await axios({
+      method: "PUT",
+      url: `${baseUrl}${url}`,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+      data: data,
     });
     return response.data;
   },

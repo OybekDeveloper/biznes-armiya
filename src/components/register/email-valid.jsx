@@ -2,6 +2,8 @@ import React from "react";
 import { MdInfo } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import * as Action from "../../reducer/event";
+import ModalLoder from "../loader/modal-loader";
+import Loader1 from "../loader/loader1";
 const EmailValid = () => {
   const register = JSON.parse(localStorage.getItem("register"));
   const { registerData, regsiterDataError, registerLoading, registerCode } =
@@ -100,7 +102,12 @@ const EmailValid = () => {
             </>
           )
         ) : (
-          <div>Loading...</div>
+          <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex justify-center items-center flex-col z-10">
+            <div className="flex justify-center items-center flex-col gap-4">
+              <h1 className="text-white font-bold">Loading</h1>
+              <Loader1 />
+            </div>
+          </div>
         )}
       </form>
     </main>
