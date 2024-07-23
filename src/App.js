@@ -59,12 +59,17 @@ const App = () => {
       document.body.classList.add("light");
     }
   }, [selectedTheme]);
-  
+
   useEffect(() => {
     if (!register && pathname !== "/login" && pathname !== "/register") {
       navigate("/login");
     }
   }, [register, pathname]);
+  useEffect(() => {
+    if (!selectedTheme) {
+      document.body.classList.add("ligth");
+    }
+  }, []);
 
   return (
     <>
