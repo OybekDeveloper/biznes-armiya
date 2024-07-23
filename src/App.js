@@ -65,6 +65,7 @@ const App = () => {
       navigate("/login");
     }
   }, [register, pathname]);
+  
   useEffect(() => {
     if (!selectedTheme) {
       document.body.classList.add("ligth");

@@ -81,14 +81,22 @@ const Register = () => {
   };
 
   const fetchGenerateCode = async () => {
+    dispatch(Action.registerLoadingSlice(true));
+
     try {
       await ApiService.postRegister("/check-gr/", {
         code: generateCode,
       });
+
+      dispatch(Action.postRegisterError({}));
       setCurrentStep(4);
     } catch (error) {
       const newErrors = {};
+      console.log(error);
       newErrors["generate_code"] = error?.response?.data?.detail;
+      dispatch(Action.postRegisterError(newErrors));
+    } finally {
+      dispatch(Action.registerLoadingSlice(false));
     }
   };
 
@@ -133,7 +141,7 @@ const Register = () => {
         dispatch(Action.postRegisterError(newErrors));
         return;
       }
-      fetchData(registerData);
+      fetchGenerateCode();
       return;
     } else if (newStep === 4) {
       if (regsiterDataError?.email) {
