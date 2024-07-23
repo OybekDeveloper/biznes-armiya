@@ -1,26 +1,33 @@
-import React from "react";
-import { MdInfo } from "react-icons/md";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Action from "../../reducer/event";
-import ModalLoder from "../loader/modal-loader";
-import Loader1 from "../loader/loader1";
+import { FaRegEye } from "react-icons/fa";
+import { FaRegEyeSlash } from "react-icons/fa";
+
 const EmailValid = () => {
+  const [showPassword, setShowPassword] = useState(true);
   const register = JSON.parse(localStorage.getItem("register"));
-  const { registerData, regsiterDataError, registerLoading, registerCode } =
-    useSelector((state) => state.event);
+  const { registerData, regsiterDataError } = useSelector(
+    (state) => state.event
+  );
   const dispatch = useDispatch();
+
+  const togglePasswordVisibility = (e) => {
+    e.preventDefault();
+    setShowPassword(!showPassword);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     dispatch(Action.postRegisterSlice({ name, value }));
-    localStorage.removeItem("register");
+    dispatch(Action.postRegisterError());
   };
   return (
     <main className="flex flex-col gap-4">
       <h1 className="text-black clamp2 font-bold text-center">
-        Valid your email
+        E-mailni tasqilash
       </h1>
-      <form action="" className="w-full flex flex-col gap-[20px]">
+      <form className="w-full flex flex-col gap-[20px]">
         {!register && (
           <>
             <div>
@@ -28,7 +35,7 @@ const EmailValid = () => {
                 className="text-[14px] font-[700] text-thin"
                 htmlFor="email"
               >
-                Email Address
+                E-mail pochta
               </label>
               <input
                 onChange={handleChange}
@@ -39,8 +46,8 @@ const EmailValid = () => {
                 name="email"
                 placeholder="youremail@gmail.com"
               />
-              {regsiterDataError.email && (
-                <p className="text-red-500">{regsiterDataError.email}</p>
+              {regsiterDataError?.email && (
+                <p className="text-red-500">{regsiterDataError?.email}</p>
               )}
             </div>
             <div>
@@ -48,66 +55,40 @@ const EmailValid = () => {
                 className="text-[14px] font-[700] text-thin"
                 htmlFor="password"
               >
-                Password
+                Parol
               </label>
-              <input
-                onChange={handleChange}
-                className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
-                type="text"
-                placeholder="oybek1234"
-                id="password"
-                value={registerData?.password}
-                name="password"
-              />
-              {regsiterDataError.password && (
-                <p className="text-red-500">{regsiterDataError.password}</p>
+              <div className="w-full relative flex items-center">
+                <input
+                  onChange={handleChange}
+                  className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
+                  type={showPassword ? "password" : "text"}
+                  placeholder="*******"
+                  id="password"
+                  value={registerData?.password}
+                  name="password"
+                />
+                {registerData?.password !== "" &&
+                  (showPassword ? (
+                    <button
+                      className="absolute right-4"
+                      onClick={togglePasswordVisibility}
+                    >
+                      <FaRegEye />
+                    </button>
+                  ) : (
+                    <button
+                      className="absolute right-4"
+                      onClick={togglePasswordVisibility}
+                    >
+                      <FaRegEyeSlash />
+                    </button>
+                  ))}
+              </div>
+              {regsiterDataError?.password && (
+                <p className="text-red-500">{regsiterDataError?.password}</p>
               )}
             </div>
           </>
-        )}
-
-        {!registerLoading ? (
-          register && (
-            <>
-              <div className="flex bg-background-secondary py-[21px] px-[12px] rounded-[14px] justify-around items-center">
-                <MdInfo className="clamp3 text-primary" />
-                <h1 className="text-[14px] text-primary font-[500]">
-                  SMS has been sent to your email
-                </h1>
-              </div>
-              <div className="">
-                <label
-                  className="text-[14px] font-[700] text-thin"
-                  htmlFor="register_code"
-                >
-                  Enter code
-                </label>
-                <input
-                  onChange={(e) =>
-                    dispatch(Action.verifyEmailSlices(e.target.value))
-                  }
-                  id="register_code"
-                  className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
-                  type="text"
-                  placeholder="123456"
-                  name="register_code"
-                  value={registerCode}
-                />
-                {regsiterDataError.register_code && (
-                  <p className="text-red-500">
-                    {regsiterDataError.register_code}
-                  </p>
-                )}
-              </div>
-            </>
-          )
-        ) : (
-          <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex justify-center items-center flex-col z-10">
-            <div className="flex justify-center items-center flex-col gap-4">
-              <h1 className="text-white font-bold">Loading</h1>
-              <Loader1 />
-            </div>
-          </div>
         )}
       </form>
     </main>

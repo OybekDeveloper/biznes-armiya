@@ -43,9 +43,7 @@ const HomeWork = () => {
   return (
     <>
       {loading ? (
-        <div className="w-full h-screen">
-          <Loader1 />
-        </div>
+        <Loader1 />
       ) : (
         <main className="flex flex-col md:px-[16px] gap-2">
           <section className="w-full flex justify-between items-center">
@@ -72,7 +70,8 @@ const HomeWork = () => {
             </div>
             <div className="max-md:col-span-1 col-span-3 max-lg:mt-2">
               <Tasks
-                to  ggleFilter={toggleFilter}
+                to
+                ggleFilter={toggleFilter}
                 tasks={tasks}
                 status={filterStatus}
               />

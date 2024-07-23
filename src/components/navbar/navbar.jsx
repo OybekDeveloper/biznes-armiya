@@ -103,7 +103,7 @@ const Navbar = () => {
           localStorage.removeItem("register");
           localStorage.removeItem("your-group");
         } else {
-          // navigate("/not-found");
+          navigate("/not-found");
         }
         console.log(error);
       }

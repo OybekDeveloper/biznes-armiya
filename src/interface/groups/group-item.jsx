@@ -15,6 +15,7 @@ const GroupItem = () => {
   const [isDelete, setIsDelete] = useState(false);
   const [editGroup, setEditGroup] = useState(false);
   const [isGenerate, setIsGenerate] = useState(false);
+  const [addUser, setAddUser] = useState(false);
 
   const handleGenerateCode = () => {
     setIsGenerate(!isGenerate);
@@ -26,6 +27,10 @@ const GroupItem = () => {
 
   const handleDelete = () => {
     setIsDelete(!isDelete);
+  };
+
+  const handleAddUser = () => {
+    setAddUser(!addUser);
   };
 
   useEffect(() => {
@@ -61,9 +66,7 @@ const GroupItem = () => {
   return (
     <>
       {loading ? (
-        <div>
-          <Loader1 />
-        </div>
+        <Loader1 />
       ) : (
         <main className="grid xl:grid-cols-4 lg:grid-cols-5 grid-cols-1 gap-4 md:px-[16px]">
           <section className="xl:col-span-1 lg:col-span-2 col-span-1 ">
@@ -75,6 +78,8 @@ const GroupItem = () => {
               editGroup={editGroup}
               isGenerate={isGenerate}
               handleGenerateCode={handleGenerateCode}
+              addUser={addUser}
+              handleAddUser={handleAddUser}
             />
           </section>
           <section className="lg:col-span-3 col-span-1 rounded-[14px] flex flex-col gap-3">
@@ -88,7 +93,10 @@ const GroupItem = () => {
                 <h1 className="font-bold clamp4">
                   There are no tasks in this group yet Let's add them
                 </h1>
-                <button className="max-md:hidden bg-button-color  flex justify-start items-center gap-2 rounded-[14px] py-2 px-4 text-white shadow-btn_shadow">
+                <button
+                  onClick={handleAddUser}
+                  className="max-md:hidden bg-button-color  flex justify-start items-center gap-2 rounded-[14px] py-2 px-4 text-white shadow-btn_shadow"
+                >
                   <FaPlus />
                   <h1>Add people</h1>
                 </button>

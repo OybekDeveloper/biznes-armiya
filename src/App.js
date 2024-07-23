@@ -4,9 +4,6 @@ import Saidbar from "./components/saidbar/saidbar";
 import Navbar from "./components/navbar/navbar";
 import { useEffect } from "react";
 import Loader1 from "./components/loader/loader1";
-import { userDetailSlice } from "./reducer/event";
-import { ApiService } from "./components/api.server";
-import { useDispatch } from "react-redux";
 //dashboard
 const Dashboard = React.lazy(() => import("./interface/dashboard/layout"));
 const NearestOvents = React.lazy(() =>
@@ -15,7 +12,13 @@ const NearestOvents = React.lazy(() =>
 //history
 const History = React.lazy(() => import("./interface/history/layout"));
 //auktion
-const Auktion = React.lazy(() => import("./interface/auktsion/layout"));
+const Auktion = React.lazy(() => import("./interface/auktsion/auktsion"));
+const AuktionItem = React.lazy(() =>
+  import("./interface/auktsion/auktsion-item")
+);
+const AuktionHistory = React.lazy(() =>
+  import("./interface/auktsion/auktsion-history")
+);
 //checklist
 const CheckList = React.lazy(() => import("./interface/checklist/layout"));
 //home work
@@ -24,6 +27,9 @@ const Project = React.lazy(() => import("./interface/tasks/project"));
 //requirements
 const Requirements = React.lazy(() =>
   import("./interface/requirements/layout")
+);
+const RequirementItem = React.lazy(() =>
+  import("./interface/requirements/requirement-item")
 );
 //news
 const News = React.lazy(() => import("./interface/news/layout"));
@@ -53,6 +59,7 @@ const App = () => {
       document.body.classList.add("light");
     }
   }, [selectedTheme]);
+  
   useEffect(() => {
     if (!register && pathname !== "/login" && pathname !== "/register") {
       navigate("/login");
@@ -82,13 +89,7 @@ const App = () => {
             <Route
               path="/"
               element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-screen flex justify-center items-center ">
-                      <Loader1 />
-                    </div>
-                  }
-                >
+                <Suspense fallback={<Loader1 />}>
                   <Dashboard />
                 </Suspense>
               }
@@ -96,13 +97,7 @@ const App = () => {
             <Route
               path="nearest"
               element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-screen flex justify-center items-center ">
-                      <Loader1 />
-                    </div>
-                  }
-                >
+                <Suspense fallback={<Loader1 />}>
                   <NearestOvents />
                 </Suspense>
               }
@@ -111,13 +106,7 @@ const App = () => {
             <Route
               path="/history"
               element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-screen flex justify-center items-center ">
-                      <Loader1 />
-                    </div>
-                  }
-                >
+                <Suspense fallback={<Loader1 />}>
                   <History />
                 </Suspense>
               }
@@ -126,13 +115,7 @@ const App = () => {
             <Route
               path="/homework"
               element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-screen flex justify-center items-center ">
-                      <Loader1 />
-                    </div>
-                  }
-                >
+                <Suspense fallback={<Loader1 />}>
                   <Homework />
                 </Suspense>
               }
@@ -140,13 +123,7 @@ const App = () => {
             <Route
               path="/project/:id"
               element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-screen flex justify-center items-center ">
-                      <Loader1 />
-                    </div>
-                  }
-                >
+                <Suspense fallback={<Loader1 />}>
                   <Project />
                 </Suspense>
               }
@@ -155,14 +132,24 @@ const App = () => {
             <Route
               path="/auktsion"
               element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-screen flex justify-center items-center ">
-                      <Loader1 />
-                    </div>
-                  }
-                >
+                <Suspense fallback={<Loader1 />}>
                   <Auktion />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/auktsion/:id"
+              element={
+                <Suspense fallback={<Loader1 />}>
+                  <AuktionItem />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/auktsion-history"
+              element={
+                <Suspense fallback={<Loader1 />}>
+                  <AuktionHistory />
                 </Suspense>
               }
             />
@@ -170,14 +157,16 @@ const App = () => {
             <Route
               path="/requirements"
               element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-screen flex justify-center items-center ">
-                      <Loader1 />
-                    </div>
-                  }
-                >
+                <Suspense fallback={<Loader1 />}>
                   <Requirements />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/requirements/:id"
+              element={
+                <Suspense fallback={<Loader1 />}>
+                  <RequirementItem />
                 </Suspense>
               }
             />
@@ -185,13 +174,7 @@ const App = () => {
             <Route
               path="/checklist"
               element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-screen flex justify-center items-center ">
-                      <Loader1 />
-                    </div>
-                  }
-                >
+                <Suspense fallback={<Loader1 />}>
                   <CheckList />
                 </Suspense>
               }
@@ -200,13 +183,7 @@ const App = () => {
             <Route
               path="/news"
               element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-screen flex justify-center items-center ">
-                      <Loader1 />
-                    </div>
-                  }
-                >
+                <Suspense fallback={<Loader1 />}>
                   <News />
                 </Suspense>
               }
@@ -215,13 +192,7 @@ const App = () => {
             <Route
               path="/groups"
               element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-screen flex justify-center items-center ">
-                      <Loader1 />
-                    </div>
-                  }
-                >
+                <Suspense fallback={<Loader1 />}>
                   <Groups />
                 </Suspense>
               }
@@ -229,13 +200,7 @@ const App = () => {
             <Route
               path="/groups/:id"
               element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-screen flex justify-center items-center ">
-                      <Loader1 />
-                    </div>
-                  }
-                >
+                <Suspense fallback={<Loader1 />}>
                   <GroupItem />
                 </Suspense>
               }
@@ -244,13 +209,7 @@ const App = () => {
             <Route
               path="/profile"
               element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-screen flex justify-center items-center ">
-                      <Loader1 />
-                    </div>
-                  }
-                >
+                <Suspense fallback={<Loader1 />}>
                   <Profile />
                 </Suspense>
               }
@@ -259,13 +218,7 @@ const App = () => {
             <Route
               path="/login"
               element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-screen flex justify-center items-center ">
-                      <Loader1 />
-                    </div>
-                  }
-                >
+                <Suspense fallback={<Loader1 />}>
                   <Login />
                 </Suspense>
               }
@@ -274,13 +227,7 @@ const App = () => {
             <Route
               path="/register"
               element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-screen flex justify-center items-center ">
-                      <Loader1 />
-                    </div>
-                  }
-                >
+                <Suspense fallback={<Loader1 />}>
                   <Register />
                 </Suspense>
               }
@@ -288,13 +235,7 @@ const App = () => {
             <Route
               path="/not-found"
               element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-screen flex justify-center items-center ">
-                      <Loader1 />
-                    </div>
-                  }
-                >
+                <Suspense fallback={<Loader1 />}>
                   <NotFound />
                 </Suspense>
               }
@@ -302,13 +243,7 @@ const App = () => {
             <Route
               path="*"
               element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-screen flex justify-center items-center ">
-                      <Loader1 />
-                    </div>
-                  }
-                >
+                <Suspense fallback={<Loader1 />}>
                   <NotFound />
                 </Suspense>
               }

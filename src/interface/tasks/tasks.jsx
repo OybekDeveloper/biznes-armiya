@@ -30,7 +30,11 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
             >
               <div className="col-span-1">
                 <p className="text-thin-color clamp4">Task name</p>
-                <h1 className="text-text-primary font-bold">{item?.name}</h1>
+                <h1 className="text-text-primary font-bold">
+                  {item?.name.length > 15
+                    ? item?.name.slice(0, 15) + "..."
+                    : item?.name}
+                </h1>
               </div>
               <div className="col-span-1">
                 <p className="text-thin-color clamp4">Estimate</p>

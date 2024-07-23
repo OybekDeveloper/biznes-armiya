@@ -77,16 +77,22 @@ const Groups = () => {
                     <div className="w-24 h-24 flex justify-center items-center">
                       <img
                         src={
-                          item?.group_photo ? item.group_photo : emptygrouplogo
+                          item?.group_photo ? item?.group_photo : emptygrouplogo
                         }
                         alt="logo"
                         className="mb-[10px] w-16 h-16 rounded-full object-cover"
                       />
                     </div>
                     <h1 className="text-text-primary font-medium">
-                      {item?.name}
+                      {item?.name.length > 20
+                        ? item?.name.slice(0, 20) + "..."
+                        : item?.name}
                     </h1>
-                    <p className="text-gray-500 font-bold">{item?.shiori}</p>
+                    <p className="text-gray-500 font-bold">
+                      {item?.shiori.length > 25
+                        ? item?.shiori.slice(0, 25)+"..."
+                        : item?.shiori}
+                    </p>
                     <p className="text-gray-500">
                       {item?.user?.length > 0 ? item.user.length : 0} user
                     </p>

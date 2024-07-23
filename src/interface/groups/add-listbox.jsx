@@ -1,4 +1,4 @@
-  import {
+import {
     Combobox,
     ComboboxButton,
     ComboboxInput,
@@ -9,11 +9,11 @@
   import clsx from "clsx";
   import { useEffect, useState } from "react";
   import { photoUrl } from "../../images";
-
+  
   export default function AddListbox({ data, handleChange, index, newUsers }) {
     const [selected, setSelected] = useState(null); // Initialize with null
     const [query, setQuery] = useState("");
-
+  
     useEffect(() => {
       if (index !== null) {
         const event = {
@@ -46,10 +46,10 @@
               return person?.name.toLowerCase().includes(query.toLowerCase());
             }
           });
-
+  
     return (
       <div className="z-[100]">
-        <Combobox
+        <Combobox   
           value={selected}
           onChange={(value) => setSelected(value)}
           onClose={() => setQuery("")}
@@ -57,7 +57,7 @@
           <div className="relative">
             <ComboboxInput
               className={clsx(
-                "w-full rounded-lg border-[1.5px] border-border bg-card py-[12px] pr-8 pl-3",
+                "rounded-lg border-[1.5px] border-border bg-card py-[12px] pr-8 pl-3",
                 "focus:outline-none focus:border-primary"
               )}
               displayValue={(person) => {
@@ -73,12 +73,12 @@
               <ChevronDownIcon className="size-4" />
             </ComboboxButton>
           </div>
-
+  
           <ComboboxOptions
             anchor="bottom"
             transition
             className={clsx(
-              "z-[1000] w-[var(--input-width)]  rounded-xl border border-border mt-2 shadow-btn_shadow bg-card p-1 [--anchor-gap:var(--spacing-1)] empty:invisible",
+              "z-[1000] w-[var(--input-width)]  rounded-xl border border-border mt-2 shadow-btn_shadow bg-card p-1  empty:invisible",
               "transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0"
             )}
           >
@@ -123,3 +123,4 @@
       </div>
     );
   }
+  

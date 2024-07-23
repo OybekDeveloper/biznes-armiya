@@ -15,13 +15,13 @@ export const saidbarData = [
   },
   {
     id: 2,
-    title: "Vazifalar",
+    title: "Tasks",
     icon: <FaTasks />,
     link: "/homework",
   },
   {
     id: 3,
-    title: "VAB tarixi",
+    title: "VAB history",
     icon: <MdWorkHistory />,
     link: "/history",
   },
@@ -33,19 +33,19 @@ export const saidbarData = [
   },
   {
     id: 5,
-    title: "Talablar",
+    title: "Requirements",
     icon: <MdOndemandVideo />,
     link: "/requirements",
   },
   {
     id: 6,
-    title: "Tekshirish ro'yxati",
+    title: "Checklist",
     icon: <FaCalendarCheck />,
     link: "/checklist",
   },
   {
     id: 7,
-    title: "Yangiliklar",
+    title: "News",
     icon: <FaNewspaper />,
     link: "/news",
   },

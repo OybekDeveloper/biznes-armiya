@@ -6,6 +6,7 @@
     "@headlessui/react": "^2.0.4",
     "@heroicons/react": "^2.1.4",
     "@reduxjs/toolkit": "^2.2.5",
+    "@syncfusion/ej2-react-richtexteditor": "^26.1.42",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",

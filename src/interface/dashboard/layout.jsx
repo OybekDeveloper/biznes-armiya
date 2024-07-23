@@ -14,9 +14,12 @@ import { FaCalendar } from "react-icons/fa";
 import { FaArrowDown } from "react-icons/fa";
 import { ApiService } from "../../components/api.server";
 import Loader1 from "../../components/loader/loader1";
+import { useSelector } from "react-redux";
 
 const Dashboard = () => {
   const register = JSON.parse(localStorage.getItem("register"));
+  const { userData } = useSelector((state) => state.event);
+
   const [groupData, setGroupData] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -37,20 +40,16 @@ const Dashboard = () => {
   return (
     <>
       {loading ? (
-        <div>
           <Loader1 />
-        </div>
       ) : (
         <main className="flex flex-col gap-[20px] md:px-[20px] pb-[20px]">
           <article className="flex w-full justify-between items-center mb-[20px]">
             <div className="flex flex-col items-start justify-start">
-              <p className="text-gray-500">Welcome back, Evan!</p>
+              <p className="text-gray-500">
+                Welcome back, {userData?.first_name}!
+              </p>
               <h1 className="font-bold clamp2 text-text-primary">Dashboard</h1>
             </div>
-            <button className="bg-primary text-primary text-white px-[10px] py-[5px] rounded">
-              <img src={calendar} alt="" />
-              <div></div>
-            </button>
           </article>
           <section className="flex gap-[30px] max-lg:flex-col ">
             <div className="min-h-[300px] lg:flex-1 bg-card shadow-btn_shadow rounded-[24px] p-[18px] flex flex-col">
@@ -71,7 +70,7 @@ const Dashboard = () => {
                       className="w-full bg-background rounded-[24px] p-[16px] flex flex-col justify-start items-center gap-1"
                       key={idx}
                     >
-                       <img
+                      <img
                         src={
                           item?.group_photo ? item.group_photo : emptygrouplogo
                         }

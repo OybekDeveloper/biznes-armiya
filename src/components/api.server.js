@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const baseUrl = "https://biznes-armiya-api.uz/api";
+// const baseUrl = "http://13.51.161.74:8000/api";
 export const ApiService = {
   async postData(url, data, token) {
     const response = await axios({
