@@ -163,6 +163,7 @@ const Register = () => {
         password: "",
       })
     );
+    localStorage.setItem("theme", "light");
   }, []);
 
   if (register) {

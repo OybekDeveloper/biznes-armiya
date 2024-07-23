@@ -73,15 +73,14 @@ const Login = () => {
   ];
 
   useEffect(() => {
+    localStorage.setItem("theme", "light");
     if (register) {
       navigate("/");
     }
   }, [register]);
 
   if (register) {
-    return (
-        <Loader1 />
-    );
+    return <Loader1 />;
   }
   return (
     <main className="flex max-md:flex-col max-md:justify-center max-md:h-screen max-md:items-center h-full md:h-[calc(100vh-40px)] px-[20px] md:px-[40px] py-[20px] bg-bg_primary">
