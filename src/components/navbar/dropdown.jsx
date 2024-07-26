@@ -33,7 +33,7 @@ export default function DropDown({ handleLogOut }) {
           />
           <div className="text-text_primary font-bold">
             {!userData.first_name ? (
-              <h1>Loading...</h1>
+              <h1>Name...</h1>
             ) : userData?.first_name?.length < 7 ? (
               userData?.first_name
             ) : (

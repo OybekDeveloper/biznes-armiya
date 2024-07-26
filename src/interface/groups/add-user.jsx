@@ -34,7 +34,6 @@ export default function AddTasks({ isOpen, handleClose }) {
           register?.access
         );
         toast.success("Group added successfully");
-        console.log(res);
         handleClose();
         setFormData({
           name: "",
@@ -119,9 +118,6 @@ export default function AddTasks({ isOpen, handleClose }) {
     setFormData({ ...formData, users: newUsers });
   }, [newUsers]);
 
-  console.log(users);
-
-  console.log(users);
   return (
     <Transition appear show={isOpen}>
       <Dialog

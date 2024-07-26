@@ -5,7 +5,6 @@ import { ApiService } from "../../components/api.server";
 import toast from "react-hot-toast";
 
 export default function ExitModal({ isOpen, handleClose, group }) {
-  console.log(group);
     const navigate = useNavigate()
   const handleDeleteGroup = () => {
     const groupFetch = async () => {

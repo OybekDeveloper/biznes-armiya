@@ -6,6 +6,7 @@ import FilterTask from "./filter-tasks";
 import { ApiService } from "../../components/api.server";
 import AddTasks from "./add-task";
 import Loader1 from "../../components/loader/loader1";
+import { useSelector } from "react-redux";
 
 const HomeWork = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -13,7 +14,8 @@ const HomeWork = () => {
   const [filterStatus, setFilterStatus] = useState("Asked");
   const [addTask, setAddTask] = useState(false);
   const [loading, setLoading] = useState(true);
-
+  const { permissionStatus } = useSelector((state) => state.event);
+  console.log(permissionStatus);
   const toggleFilter = () => {
     setIsFilterOpen(!isFilterOpen);
   };

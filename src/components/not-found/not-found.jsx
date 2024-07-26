@@ -5,7 +5,6 @@ const NotFound = () => {
   const navigate = useNavigate();
   const logOut = () => {
     localStorage.removeItem("register");
-    localStorage.removeItem("your-group");
     navigate("/login");
   };
   return (

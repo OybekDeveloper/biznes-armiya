@@ -1,9 +1,12 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useState } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Saidbar from "./components/saidbar/saidbar";
 import Navbar from "./components/navbar/navbar";
 import { useEffect } from "react";
 import Loader1 from "./components/loader/loader1";
+import { useDispatch } from "react-redux";
+import { setPermissionStatus } from "./reducer/event";
+import { ApiService } from "./components/api.server";
 //dashboard
 const Dashboard = React.lazy(() => import("./interface/dashboard/layout"));
 const NearestOvents = React.lazy(() =>
@@ -13,6 +16,9 @@ const NearestOvents = React.lazy(() =>
 const History = React.lazy(() => import("./interface/history/layout"));
 //auktion
 const Auktion = React.lazy(() => import("./interface/auktsion/auktsion"));
+const AuktionSelect = React.lazy(() =>
+  import("./interface/auktsion/now-auktsion")
+);
 const AuktionItem = React.lazy(() =>
   import("./interface/auktsion/auktsion-item")
 );
@@ -33,6 +39,7 @@ const RequirementItem = React.lazy(() =>
 );
 //news
 const News = React.lazy(() => import("./interface/news/layout"));
+const NewsItem = React.lazy(() => import("./interface/news/news-item"));
 //groups
 const Groups = React.lazy(() => import("./interface/groups/layout"));
 const GroupItem = React.lazy(() => import("./interface/groups/group-item"));
@@ -49,7 +56,8 @@ const App = () => {
   const navigate = useNavigate();
   const selectedTheme = localStorage.getItem("theme");
   const register = JSON.parse(localStorage.getItem("register"));
-
+  const [messages, setMessages] = useState([]);
+  const dispatch = useDispatch();
   useEffect(() => {
     if (selectedTheme) {
       document.body.classList.add(selectedTheme);
@@ -65,13 +73,51 @@ const App = () => {
       navigate("/login");
     }
   }, [register, pathname]);
-  
+
   useEffect(() => {
     if (!selectedTheme) {
       document.body.classList.add("ligth");
     }
   }, []);
 
+  useEffect(() => {
+    const socket = new WebSocket("ws://biznes-armiya-api.uz/ws/notifications/");
+
+    socket.onopen = () => {
+      console.log("WebSocket connection established");
+    };
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log("Received message:", data.message);
+      setMessages((prevMessages) => [...prevMessages, data.message]);
+      console.log(data, "socket message");
+    };
+
+    socket.onclose = () => {
+      console.log("WebSocket connection closed");
+    };
+
+    const permissionFetch = async () => {
+      try {
+        const permission = await ApiService.getData(
+          `/role/${register?.role}`,
+          register?.access
+        );
+        dispatch(setPermissionStatus(permission));
+        console.log(permission);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    permissionFetch();
+
+    dispatch(setPermissionStatus({ hi: "hello" }));
+
+    return () => {
+      socket.close();
+    };
+  }, []);
   return (
     <>
       <div
@@ -152,6 +198,14 @@ const App = () => {
               }
             />
             <Route
+              path="/auktsion-item/:id"
+              element={
+                <Suspense fallback={<Loader1 />}>
+                  <AuktionSelect />
+                </Suspense>
+              }
+            />
+            <Route
               path="/auktsion-history"
               element={
                 <Suspense fallback={<Loader1 />}>
@@ -191,6 +245,14 @@ const App = () => {
               element={
                 <Suspense fallback={<Loader1 />}>
                   <News />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/news/:id"
+              element={
+                <Suspense fallback={<Loader1 />}>
+                  <NewsItem />
                 </Suspense>
               }
             />

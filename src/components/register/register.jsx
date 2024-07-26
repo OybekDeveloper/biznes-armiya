@@ -53,15 +53,20 @@ const Register = () => {
     try {
       const res = await ApiService.postRegister("/register", data);
       dispatch(Action.setRegisterSuccessData(res));
-      fetchGenerateCode(registerData);
+      setCurrentStep(4);
     } catch (error) {
-      toast.error(error?.response?.data?.email[0]);
       setCurrentStep(2);
-      dispatch(
-        Action.postRegisterError({
-          email: error?.response?.data?.email[0],
-        })
-      );
+      
+      console.log(error);
+      if (error.response.data.email) {
+        dispatch(
+          Action.postRegisterError({
+            email: error?.response?.data?.email[0]
+              ? error?.response?.data?.email
+              : {},
+          })
+        );
+      }
     } finally {
       dispatch(Action.registerLoadingSlice(false));
     }
@@ -82,20 +87,16 @@ const Register = () => {
 
   const fetchGenerateCode = async () => {
     dispatch(Action.registerLoadingSlice(true));
-
     try {
       await ApiService.postRegister("/check-gr/", {
         code: generateCode,
       });
-
       dispatch(Action.postRegisterError({}));
-      setCurrentStep(4);
+      fetchData(registerData);
     } catch (error) {
       const newErrors = {};
-      console.log(error);
       newErrors["generate_code"] = error?.response?.data?.detail;
       dispatch(Action.postRegisterError(newErrors));
-    } finally {
       dispatch(Action.registerLoadingSlice(false));
     }
   };
@@ -178,7 +179,6 @@ const Register = () => {
     navigate("/");
     return <Loader1 />;
   }
-
   return (
     <main className="w-screen h-screen flex justify-center items-center md:grid grid-cols-4 max-lg:grid-cols-5 max-md:grid-cols-1">
       <section className="max-md:hidden w-full h-full col-span-1 max-lg:col-span-2 p-4">

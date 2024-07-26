@@ -23,8 +23,10 @@ const GroupInfo = ({
   isGenerate,
   handleGenerateCode,
   handleAddUser,
-  addUser
+  addUser,
 }) => {
+  const { permissionStatus } = useSelector((state) => state.event);
+
   const handleCopyCode = () => {
     navigator.clipboard
       .writeText(group?.generate_code)
@@ -47,53 +49,59 @@ const GroupInfo = ({
               className="mb-[10px] w-full h-full rounded-xl border-border border object-cover"
             />
           </div>
-          <div className="flex justify-between items-center w-full gap-3">
-            <div className="flex gap-2">
-              <button
-                onClick={handleAddUser}
-                className="p-2 rounded-md bg-background-secondary flex justify-start items-center gap-2 text-primary"
-              >
-                <FaPlus className="text-[18px] cursor-pointer" />
-                Add User
-              </button>
-            </div>
-            <div className="flex gap-2">
-              <button
-                onClick={handleEditGroup}
-                className="p-2 rounded-md bg-background-secondary"
-              >
-                <BiEdit className="text-[24px] cursor-pointer" />
-              </button>
-              <button
-                onClick={handleDelete}
-                className="p-2 rounded-md bg-background-secondary"
-              >
-                <FaRegTrashAlt className="text-red-500 text-[24px] cursor-pointer" />
-              </button>
-            </div>
-          </div>
-          <div className="flex justify-between items-center gap-2 w-full">
-            {group?.generate_code ? (
-              <button
-                className="w-full cursor-pointer flex justify-between items-center p-4 bg-background-secondary rounded-xl mt-2"
-                onClick={handleCopyCode}
-              >
-                {group?.generate_code}
-                <MdOutlineContentCopy className="ml-2" />
-              </button>
-            ) : (
-              <button
-                onClick={handleGenerateCode}
-                className="p-2 rounded-md bg-background-secondary flex justify-start items-center gap-2 text-primary"
-              >
-                <TbCircleKeyFilled className="text-[24px] cursor-pointer" />
-                Generate code
-              </button>
-            )}
-            <div className="flex justify-end items-center gap-2">
-              Admin:<h1 className="font-bold clamp4">{group?.admin}</h1>
-            </div>
-          </div>
+          {permissionStatus?.chat_edit ? (
+            <>
+              <div className="flex justify-between items-center w-full gap-3">
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleAddUser}
+                    className="p-2 rounded-md bg-background-secondary flex justify-start items-center gap-2 text-primary"
+                  >
+                    <FaPlus className="text-[18px] cursor-pointer" />
+                    Add User
+                  </button>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleEditGroup}
+                    className="p-2 rounded-md bg-background-secondary"
+                  >
+                    <BiEdit className="text-[24px] cursor-pointer" />
+                  </button>
+                  <button
+                    onClick={handleDelete}
+                    className="p-2 rounded-md bg-background-secondary"
+                  >
+                    <FaRegTrashAlt className="text-red-500 text-[24px] cursor-pointer" />
+                  </button>
+                </div>
+              </div>
+              <div className="flex justify-between items-center gap-2 w-full">
+                {group?.generate_code ? (
+                  <button
+                    className="w-full cursor-pointer flex justify-between items-center p-4 bg-background-secondary rounded-xl mt-2"
+                    onClick={handleCopyCode}
+                  >
+                    {group?.generate_code}
+                    <MdOutlineContentCopy className="ml-2" />
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleGenerateCode}
+                    className="p-2 rounded-md bg-background-secondary flex justify-start items-center gap-2 text-primary"
+                  >
+                    <TbCircleKeyFilled className="text-[24px] cursor-pointer" />
+                    Generate code
+                  </button>
+                )}
+                <div className="flex justify-end items-center gap-2">
+                  Admin:<h1 className="font-bold clamp4">{group?.admin}</h1>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div></div>
+          )}
         </div>
         <div>
           <h1 className="text-text-primary font-bold clamp3">{group?.name}</h1>
@@ -117,11 +125,7 @@ const GroupInfo = ({
         handleClose={handleGenerateCode}
         group={group}
       />
-      <AddUser
-        isOpen={addUser}
-        handleClose={handleAddUser}
-        group={group}
-      />
+      <AddUser isOpen={addUser} handleClose={handleAddUser} group={group} />
     </main>
   );
 };

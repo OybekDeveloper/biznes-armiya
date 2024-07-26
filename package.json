@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^42.0.1",
+    "@ckeditor/ckeditor5-markdown-gfm": "^42.0.1",
+    "@ckeditor/ckeditor5-react": "^8.0.0",
+    "@ckeditor/ckeditor5-upload": "^42.0.1",
     "@headlessui/react": "^2.0.4",
     "@heroicons/react": "^2.1.4",
     "@reduxjs/toolkit": "^2.2.5",
@@ -11,9 +15,12 @@
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
     "axios": "^1.7.2",
+    "ckeditor4-react": "^5.0.0",
+    "ckeditor5": "^42.0.1",
     "clsx": "^2.1.1",
     "emoji-picker-react": "^4.11.1",
     "framer-motion": "^11.2.10",
+    "jodit-react": "^4.1.2",
     "react": "^18.3.1",
     "react-circular-progressbar": "^2.1.0",
     "react-dom": "^18.3.1",
@@ -24,6 +31,7 @@
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
     "sass": "^1.77.6",
+    "socket.io-client": "^4.7.5",
     "web-vitals": "^2.1.0"
   },
   "scripts": {

@@ -5,6 +5,7 @@ import { ApiService } from "../../components/api.server";
 import { emptyGroup, photoUrl } from "../../images";
 import { FaPlus } from "react-icons/fa";
 import Loader1 from "../../components/loader/loader1";
+import { useSelector } from "react-redux";
 
 const GroupItem = () => {
   const { id } = useParams();
@@ -16,6 +17,7 @@ const GroupItem = () => {
   const [editGroup, setEditGroup] = useState(false);
   const [isGenerate, setIsGenerate] = useState(false);
   const [addUser, setAddUser] = useState(false);
+  const { permissionStatus } = useSelector((state) => state.event);
 
   const handleGenerateCode = () => {
     setIsGenerate(!isGenerate);
@@ -62,7 +64,6 @@ const GroupItem = () => {
     };
     groupFetch();
   }, [id, editGroup, isGenerate]);
-  console.log(users);
   return (
     <>
       {loading ? (
@@ -93,13 +94,15 @@ const GroupItem = () => {
                 <h1 className="font-bold clamp4">
                   There are no tasks in this group yet Let's add them
                 </h1>
-                <button
-                  onClick={handleAddUser}
-                  className="max-md:hidden bg-button-color  flex justify-start items-center gap-2 rounded-[14px] py-2 px-4 text-white shadow-btn_shadow"
-                >
-                  <FaPlus />
-                  <h1>Add people</h1>
-                </button>
+                {permissionStatus?.chat_edit && (
+                  <button
+                    onClick={handleAddUser}
+                    className="max-md:hidden bg-button-color  flex justify-start items-center gap-2 rounded-[14px] py-2 px-4 text-white shadow-btn_shadow"
+                  >
+                    <FaPlus />
+                    <h1>Add people</h1>
+                  </button>
+                )}
               </div>
             ) : (
               <div className="grid grid-cols-4 gap-4">

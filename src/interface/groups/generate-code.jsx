@@ -19,7 +19,6 @@ import ModalLoader from "../../components/loader/modal-loader";
 import { MdOutlineContentCopy } from "react-icons/md";
 
 export default function GenerateCode({ isOpen, handleClose, group }) {
-  console.log(group);
   const [loading, setLoading] = useState(false);
   const [generate, setGenerate] = useState();
 
@@ -39,7 +38,6 @@ export default function GenerateCode({ isOpen, handleClose, group }) {
         );
         setLoading(false);
         setGenerate(res.gr_code);
-        console.log(res);
       } catch (error) {
         console.log(error);
         setLoading(false);

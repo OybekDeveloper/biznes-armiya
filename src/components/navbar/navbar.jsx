@@ -95,17 +95,14 @@ const Navbar = () => {
           `/users/${register?.user_id}`,
           register?.access
         );
-        console.log(res);
         dispatch(userDetailSlice(res));
       } catch (error) {
-        console.log(error);
         if (error?.response?.status === 401) {
           localStorage.removeItem("register");
           localStorage.removeItem("your-group");
         } else {
           navigate("/not-found");
         }
-        console.log(error);
       }
     };
     if (register) {

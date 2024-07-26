@@ -9,9 +9,37 @@ import { NavLink, useParams } from "react-router-dom";
 import { ApiService } from "../../components/api.server";
 
 const Auktsion = () => {
-  const {id}=useParams(Auktsion)
-  const [loading, setLoading] = useState(false);
+  const { id } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [allItems, setAllItems] = useState([]);
+  const [pendingAuction, setPendingAuction] = useState({});
 
+  useEffect(() => {
+    const register = JSON.parse(localStorage.getItem("register"));
+    const fetchItem = async () => {
+      try {
+        const items = await ApiService.getData("/buyum", register?.access);
+        const auktsion = await ApiService.getData(
+          `/auktsion/${id}`,
+          register?.access
+        );
+        if (!items && !auktsion) {
+          return;
+        }
+        setPendingAuction(auktsion);
+
+        const filteredItems = items.filter((item) =>
+          auktsion?.buyumlar.includes(item.id)
+        );
+        setAllItems(filteredItems);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchItem();
+  }, []);
   return (
     <>
       {loading ? (
@@ -19,7 +47,9 @@ const Auktsion = () => {
       ) : (
         <main className="flex flex-col md:px-[16px] gap-2">
           <section className="w-full flex justify-between items-center">
-            <h1 className="font-bold text-text-primary clamp2">Auctions</h1>
+            <h1 className="font-bold text-text-primary clamp2">
+              {pendingAuction?.name}
+            </h1>
             <div className="flex justify-start items-center gap-2">
               <NavLink
                 to={"/auktsion-history"}
@@ -32,12 +62,9 @@ const Auktsion = () => {
               </button>
             </div>
           </section>
-          <section className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-5 gap-2">
+          <section className="">
             <div className="col-span-2">
-              <PandingAuction id={id}/>
-            </div>
-            <div className="col-span-1 sm:col-span-2 md:col-span-3">
-              <NowAuction />
+              <PandingAuction allItems={allItems} id={id} />
             </div>
           </section>
         </main>

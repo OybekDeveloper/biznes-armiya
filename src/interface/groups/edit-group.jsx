@@ -18,7 +18,6 @@ import axios from "axios";
 import ModalLoader from "../../components/loader/modal-loader";
 
 export default function EditGroup({ isOpen, handleClose, group }) {
-  console.log(group);
   const [errorMessage, setErrorMessage] = useState({});
   const [uploadPhoto, setUploadPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -83,7 +82,6 @@ export default function EditGroup({ isOpen, handleClose, group }) {
         );
         setLoading(false);
         toast.success("Group updated successfully");
-        console.log(res);
         handleClose();
       } catch (error) {
         console.log(error);
@@ -101,7 +99,6 @@ export default function EditGroup({ isOpen, handleClose, group }) {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-  console.log(formData);
   return (
     <Transition appear show={isOpen}>
       <Dialog

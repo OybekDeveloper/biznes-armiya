@@ -6,8 +6,10 @@ import { ApiService } from "../../components/api.server";
 import Loader1 from "../../components/loader/loader1";
 import { dataempty, emptygrouplogo } from "../../images";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Groups = () => {
+  const { permissionStatus } = useSelector((state) => state.event);
   const register = JSON.parse(localStorage.getItem("register"));
   const [isAddGroup, setIsAddGroup] = useState(false);
   const [groupData, setGroupData] = useState([]);
@@ -21,7 +23,6 @@ const Groups = () => {
     const groupFetch = async () => {
       try {
         const group = await ApiService.getData(`/group`, register?.access);
-        console.log(group);
         setGroupData(group);
         setLoading(false);
       } catch (error) {
@@ -34,7 +35,7 @@ const Groups = () => {
 
   return (
     <main className="col-span-3 max-lg:grid-cols-1 flex flex-col gap-2 md:px-[16px]">
-      <section className="flex justify-between items-center max-md:grid grid-cols-4">
+      <section className="flex justify-between items-center">
         <h1 className="col-span-4 text-text-primary font-bold clamp3">
           Groups ({groupData.length > 0 ? groupData.length : 0})
         </h1>
@@ -43,20 +44,24 @@ const Groups = () => {
             <button>
               <LuFilter className="text-xl text-text-primary" />
             </button>
-            <button
-              onClick={handleOpenAddGroup}
-              className="md:hidden fixed bottom-[16px] right-[16px] bg-button-color  flex justify-start items-center gap-2 rounded-full p-4 text-white shadow-btn_shadow"
-            >
-              <FaPlus />
-            </button>
           </div>
-          <button
-            onClick={handleOpenAddGroup}
-            className="max-md:hidden bg-button-color  flex justify-start items-center gap-2 rounded-[14px] py-2 px-4 text-white shadow-btn_shadow"
-          >
-            <FaPlus />
-            <h1>Add group</h1>
-          </button>
+          {permissionStatus?.chat_edit && (
+            <>
+              <button
+                onClick={handleOpenAddGroup}
+                className="md:hidden fixed bottom-[16px] right-[16px] bg-button-color  flex justify-start items-center gap-2 rounded-full p-4 text-white shadow-btn_shadow"
+              >
+                <FaPlus />
+              </button>
+              <button
+                onClick={handleOpenAddGroup}
+                className="max-md:hidden bg-button-color  flex justify-start items-center gap-2 rounded-[14px] py-2 px-4 text-white shadow-btn_shadow"
+              >
+                <FaPlus />
+                <h1>Add group</h1>
+              </button>
+            </>
+          )}
         </div>
       </section>
       {loading ? (
@@ -90,7 +95,7 @@ const Groups = () => {
                     </h1>
                     <p className="text-gray-500 font-bold">
                       {item?.shiori.length > 25
-                        ? item?.shiori.slice(0, 25)+"..."
+                        ? item?.shiori.slice(0, 25) + "..."
                         : item?.shiori}
                     </p>
                     <p className="text-gray-500">

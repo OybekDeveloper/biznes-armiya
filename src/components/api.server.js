@@ -15,6 +15,18 @@ export const ApiService = {
     });
     return response.data;
   },
+  async putData(url, data, token) {
+    const response = await axios({
+      method: "PUT",
+      url: `${baseUrl}${url}`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      data: JSON.stringify(data),
+    });
+    return response.data;
+  },
   async postMediaData(url, data, token) {
     const response = await axios({
       method: "POST",

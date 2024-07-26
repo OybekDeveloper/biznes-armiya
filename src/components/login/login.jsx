@@ -67,7 +67,6 @@ const Login = () => {
     };
     fetchLogin();
   };
-  console.log(errorMessage);
   const handleChange = (e) => [
     setFormData({ ...formData, [e.target.name]: e.target.value }),
   ];
@@ -184,7 +183,6 @@ const Login = () => {
       {loading && (
         <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex justify-center items-center flex-col">
           <div className="flex justify-center items-center flex-col gap-4">
-            <h1 className="text-white font-bold">Loading</h1>
             <Loader1 />
           </div>
         </div>
