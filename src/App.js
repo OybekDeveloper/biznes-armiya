@@ -97,7 +97,9 @@ const App = () => {
     socket.onclose = () => {
       console.log("WebSocket connection closed");
     };
-
+    if (pathname === "/login" || pathname === "/register") {
+      return;
+    }
     const permissionFetch = async () => {
       try {
         const permission = await ApiService.getData(
