@@ -81,22 +81,22 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    // const socket = new WebSocket("ws://biznes-armiya-api.uz/ws/notifications/");
+    const socket = new WebSocket("wss://biznes-armiya-api.uz/ws/notifications/");
 
-    // socket.onopen = () => {
-    //   console.log("WebSocket connection established");
-    // };
+    socket.onopen = () => {
+      console.log("WebSocket connection established");
+    };
 
-    // socket.onmessage = (event) => {
-    //   const data = JSON.parse(event.data);
-    //   console.log("Received message:", data.message);
-    //   setMessages((prevMessages) => [...prevMessages, data.message]);
-    //   console.log(data, "socket message");
-    // };
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log("Received message:", data.message);
+      setMessages((prevMessages) => [...prevMessages, data.message]);
+      console.log(data, "socket message");
+    };
 
-    // socket.onclose = () => {
-    //   console.log("WebSocket connection closed");
-    // };
+    socket.onclose = () => {
+      console.log("WebSocket connection closed");
+    };
     if (pathname === "/login" || pathname === "/register") {
       return;
     }
@@ -116,9 +116,9 @@ const App = () => {
 
     dispatch(setPermissionStatus({ hi: "hello" }));
 
-    // return () => {
-    //   socket.close();
-    // };
+    return () => {
+      socket.close();
+    };
   }, []);
   return (
     <>
