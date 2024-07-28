@@ -144,11 +144,11 @@ const Dashboard = () => {
                           <h1 className="w-[90%] clamp3 text-text-primary font-bold">
                             {item?.title}
                           </h1>
-                          <p className="text-thin text-[14px]">
+                          {/* <p className="text-thin text-[14px]">
                             Today | 5:00 PM
-                          </p>
+                          </p> */}
                         </div>
-                        <div className="w-full h-full flex flex-col justify-between items-end gap-3">
+                        {/* <div className="w-full h-full flex flex-col justify-between items-end gap-3">
                           <div className="text-yellow-500 flex justify-between items-center">
                             <h1>Midium</h1>
                             <img src={yellowarrow} alt="" />
@@ -175,7 +175,7 @@ const Dashboard = () => {
                               alt=""
                             />
                           </div>
-                        </div>
+                        </div> */}
                       </NavLink>
                     ))}
                   </div>

@@ -1,6 +1,6 @@
 import React, { Suspense, useState } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import Saidbar from "./components/saidbar/saidbar";
+import Saidbar from "./components/sidebar/sidebar";
 import Navbar from "./components/navbar/navbar";
 import { useEffect } from "react";
 import Loader1 from "./components/loader/loader1";
@@ -47,6 +47,14 @@ const GroupItem = React.lazy(() => import("./interface/groups/group-item"));
 const Profile = React.lazy(() => import("./interface/profile/layout"));
 //login
 const Login = React.lazy(() => import("./components/login/login"));
+//settings
+const Settings = React.lazy(() => import("./interface/settings/settings"));
+const UserManagement = React.lazy(() =>
+  import("./interface/settings/user-menage")
+);
+const RoleManagement = React.lazy(() =>
+  import("./interface/settings/add-role")
+);
 //register
 const Register = React.lazy(() => import("./components/register/register"));
 const NotFound = React.lazy(() => import("./components/not-found/not-found"));
@@ -81,7 +89,9 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const socket = new WebSocket("wss://biznes-armiya-api.uz/ws/notifications/");
+    const socket = new WebSocket(
+      "wss://biznes-armiya-api.uz/ws/notifications/"
+    );
 
     socket.onopen = () => {
       console.log("WebSocket connection established");
@@ -293,6 +303,32 @@ const App = () => {
                 </Suspense>
               }
             />
+            {/* Settings */}
+            <Route
+              path="/settings"
+              element={
+                <Suspense fallback={<Loader1 />}>
+                  <Settings />
+                </Suspense>
+              }
+            >
+              <Route
+                path="user"
+                element={
+                  <Suspense fallback={<Loader1 />}>
+                    <UserManagement />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="role"
+                element={
+                  <Suspense fallback={<Loader1 />}>
+                    <RoleManagement />
+                  </Suspense>
+                }
+              />
+            </Route>
             {/* register */}
             <Route
               path="/register"

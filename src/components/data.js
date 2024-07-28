@@ -5,7 +5,7 @@ import { RiAuctionFill } from "react-icons/ri";
 import { MdOndemandVideo } from "react-icons/md";
 import { FaCalendarCheck } from "react-icons/fa";
 import { FaNewspaper } from "react-icons/fa";
-
+import { IoMdSettings } from "react-icons/io";
 export const saidbarData = [
   {
     id: 1,
@@ -48,5 +48,11 @@ export const saidbarData = [
     title: "News",
     icon: <FaNewspaper />,
     link: "/news",
+  },
+  {
+    id: 7,
+    title: "Settings",
+    icon: <IoMdSettings />,
+    link: "/settings/user",
   },
 ];
