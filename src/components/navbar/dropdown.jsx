@@ -28,7 +28,11 @@ export default function DropDown({ handleLogOut }) {
         <MenuButton className="inline-flex items-center gap-2 bg-card shadow-btn_shadow py-[12px] px-[12px] rounded-[14px] z-10">
           <img
             className="cursor-pointer w-[24px] h-[24px] object-cover rounded-full"
-            src={userData?.profile_photo?.includes('.') ? userData.profile_photo : photoUrl}
+            src={
+              userData?.profile_photo?.includes(".")
+                ? userData.profile_photo
+                : photoUrl
+            }
             alt={"ddd"}
           />
           <div className="text-text_primary font-bold">
@@ -54,16 +58,18 @@ export default function DropDown({ handleLogOut }) {
             anchor="bottom end"
             className="w-52 origin-top-right rounded-xl bg-card mt-[5px] z-[999] shadow-btn_shadow outline-none"
           >
-            <div className="py-1.5 px-3 flex justify-between items-center">
+            <div className="px-3 py-1.5 flex justify-between items-start">
               <div className="w-32 cursor-pointer flex justify-between items-center gap-3 py-3 px-3 border-border border-[2px] rounded-[14px]">
-                <h1>9000</h1>
+                <h1>{userData?.vab ? userData?.vab : 0}</h1>
                 <img src={coinimg} alt="" />
               </div>
               <div className="cursor-pointer w-12 h-12 relative flex justify-center items-center">
-                <h1 className="absolute clamp4 ">8.8</h1>
+                <h1 className="absolute clamp4 ">
+                  {userData?.reyting ? userData?.reyting : 0}
+                </h1>
                 <CircularProgressbar
                   maxValue={10}
-                  value={8.8}
+                  value={userData?.reyting ? userData?.reyting : 0}
                   styles={buildStyles({
                     textColor: "#3F8CFF",
                     pathColor: "#3F8CFF",
@@ -71,7 +77,7 @@ export default function DropDown({ handleLogOut }) {
                   })}
                 />
               </div>
-            </div>
+            </div>  
             <MenuItem>
               <NavLink
                 to={"/profile"}

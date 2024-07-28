@@ -17,7 +17,7 @@ import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { photoUrl } from "../../images";
 
-export default function DropDownMobile() {
+export default function DropDownMobile({ handleLogOut }) {
   const { userData } = useSelector((state) => state.event);
 
   return (
@@ -59,7 +59,10 @@ export default function DropDownMobile() {
               </NavLink>
             </MenuItem>
             <MenuItem>
-              <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+              <button
+                onClick={handleLogOut}
+                className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10"
+              >
                 <ImExit className="size-4 fill-thin" />
                 Exit
                 <kbd className="ml-auto hidden font-sans text-xs text-thin group-data-[focus]:inline">

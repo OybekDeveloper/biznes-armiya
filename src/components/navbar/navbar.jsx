@@ -95,11 +95,14 @@ const Navbar = () => {
           `/users/${register?.user_id}`,
           register?.access
         );
-        dispatch(userDetailSlice(res));
+        const role = await ApiService.getData(
+          `/role/${register?.role}`,
+          register?.access
+        );
+        dispatch(userDetailSlice({ ...res, role: role }));
       } catch (error) {
         if (error?.response?.status === 401) {
           localStorage.removeItem("register");
-          localStorage.removeItem("your-group");
         } else {
           navigate("/not-found");
         }

@@ -24,7 +24,7 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
         <section className="flex flex-col gap-3">
           {filteredTasks.map((item, idx) => (
             <NavLink
-              to={`/project/${idx}`}
+              to={`/project/${item?.id}`}
               key={idx}
               className="cursor-pointer hover:bg-hover-card bg-card shadow-btn_shadow rounded-[14px] w-full grid grid-cols-6 max-lg:grid-cols-3 max-xl:grid-cols-4 px-[24px] py-[16px] gap-3"
             >

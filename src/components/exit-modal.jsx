@@ -1,13 +1,13 @@
 import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function ExitModal({ isOpen, handleClose }) {
-  const navigate = useNavigate()
-  const handleLouOut = () => {
+  const navigate = useNavigate();
+  
+  const handleLogOut = () => {
     localStorage.removeItem("register");
     localStorage.removeItem("your-group");
-    navigate('/login')
+    navigate('/login');
     handleClose();
   };
 
@@ -22,7 +22,6 @@ export default function ExitModal({ isOpen, handleClose }) {
         <div className="fixed inset-0 z-[999] w-screen overflow-y-auto bg-black/50">
           <div className="flex min-h-full items-center justify-center p-4">
             <DialogPanel
-              transition
               className="w-full max-w-md rounded-xl bg-card p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
             >
               <DialogTitle
@@ -43,7 +42,7 @@ export default function ExitModal({ isOpen, handleClose }) {
                 </Button>
                 <Button
                   className="inline-flex items-center gap-2 rounded-md bg-red-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-red-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700"
-                  onClick={handleLouOut}
+                  onClick={handleLogOut}
                 >
                   Yes
                 </Button>

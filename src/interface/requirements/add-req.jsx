@@ -3,16 +3,14 @@ import {
   DialogPanel,
   DialogTitle,
   Transition,
-  TransitionChild,
 } from "@headlessui/react";
 import { IoClose } from "react-icons/io5";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ApiService } from "../../components/api.server";
 import toast from "react-hot-toast";
 import SimpleLoading from "../../components/loader/simple-loading";
-import { close } from "../../images";
 
-export default function AddGroup({ isOpen, handleClose }) {
+export default function AddGroup({ isOpen, handleClose, updateItem }) {
   const register = JSON.parse(localStorage.getItem("register"));
   const [errorMessage, setErrorMessage] = useState({});
   const [loading, setLoading] = useState(false);
@@ -40,14 +38,30 @@ export default function AddGroup({ isOpen, handleClose }) {
     const groupFetch = async () => {
       setLoading(true);
       try {
-        await ApiService.postMediaData("/talablar", formData, register?.access);
-        toast.success("Requirement added successfully");
-        setFormData({
-          mavzu: "",
-          content: "",
-          user_id: register?.user_id || "",
-        });
-        handleClose();
+        if (updateItem) {
+          await ApiService.putData(
+            `/talablar/${updateItem.id}`,
+            formData,
+            register?.access
+          );
+          toast.success("Requirement updated successfully");
+          updateItem.mavzu = formData.mavzu;
+          updateItem.content = formData.content;
+          handleClose();
+        } else {
+          await ApiService.postMediaData(
+            "/talablar",
+            formData,
+            register?.access
+          );
+          toast.success("Requirement added successfully");
+          setFormData({
+            mavzu: "",
+            content: "",
+            user_id: register?.user_id || "",
+          });
+          handleClose();
+        }
       } catch (error) {
         console.log(error);
       } finally {
@@ -74,6 +88,12 @@ export default function AddGroup({ isOpen, handleClose }) {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
+  useEffect(() => {
+    if (updateItem) {
+      setFormData(updateItem);
+    }
+  }, [updateItem]);
+
   return (
     <Transition appear show={isOpen}>
       <Dialog
@@ -87,7 +107,7 @@ export default function AddGroup({ isOpen, handleClose }) {
           )}
 
           <div className="flex min-h-full items-center justify-center p-4">
-            <TransitionChild
+            <Transition.Child
               enter="ease-out duration-300"
               enterFrom="opacity-0 transform-[scale(95%)]"
               enterTo="opacity-100 transform-[scale(100%)]"
@@ -97,16 +117,16 @@ export default function AddGroup({ isOpen, handleClose }) {
             >
               <DialogPanel className="w-full max-w-md rounded-xl bg-card p-6 backdrop-blur-2xl relative">
                 <DialogTitle as="h3" className="text-base/7 font-medium">
-                  <div className="flex items-end justify-between cursor-pointer">
-                    <h1 className="font-[600] clamp3">Add Requirement</h1>
-                    <div className="p-[10px] bg-background-secondary rounded-[12px]">
-                      <IoClose
-                        onClick={handleCloseModal}
-                        className="text-text-primary text-[24px]"
-                        src={close}
-                        alt="close"
-                      />
-                    </div>
+                  <div className="flex items-end justify-between">
+                    <h1 className="font-[600] clamp3">
+                      {updateItem ? "Update Requirement" : "Add Requirement"}
+                    </h1>
+                    <button
+                      className="p-[10px] bg-background-secondary rounded-[12px]"
+                      onClick={handleCloseModal}
+                    >
+                      <IoClose className="text-text-primary text-[24px]" />
+                    </button>
                   </div>
                 </DialogTitle>
                 <form
@@ -122,7 +142,7 @@ export default function AddGroup({ isOpen, handleClose }) {
                     </label>
                     <input
                       onChange={handleChange}
-                      value={formData.mavzu || ""}
+                      value={formData.mavzu}
                       className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
                       type="text"
                       id="mavzu"
@@ -141,7 +161,7 @@ export default function AddGroup({ isOpen, handleClose }) {
                       Content
                     </label>
                     <input
-                      value={formData.content || ""}
+                      value={formData.content}
                       onChange={handleChange}
                       className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
                       type="text"
@@ -157,6 +177,7 @@ export default function AddGroup({ isOpen, handleClose }) {
                     <button
                       type="submit"
                       className="px-[20px] py-[13px] rounded-[14px] bg-button-color text-white clamp4 font-bold"
+                      disabled={loading}
                     >
                       {loading ? (
                         <div className="flex justify-start items-center gap-2 opacity-[0.8]">
@@ -164,13 +185,15 @@ export default function AddGroup({ isOpen, handleClose }) {
                           <h1>Loading...</h1>
                         </div>
                       ) : (
-                        <h1>Add Group</h1>
+                        <h1>
+                          {updateItem ? "Save" : "Submit"}
+                        </h1>
                       )}
                     </button>
                   </div>
                 </form>
               </DialogPanel>
-            </TransitionChild>
+            </Transition.Child>
           </div>
         </div>
       </Dialog>

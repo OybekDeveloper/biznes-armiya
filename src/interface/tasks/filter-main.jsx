@@ -6,17 +6,17 @@ import { NavLink } from "react-router-dom";
 const filterData = [
   {
     id: 1,
-    title: "Yuklamalar",
+    title: "Asked",
     status: "Asked",
   },
   {
     id: 2,
-    title: "Bajarilayotganlar",
+    title: "Expected",
     status: "Expected",
   },
   {
     id: 3,
-    title: "Tugatilganlar",
+    title: "Finished",
     status: "Done",
   },
 ];
@@ -31,7 +31,7 @@ const FilterMain = ({ handleFilterStatus }) => {
   return (
     <main className="sticky top-[88px] bg-card shadow-btn_shadow rounded-[14px] flex flex-col gap-3">
       <section className="w-full p-[8px] flex flex-col gap-[16px]">
-        {filterData.map((item, idx) => (
+        {filterData?.map((item, idx) => (
           <button
             onClick={() => handleActiveTab(item)}
             key={idx}

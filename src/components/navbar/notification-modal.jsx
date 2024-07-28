@@ -15,7 +15,8 @@ export default function NotificationModal({ isOpen, handleClose }) {
     e.preventDefault();
   };
   return (
-    <Transition appear show={isOpen}>
+    <Transition 
+    appear show={isOpen}>
       <Dialog
         as="div"
         className="relative z-[998] focus:outline-none"

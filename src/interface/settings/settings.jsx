@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import ProfileInfo from "./profile";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import Loader1 from "../../components/loader/loader1";
 
 const dataNav = [
-    {
-      id: 1,
-      title: "User Management",
-      link: "/settings/user",
-    },
+  {
+    id: 1,
+    title: "User Management",
+    link: "/settings/user",
+  },
   {
     id: 2,
     title: "Role",
@@ -17,6 +19,8 @@ const dataNav = [
 ];
 
 const Settings = () => {
+  const { userData } = useSelector((state) => state.event);
+
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -42,14 +46,18 @@ const Settings = () => {
           ))}
         </div>
       </section>
-      <section className="bg-card p-4 min-h-[calc(100vh-150px)] grid max-md:flex flex-col  md:grid-cols-2 xl:grid-cols-4 gap-4">
-        <div className="col-span-1">
-          <ProfileInfo />
-        </div>
-        <div className="col-span-1 lg:col-span-3">
-          <Outlet />
-        </div>
-      </section>
+      {!userData?.role ? (
+        <Loader1 />
+      ) : (
+        <section className="bg-card p-4 min-h-[calc(100vh-150px)] grid max-md:flex flex-col  md:grid-cols-2 xl:grid-cols-4 gap-4">
+          <div className="col-span-1">
+            <ProfileInfo />
+          </div>
+          <div className="col-span-1 lg:col-span-3">
+            <Outlet />
+          </div>
+        </section>
+      )}
     </main>
   );
 };

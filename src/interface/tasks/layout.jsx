@@ -72,8 +72,7 @@ const HomeWork = () => {
             </div>
             <div className="max-md:col-span-1 col-span-3 max-lg:mt-2">
               <Tasks
-                to
-                ggleFilter={toggleFilter}
+                toggleFilter={toggleFilter}
                 tasks={tasks}
                 status={filterStatus}
               />

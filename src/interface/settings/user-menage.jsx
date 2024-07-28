@@ -73,7 +73,7 @@ const UserMenage = () => {
       }
     };
     fetchData();
-  }, [register]);
+  }, []);
 
   if (loading) {
     return <Loader1 />;

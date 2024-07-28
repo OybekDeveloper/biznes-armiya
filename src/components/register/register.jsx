@@ -56,7 +56,7 @@ const Register = () => {
       setCurrentStep(4);
     } catch (error) {
       setCurrentStep(2);
-      
+
       console.log(error);
       if (error.response.data.email) {
         dispatch(

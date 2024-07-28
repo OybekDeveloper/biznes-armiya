@@ -1,26 +1,32 @@
-import { Listbox, ListboxButton, ListboxOption, ListboxOptions, Transition } from '@headlessui/react'
-import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid'
-import clsx from 'clsx'
-import { useState } from 'react'
+import {
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
+  Transition,
+} from "@headlessui/react";
+import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
+import clsx from "clsx";
+import { useState } from "react";
 
 const people = [
-  { id: 1, name: 'Tom Cook' },
-  { id: 2, name: 'Wade Cooper' },
-  { id: 3, name: 'Tanya Fox' },
-  { id: 4, name: 'Arlene Mccoy' },
-  { id: 5, name: 'Devon Webb' },
-]
+  { id: 1, name: "Tom Cook" },
+  { id: 2, name: "Wade Cooper" },
+  { id: 3, name: "Tanya Fox" },
+  { id: 4, name: "Arlene Mccoy" },
+  { id: 5, name: "Devon Webb" },
+];
 
 export default function SelectListBox() {
-  const [selected, setSelected] = useState(people[1])
+  const [selected, setSelected] = useState(people[1]);
 
   return (
     <div className="mx-auto w-full h-full z-[999]">
       <Listbox value={selected} onChange={setSelected}>
         <ListboxButton
           className={clsx(
-            'relative block w-full rounded-lg bg-card py-1.5 pr-8 pl-3 text-left clamp4 text-thin border-[1px] border-border',
-            'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
+            "relative block w-full rounded-lg bg-card py-1.5 pr-8 pl-3 text-left clamp4 text-thin border-[1px] border-border",
+            "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
           )}
         >
           {selected.name}
@@ -29,7 +35,11 @@ export default function SelectListBox() {
             aria-hidden="true"
           />
         </ListboxButton>
-        <Transition leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+        <Transition
+          leave="transition ease-in duration-100"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
           <ListboxOptions
             anchor="bottom"
             className="w-[var(--button-width)] rounded-xl shadow-custom border-[1px] border-border bg-card p-1 mt-1 focus:outline-none z-[1000]"
@@ -48,5 +58,5 @@ export default function SelectListBox() {
         </Transition>
       </Listbox>
     </div>
-  )
+  );
 }
