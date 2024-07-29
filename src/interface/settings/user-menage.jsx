@@ -81,7 +81,7 @@ const UserMenage = () => {
 
   return (
     <main className="">
-      <section className="w-full grid grid-cols-4 gap-4">
+      <section className="w-full grid max-sm:grid-cols-1 grid-cols-4 gap-4">
         <div className="w-full flex flex-col gap-3 col-span-2">
           <h1>Selected user</h1>
           <AddListbox

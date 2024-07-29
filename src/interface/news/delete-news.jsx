@@ -65,10 +65,10 @@ import {
                     as="h3"
                     className="text-clamp2 font-medium text-text-primary"
                   >
-                    Log Out
+                    Delete news
                   </DialogTitle>
                   <p className="mt-2 text-sm/6 text-thin-color">
-                    Are you sure you want to log out?
+                    Are you sure you want to delete this news?
                   </p>
                   <div className="mt-4 flex justify-between items-center gap-3">
                     <Button

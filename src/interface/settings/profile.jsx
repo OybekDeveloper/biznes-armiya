@@ -3,8 +3,9 @@ import { BiEdit } from "react-icons/bi";
 import { useSelector } from "react-redux";
 import { coinimg, photoUrl } from "../../images";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
+import { FaPhoneAlt } from "react-icons/fa";
 
-const ProfileInfo = () => {
+const ProfileInfo = ({ handleUpdateUser }) => {
   const { userData } = useSelector((state) => state.event);
   console.log(userData);
   return (
@@ -20,28 +21,32 @@ const ProfileInfo = () => {
             }
             alt=""
           />
-          <div className="p-2 rounded-md bg-background-secondary">
+          <div
+            onClick={handleUpdateUser}
+            className="p-2 rounded-md bg-background-secondary"
+          >
             <BiEdit className="text-[24px] cursor-pointer" />
           </div>
         </div>
-        <div>
+        <div className="flex flex-col justify-start items-start gap-2">
           <h1 className="text-text-primary font-bold clamp3">
             {userData.first_name + " " + userData.last_name}
           </h1>
           <p className="text-thin-color clamp4">{userData?.email}</p>
-          <p
+          <div
             onClick={() => window.open(`tel:${userData?.phone}`)}
-            className="text-primary clamp4 cursor-pointer underline decoration-solid"
+            className="bg-primary text-card p-2 rounded-md clamp4 cursor-pointer flex justify-start items-center gap-2"
           >
-            {userData?.phone_number}
-          </p>
-          <div className="py-1.5 flex justify-between items-start">
-            <div className="w-32 cursor-pointer flex justify-between items-center gap-3 py-3 px-3 border-border border-[2px] rounded-[14px]">
+            <FaPhoneAlt />
+            <h1>{userData?.phone_number}</h1>
+          </div>
+          <div className="py-1.5 flex justify-between items-center gap-3 ">
+            <div className="w-32 cursor-pointer flex justify-between items-center gap-3 py-1.5 px-3 border-border border-[2px] rounded-[14px]">
               <h1>{userData?.vab ? userData?.vab : 0}</h1>
               <img src={coinimg} alt="" />
             </div>
-            <div className="cursor-pointer w-12 h-12 relative flex justify-center items-center">
-              <h1 className="absolute clamp4 ">
+            <div className="cursor-pointer w-10 h-10 relative flex justify-center items-center">
+              <h1 className="absolute ">
                 {userData?.reyting ? userData?.reyting : 0}
               </h1>
               <CircularProgressbar

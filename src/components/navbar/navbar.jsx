@@ -15,6 +15,7 @@ import { ApiService } from "../api.server";
 import { useDispatch, useSelector } from "react-redux";
 import { userDetailSlice } from "../../reducer/event";
 import ExitModal from "../exit-modal";
+import "./index.css";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -144,8 +145,9 @@ const Navbar = () => {
             )}
           </div>
           <div
+            data-count={9}
             onClick={handleOpenNotification}
-            className="p-[12px] rounded-[14px] bg-card cursor-pointer shadow-btn_shadow flex justify-center items-center"
+            className="p-[12px] rounded-[14px] bg-card cursor-pointer shadow-btn_shadow flex justify-center items-center notf-cound relative"
           >
             <button>
               <IoMdNotificationsOutline className="text-xl text-text-primary" />
@@ -182,7 +184,7 @@ const Navbar = () => {
                 <MdDarkMode className="text-xl text-text-primary" />
               </button>
             )}
-            <button onClick={handleOpenNotification}>
+            <button data-count={2} className="relative notf-cound" onClick={handleOpenNotification}>
               <IoMdNotificationsOutline className="text-xl text-text-primary" />
             </button>
             <div>

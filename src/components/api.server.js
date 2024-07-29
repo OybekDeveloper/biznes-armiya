@@ -51,6 +51,18 @@ export const ApiService = {
     });
     return response.data;
   },
+  async putMediaData(url, data, token) {
+    const response = await axios({
+      method: "PUT",
+      url: `${baseUrl}${url}`,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+      data: data,
+    });
+    return response.data;
+  },
   async getData(url, token) {
     const response = await axios({
       method: "GET",

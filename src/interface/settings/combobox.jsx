@@ -59,10 +59,8 @@ export default function AddListbox({ data, handleChange, status }) {
             <ChevronDownIcon className="size-4" />
           </ComboboxButton>
         </div>
-        {query && filteredData.length > 0 && (
           <ComboboxOptions
             anchor="bottom"
-            transition
             className={clsx(
               "z-[1000] w-[var(--input-width)] rounded-xl border border-border mt-2 shadow-btn_shadow bg-card p-1",
               "transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0 overflow-auto"
@@ -92,7 +90,6 @@ export default function AddListbox({ data, handleChange, status }) {
               </ComboboxOption>
             ))}
           </ComboboxOptions>
-        )}
       </Combobox>
     </div>
   );
