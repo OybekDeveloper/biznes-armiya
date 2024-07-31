@@ -48,7 +48,7 @@ const Auktsion = () => {
               <button className="hidden md:flex bg-card justify-start items-center gap-2 rounded-[14px] p-3 text-xl shadow-btn_shadow">
                 <FiFilter />
               </button>
-              {permissionStatus?.auktsion_edit && (
+              {true && (
                 <button
                   onClick={handleAddAuktsion}
                   className="bg-button-color flex justify-start items-center gap-2 rounded-md px-4 py-2 text-white shadow-btn_shadow"

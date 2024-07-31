@@ -72,6 +72,7 @@ body {
 
 .light {
   --primary: 11, 92, 181, 1;
+  --primarychart:#0B5CB5;
 
   --background: 244, 249, 253, 1;
   --background-secondary: 232, 242, 248;
@@ -101,6 +102,7 @@ body {
 
 .dark {
   --primary: 255, 255, 255, 1;
+  --primarychart:#fff;
 
   --background: 15, 18, 45;
   --background-secondary: 20, 24, 58;

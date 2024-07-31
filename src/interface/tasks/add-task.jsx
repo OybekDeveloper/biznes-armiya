@@ -194,7 +194,7 @@ export default function AddTasks({ isOpen, handleClose }) {
                       </p>
                     )}
                   </div>
-                  <div className="w-full flex justify-between items-center gap-4">
+                  <div className="w-full flex justify-between items-center gap-4 max-sm:flex-col">
                     <div className="w-full">
                       <label
                         className="text-[14px] font-[700] text-thin"

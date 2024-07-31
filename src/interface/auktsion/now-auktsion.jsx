@@ -5,15 +5,26 @@ import { motion } from "framer-motion";
 import { ApiService } from "../../components/api.server";
 import { useParams } from "react-router-dom";
 import Loader1 from "../../components/loader/loader1";
+import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
+
 const allItems = [];
+
 const NowAuction = () => {
+  const register = JSON.parse(localStorage.getItem("register"));
+  const { userData } = useSelector((state) => state.event);
+
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [item, setItem] = useState({});
   const [bids, setBids] = useState([]);
+  const [addVab, setAddVab] = useState({
+    vab: null,
+    buyum_id: id,
+    user_id: register?.user_id,
+  });
 
   useEffect(() => {
-    const register = JSON.parse(localStorage.getItem("register"));
     const fetchItem = async () => {
       try {
         const items = await ApiService.getData(
@@ -29,7 +40,7 @@ const NowAuction = () => {
       }
     };
     fetchItem();
-  }, []);
+  }, [id, register?.access]);
 
   useEffect(() => {
     const now = new Date();
@@ -47,8 +58,38 @@ const NowAuction = () => {
       )
     );
   };
+
   const maxVab = Math.max(...bids.map((bid) => bid.ekb));
   const maxVabItem = bids.find((bid) => bid.ekb === maxVab);
+
+  const handleAddVab = () => {
+    // Validate addVab input
+    if (addVab.vab <= 0) {
+      toast.error("Vab must be a positive number!");
+      return;
+    }
+    if (userData?.vab < addVab?.vab) {
+      toast.error("Not enough vab!");
+      return;
+    }
+
+    // Proceed to add vab
+    const fetchData = async () => {
+      try {
+        const res = await ApiService.postData(
+          "/buyumusers",
+          addVab,
+          register?.access
+        );
+        toast.success("Successfully added vab!");
+        console.log(res);
+      } catch (error) {
+        toast.error("Failed to add vab!");
+        console.log(error);
+      }
+    };
+    fetchData();
+  };
 
   return (
     <>
@@ -86,7 +127,7 @@ const NowAuction = () => {
                   </div>
                 </div>
                 <div className="col-span-2 max-sm:col-span-3 sm:col-span-3 lg:col-span-2 mb-2">
-                  <table className="min-w-full bg-card   shadow-sm overflow-hidden">
+                  <table className="min-w-full bg-card shadow-sm overflow-hidden">
                     <thead>
                       <tr>
                         <th className="px-4 py-2 border-b border-hr-color text-start">
@@ -162,14 +203,21 @@ const NowAuction = () => {
               </table>
             </section>
             <section className="absolute bottom-0 right-0 flex w-full justify-end items-end rounded-md p-2">
-              <div className="w-full h-full  flex justify-between items-center gap-4">
+              <div className="w-full h-full flex justify-between items-center gap-4">
                 <input
+                  onChange={(e) =>
+                    setAddVab({ ...addVab, vab: Number(e.target.value) || "" })
+                  }
                   type="number"
+                  value={addVab?.vab || ""}
                   className="shadow-btn_shadow bg-card w-full p-2 border rounded-md focus:outline-none border-border focus:border-primary"
                   placeholder="Enter your vab"
                 />
-                <div className=" flex justify-end items-center">
-                  <button className="whitespace-nowrap w-full shadow-btn_shadow p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                <div className="flex justify-end items-center">
+                  <button
+                    onClick={handleAddVab}
+                    className="whitespace-nowrap w-full shadow-btn_shadow p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                  >
                     Add vab
                   </button>
                 </div>

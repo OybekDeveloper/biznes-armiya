@@ -19,6 +19,7 @@ export default function AddAuktsion({ isOpen, handleClose }) {
   const [formData, setFormData] = useState({
     name: "",
     kuni: "",
+    vab_id: 1,
     yutganlar: "1",
     buyumlar: [],
   });
