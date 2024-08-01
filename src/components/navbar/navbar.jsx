@@ -97,7 +97,7 @@ const Navbar = () => {
           register?.access
         );
         const role = await ApiService.getData(
-          `/role/${register?.role}`,
+          `/role/${register?.role_id}`,
           register?.access
         );
         dispatch(userDetailSlice({ ...res, role: role }));

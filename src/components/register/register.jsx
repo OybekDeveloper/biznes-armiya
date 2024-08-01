@@ -73,15 +73,23 @@ const Register = () => {
   };
 
   const fetchVerifyEmail = async (code) => {
+    console.log(registerData)
+    dispatch(Action.registerLoadingSlice(true));
     try {
-      dispatch(Action.registerLoadingSlice(false));
-      await ApiService.postRegisterData("/verify-email", { code });
+      await ApiService.postRegisterData("/verify-email", {
+        code: code,
+        email: registerData?.email,
+      });
       setCurrentStep(3);
       localStorage.setItem("register", JSON.stringify(registerSuccessData));
     } catch (error) {
+      console.log(error);
+
       const newErrors = {};
       newErrors["register_code"] = error?.response?.data?.detail;
       dispatch(Action.postRegisterError(newErrors));
+    } finally {
+      dispatch(Action.registerLoadingSlice(false));
     }
   };
 

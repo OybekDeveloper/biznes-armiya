@@ -51,7 +51,11 @@ export default function TransactionPay({ isOpen, handleClose }) {
         return;
       }
       if (userData?.vab < formData?.vab) {
-        toast.error("Not enough vab!");
+        toast.error(
+          `You do not have enough VABs. You have ${
+            userData?.vab ? userData?.vab : 0
+          } VAB!`
+        );
         return;
       }
       setLoading(true);
