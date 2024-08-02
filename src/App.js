@@ -113,7 +113,7 @@ const App = () => {
     const permissionFetch = async () => {
       try {
         const permission = await ApiService.getData(
-          `/role/${register?.role_id}`,
+          `/role/${register?.role_id?register?.role_id:register?.role}`,
           register?.access
         );
         dispatch(setPermissionStatus(permission));

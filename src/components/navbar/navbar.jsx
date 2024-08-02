@@ -89,6 +89,7 @@ const Navbar = () => {
   }, [isOpen]);
 
   useEffect(() => {
+    console.log(register)
     if (!register && pathname !== "/register") navigate("/login");
     const fetchUserData = async () => {
       try {
@@ -97,7 +98,7 @@ const Navbar = () => {
           register?.access
         );
         const role = await ApiService.getData(
-          `/role/${register?.role_id}`,
+          `/role/${register?.role_id?register?.role_id:register?.role}`,
           register?.access
         );
         dispatch(userDetailSlice({ ...res, role: role }));
