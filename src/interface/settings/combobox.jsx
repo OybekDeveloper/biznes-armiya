@@ -9,10 +9,12 @@ import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { photoUrl } from "../../images";
+import { useSelector } from "react-redux";
 
 export default function AddListbox({ data, handleChange, status }) {
   const [selected, setSelected] = useState(null);
   const [query, setQuery] = useState("");
+  const { userData } = useSelector((state) => state.event);
 
   useEffect(() => {
     if (selected) {
@@ -59,14 +61,18 @@ export default function AddListbox({ data, handleChange, status }) {
             <ChevronDownIcon className="size-4" />
           </ComboboxButton>
         </div>
-          <ComboboxOptions
-            anchor="bottom"
-            className={clsx(
-              "z-[1000] w-[var(--input-width)] rounded-xl border border-border mt-2 shadow-btn_shadow bg-card p-1",
-              "transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0 overflow-auto"
-            )}
-          >
-            {filteredData.map((item) => (
+        <ComboboxOptions
+          anchor="bottom"
+          className={clsx(
+            "z-[1000] w-[var(--input-width)] rounded-xl border border-border mt-2 shadow-btn_shadow bg-card p-1",
+            "transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0 overflow-auto"
+          )}
+        >
+          {filteredData.map((item) => {
+            if (userData?.id === item?.id) {
+              return null;
+            }
+            return (
               <ComboboxOption
                 key={item?.id}
                 value={item}
@@ -88,8 +94,9 @@ export default function AddListbox({ data, handleChange, status }) {
                 </div>
                 <CheckIcon className="invisible size-4 group-data-[selected]:visible" />
               </ComboboxOption>
-            ))}
-          </ComboboxOptions>
+            );
+          })}
+        </ComboboxOptions>
       </Combobox>
     </div>
   );

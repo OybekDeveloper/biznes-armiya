@@ -1,5 +1,4 @@
 import {
-  Button,
   Dialog,
   DialogPanel,
   DialogTitle,
@@ -13,7 +12,7 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import SimpleLoading from "../../components/loader/simple-loading";
 import { addGroupBg, close } from "../../images";
 import { useSelector } from "react-redux";
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+// import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
 export default function AddUser({ isOpen, handleClose }) {
   const { userData } = useSelector((state) => state.event);
@@ -21,7 +20,7 @@ export default function AddUser({ isOpen, handleClose }) {
   const [uploadPhoto, setUploadPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const [showPassword, setShowPassword] = useState(true);
+  // const [showPassword, setShowPassword] = useState(true);
 
   const [formData, setFormData] = useState();
 
@@ -60,17 +59,11 @@ export default function AddUser({ isOpen, handleClose }) {
     }
   };
 
-  const handlePasswordChange = async () => {
-    if (!formData?.password) {
-      setErrorMessage({
-        password: "Password field is required",
-      });
-      return;
-    }
-    setErrorMessage({});
+  const handleUpdateProfile = async () => {
     setLoading(true);
     const fetchData = async () => {
       const register = JSON.parse(localStorage.getItem("register"));
+      console.log(formData)
       try {
         const formD = new FormData();
         formD.append("email", formData.email);
@@ -80,10 +73,8 @@ export default function AddUser({ isOpen, handleClose }) {
         if (uploadPhoto) {
           formD.append("profile_photo", uploadPhoto);
         }
-        formD.append("password", formData?.password);
-
         await ApiService.putMediaData(
-          `/users/${userData?.id}`,
+          `/update-user/${userData?.id}/`,
           formD,
           register?.access
         ); // Adjust API endpoint as needed
@@ -126,10 +117,10 @@ export default function AddUser({ isOpen, handleClose }) {
     setFormData({ ...formData, [name]: value });
   };
 
-  const togglePasswordVisibility = (e) => {
-    e.preventDefault();
-    setShowPassword(!showPassword);
-  };
+  // const togglePasswordVisibility = (e) => {
+  //   e.preventDefault();
+  //   setShowPassword(!showPassword);
+  // };
 
   useEffect(() => {
     setFormData({
@@ -281,59 +272,12 @@ export default function AddUser({ isOpen, handleClose }) {
                       </p>
                     )}
                   </div>
-                  <div className="w-full flex justify-end items-center">
-                    <button
-                      type="submit"
-                      className="px-[20px] py-[13px] rounded-[14px] bg-button-color text-white clamp4 font-bold"
-                    >
-                      {loading ? (
-                        <div className="flex justify-start items-center gap-2 opacity-[0.8]">
-                          <SimpleLoading />
-                          <h1>Loading...</h1>
-                        </div>
-                      ) : (
-                        <h1>Update Profile</h1>
-                      )}
-                    </button>
-                  </div>
-                </form>
-              </DialogPanel>
-            </div>
-          </div>
-        </Dialog>
-      </Transition>
-
-      {/* Password Change Modal */}
-      <Transition appear show={showPasswordModal}>
-        <Dialog
-          as="div"
-          className="relative z-[998]"
-          onClose={() => setShowPasswordModal(false)}
-        >
-          <div className="fixed inset-0 z-[999] w-screen overflow-y-auto bg-black/50">
-            <div className="flex min-h-full items-center justify-center p-4">
-              <DialogPanel className="w-full max-w-md rounded-xl bg-card p-6 backdrop-blur-2xl relative">
-                <DialogTitle
-                  as="h3"
-                  className="text-base/7 font-medium flex justify-between items-center gap-2"
-                >
-                  Valid Password
-                  <div className="p-[10px] bg-background-secondary rounded-[12px] cursor-pointer">
-                    <IoClose
-                      onClick={() => setShowPasswordModal(false)}
-                      className="text-text-primary text-[24px]"
-                      src={close}
-                      alt="close"
-                    />
-                  </div>
-                </DialogTitle>
-                <form className="mt-4 flex flex-col gap-3">
-                  <div>
+                  {/* <div>
                     <label
                       className="text-[14px] font-[700] text-thin"
                       htmlFor="password"
                     >
-                      Your password
+                      Password
                     </label>
                     <div className="w-full relative flex items-center">
                       <input
@@ -368,10 +312,10 @@ export default function AddUser({ isOpen, handleClose }) {
                     {errorMessage?.password && (
                       <p className="text-red-500">{errorMessage.password}</p>
                     )}
-                  </div>
+                  </div> */}
                   <div className="w-full flex justify-end items-center">
                     <button
-                      onClick={handlePasswordChange}
+                      onClick={handleUpdateProfile}
                       className="px-[20px] py-[13px] rounded-[14px] bg-button-color text-white clamp4 font-bold"
                     >
                       {loading ? (
@@ -380,7 +324,7 @@ export default function AddUser({ isOpen, handleClose }) {
                           <h1>Loading...</h1>
                         </div>
                       ) : (
-                        <h1>Valid password</h1>
+                        <h1>Update profile</h1>
                       )}
                     </button>
                   </div>

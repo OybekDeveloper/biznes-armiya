@@ -32,7 +32,7 @@ const Dashboard = () => {
           `/users/${register?.user_id}`,
           register?.access
         );
-        console.log(user,'user')
+        console.log(user, "user");
         setNewsList(res);
         setGroupData(group);
         setLoading(false);
@@ -125,7 +125,7 @@ const Dashboard = () => {
                 <div className="w-full flex justify-between items-center mb-[20px]">
                   <h1 className="text-text-pimary clamp3 font-bold">News</h1>
                   <NavLink
-                    to={"/nearest"}
+                    to={"/news"}
                     className="flex justify-center items-center"
                   >
                     <h1 className="text-primary cursor-pointer">View all</h1>
@@ -141,8 +141,10 @@ const Dashboard = () => {
                         className="hover:bg-hover-card cursor-pointer p-2 rounded-md flex w-full justify-between items-center gap-1 border-l-[2px] border-hr-color pl-2"
                       >
                         <div className="h-full flex flex-col justify-between">
-                          <h1 className="w-[90%] clamp3 text-text-primary font-bold">
-                            {item?.title}
+                          <h1 className="w-full clamp3 text-text-primary font-bold">
+                            {item?.title.length > 30
+                              ? item?.title.slice(0, 30) + "..."
+                              : item?.title}
                           </h1>
                           {/* <p className="text-thin text-[14px]">
                             Today | 5:00 PM

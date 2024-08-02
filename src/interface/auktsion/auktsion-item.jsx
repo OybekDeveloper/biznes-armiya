@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Loader1 from "../../components/loader/loader1";
-import { FaPlus } from "react-icons/fa";
+import { FaArrowLeft, FaPlus } from "react-icons/fa";
 import PandingAuction from "./pending-auction";
 import NowAuction from "./now-auktsion";
 import { FaShoppingCart } from "react-icons/fa";
@@ -47,9 +47,21 @@ const Auktsion = () => {
       ) : (
         <main className="flex flex-col md:px-[16px] gap-2">
           <section className="w-full flex justify-between items-center">
-            <h1 className="font-bold text-text-primary clamp2">
-              {pendingAuction?.name}
-            </h1>
+            <div className="flex flex-col justify-start items-center gap-3">
+              <button
+                className={
+                  "flex justify-start items-center gap-2 text-blue-600"
+                }
+                onClick={() => window.history.back()}
+              >
+                <FaArrowLeft className="text-[14px]" />
+                <p className="text-[14px]">Back to back</p>
+              </button>
+              <h1 className="font-bold text-text-primary clamp2">
+                {pendingAuction?.name}
+              </h1>
+            </div>
+
             <div className="flex justify-start items-center gap-2">
               <NavLink
                 to={"/auktsion-history"}

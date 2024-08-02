@@ -3,7 +3,7 @@ import GroupInfo from "./group-info";
 import { NavLink, useParams } from "react-router-dom";
 import { ApiService } from "../../components/api.server";
 import { emptyGroup, photoUrl } from "../../images";
-import { FaPlus } from "react-icons/fa";
+import { FaArrowLeft, FaPlus } from "react-icons/fa";
 import Loader1 from "../../components/loader/loader1";
 import { useSelector } from "react-redux";
 
@@ -71,6 +71,14 @@ const GroupItem = () => {
       ) : (
         <main className="grid xl:grid-cols-4 lg:grid-cols-5 grid-cols-1 gap-4 md:px-[16px]">
           <section className="xl:col-span-1 lg:col-span-2 col-span-1 ">
+            {/* back button */}
+            <button
+              className={"py-2 flex justify-start items-center gap-2 text-blue-600"}
+              onClick={() => window.history.back()}
+            >
+              <FaArrowLeft className="text-[14px]" />
+              <p className="text-[14px]">Back to Group</p>
+            </button>
             <GroupInfo
               group={group}
               handleEditGroup={handleEditGroup}

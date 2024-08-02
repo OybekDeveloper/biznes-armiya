@@ -4,9 +4,10 @@ import { FaPlus } from "react-icons/fa";
 import AddGroup from "./add-group";
 import { ApiService } from "../../components/api.server";
 import Loader1 from "../../components/loader/loader1";
-import { dataempty, emptygrouplogo } from "../../images";
+import { arrowleft, dataempty, emptygrouplogo } from "../../images";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { FaArrowLeft } from "react-icons/fa";
 
 const Groups = () => {
   const { permissionStatus } = useSelector((state) => state.event);
@@ -36,9 +37,19 @@ const Groups = () => {
   return (
     <main className="col-span-3 max-lg:grid-cols-1 flex flex-col gap-2 md:px-[16px]">
       <section className="flex justify-between items-center">
-        <h1 className="col-span-4 text-text-primary font-bold clamp3">
-          Groups ({groupData.length > 0 ? groupData.length : 0})
-        </h1>
+        <div className="flex flex-col justify-start items-center gap-3">
+          {/* back button */}
+          <button
+            className={"flex justify-start items-center gap-2 text-blue-600"}
+            onClick={() => window.history.back()}
+          >
+            <FaArrowLeft className="text-[14px]" />
+            <p className="text-[14px]">Back to back</p>
+          </button>
+          <h1 className="col-span-4 text-text-primary font-bold clamp3">
+            Groups ({groupData.length > 0 ? groupData.length : 0})
+          </h1>
+        </div>
         <div className="col-span-1 flex justify-end items-center gap-3">
           <div className="p-[12px] rounded-[14px] bg-card cursor-pointer shadow-btn_shadow flex justify-center items-center">
             <button>

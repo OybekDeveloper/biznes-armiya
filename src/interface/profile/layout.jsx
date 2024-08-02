@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProfileInfo from "./profile-info";
 import { FaArrowDown, FaCalendar } from "react-icons/fa";
 import { motion } from "framer-motion";
 import Projects from "./projects";
 import Team from "./team";
 import Myvacations from "./my-vacations";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loader1 from "../../components/loader/loader1";
+import EditUser from "../settings/edit-user";
+import { ApiService } from "../../components/api.server";
+import { useLocation, useNavigate } from "react-router-dom";
+import { userDetailSlice } from "../../reducer/event";
+
 const filterProject = [
   {
     id: 1,
@@ -23,8 +28,13 @@ const filterProject = [
 ];
 
 const Profile = () => {
+  const register = JSON.parse(localStorage.getItem("register"));
+  const [editUser, setEditUser] = useState(false);
   const { userData } = useSelector((state) => state.event);
   const [activeTab, setActiveTab] = useState(1);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
   const activeProfileDetails = (id) => {
     switch (id) {
       case 1:
@@ -37,6 +47,36 @@ const Profile = () => {
         return;
     }
   };
+
+  const handleUpdateUser = () => {
+    setEditUser(!editUser);
+  };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const res = await ApiService.getData(
+          `/users/${register?.user_id}`,
+          register?.access
+        );
+        const role = await ApiService.getData(
+          `/role/${register?.role_id ? register?.role_id : register?.role}`,
+          register?.access
+        );
+        dispatch(userDetailSlice({ ...res, role: role }));
+      } catch (error) {
+        if (error?.response?.status === 401) {
+          localStorage.removeItem("register");
+        } else {
+          navigate("/not-found");
+        }
+      }
+    };
+    if (register) {
+      fetchUserData();
+    }
+  }, [register?.user_id, editUser]);
+
   return (
     <div>
       {!userData?.role ? (
@@ -44,7 +84,7 @@ const Profile = () => {
       ) : (
         <main className="grid xl:grid-cols-4 lg:grid-cols-5 grid-cols-1 gap-4 md:px-[16px]">
           <section className="xl:col-span-1 lg:col-span-2 col-span-1 ">
-            <ProfileInfo />
+            <ProfileInfo handleUpdateUser={handleUpdateUser} />
           </section>
           <section className="lg:col-span-3 col-span-1 rounded-[14px] flex flex-col gap-3">
             <div className="flex justify-between items-start max-md:flex-col-reverse ">
@@ -79,6 +119,7 @@ const Profile = () => {
               {activeProfileDetails(activeTab)}
             </div>
           </section>
+          <EditUser isOpen={editUser} handleClose={handleUpdateUser} />
         </main>
       )}
     </div>

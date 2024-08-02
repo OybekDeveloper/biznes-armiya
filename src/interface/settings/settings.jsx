@@ -41,7 +41,7 @@ const Settings = () => {
           register?.access
         );
         const role = await ApiService.getData(
-          `/role/${register?.role_id?register?.role_id:register?.role}`,
+          `/role/${register?.role_id ? register?.role_id : register?.role}`,
           register?.access
         );
         dispatch(userDetailSlice({ ...res, role: role }));
@@ -56,7 +56,8 @@ const Settings = () => {
     if (register) {
       fetchUserData();
     }
-  }, [register.user_id, editUser]);
+    //eslint-disable-next-line
+  }, [register?.user_id, editUser]);
 
   return (
     <>

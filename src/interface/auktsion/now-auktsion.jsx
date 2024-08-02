@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { emptygrouplogo } from "../../images";
-import { FaCalendar } from "react-icons/fa";
+import { FaArrowLeft, FaCalendar } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { ApiService } from "../../components/api.server";
 import { useParams } from "react-router-dom";
@@ -97,6 +97,13 @@ const NowAuction = () => {
         <Loader1 />
       ) : (
         <div className="sm:px-4">
+          <button
+            className={"py-2 flex justify-start items-center gap-2 text-blue-600"}
+            onClick={() => window.history.back()}
+          >
+            <FaArrowLeft className="text-[14px]" />
+            <p className="text-[14px]">Back to back</p>
+          </button>
           <main className="relative h-full min-h-[calc(100vh-110px)] w-full bg-card rounded-xl shadow-btn_shadow">
             <section className="bg-background-secondary rounded-md">
               <div className="grid grid-cols-3 gap-4 rounded-md sm:p-4">

@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FaPlus } from "react-icons/fa";
 import { LuFilter } from "react-icons/lu";
 import { NavLink } from "react-router-dom";
 
 const Checklist = () => {
+
+  useEffect(()=>{
+
+  },[])
+
   return (
     <main className="col-span-3 max-lg:grid-cols-1 flex flex-col gap-2">
       <section className="flex justify-between items-center">
