@@ -64,21 +64,29 @@ const NowAuction = () => {
 
   const handleAddVab = () => {
     // Validate addVab input
-    if (addVab.vab <= 0) {
-      toast.error("Vab must be a positive number!");
-      return;
-    }
-    if (userData?.vab < addVab?.vab) {
-      toast.error("Not enough vab!");
-      return;
-    }
+    // if (addVab.vab <= 0) {
+    //   toast.error("Vab must be a positive number!");
+    //   return;
+    // }
+    // if (userData?.vab < addVab?.vab) {
+    //   toast.error("Not enough vab!");
+    //   return;
+    // }
 
     // Proceed to add vab
     const fetchData = async () => {
       try {
-        const res = await ApiService.postData(
-          "/buyumusers",
-          addVab,
+        const res = await ApiService.putData(
+          "/buyum/" + id,
+          {
+            buyumusers:[
+              ...item.buyumusers,
+              {
+                user_id: register?.user_id,
+                ekb: addVab.vab
+              }
+            ]
+          },
           register?.access
         );
         toast.success("Successfully added vab!");
@@ -98,7 +106,9 @@ const NowAuction = () => {
       ) : (
         <div className="sm:px-4">
           <button
-            className={"py-2 flex justify-start items-center gap-2 text-blue-600"}
+            className={
+              "py-2 flex justify-start items-center gap-2 text-blue-600"
+            }
             onClick={() => window.history.back()}
           >
             <FaArrowLeft className="text-[14px]" />

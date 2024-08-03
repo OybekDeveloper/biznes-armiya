@@ -190,7 +190,7 @@ const Register = () => {
   return (
     <main className="w-screen h-screen flex justify-center items-center md:grid grid-cols-4 max-lg:grid-cols-5 max-md:grid-cols-1">
       <section className="max-md:hidden w-full h-full col-span-1 max-lg:col-span-2 p-4">
-        <div className="w-full h-full bg-primary rounded-[24px] pt-[150px] flex justify-center">
+        <div className="w-full h-full bg-primary rounded-[24px] pt-[150px] flex justify-center px-2">
           <div className="flex flex-col gap-3">
             <h1 className="clamp2 font-bold text-white">Boshlash</h1>
             <Stepper steps={steps} currentStep={currentStep} />

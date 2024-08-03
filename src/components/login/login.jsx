@@ -53,7 +53,7 @@ const Login = () => {
         toast.success("Siz muvoffaqiyatli kirdingiz!", { id: toastId });
       } catch (error) {
         setLoading(false);
-
+        console.log(error)
         setErrorMessage(error?.response?.data);
         toast.error(
           <h1 className="text-center">

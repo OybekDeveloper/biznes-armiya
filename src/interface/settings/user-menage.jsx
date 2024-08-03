@@ -41,7 +41,7 @@ const UserMenage = () => {
 
     try {
       const res = await ApiService.putData(
-        `/users/${selected.user}`,
+        `/update-user/${selected.user}/`,
         {
           role: selected.role,
         },

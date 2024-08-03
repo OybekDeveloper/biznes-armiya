@@ -14,8 +14,7 @@ const HomeWork = () => {
   const [filterStatus, setFilterStatus] = useState("Asked");
   const [addTask, setAddTask] = useState(false);
   const [loading, setLoading] = useState(true);
-  const { permissionStatus } = useSelector((state) => state.event);
-  console.log(permissionStatus);
+  const { userData } = useSelector((state) => state.event);
   const toggleFilter = () => {
     setIsFilterOpen(!isFilterOpen);
   };

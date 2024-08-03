@@ -19,7 +19,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import DeleteModal from "./delete-news";
 
 const News = () => {
-  const { permissionStatus } = useSelector((state) => state.event);
+  const { userData } = useSelector((state) => state.event);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newsList, setNewsList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -50,6 +50,7 @@ const News = () => {
     };
     fetchNews();
   }, [isModalOpen, delModal]);
+  console.log(userData)
   return (
     <>
       {loading ? (
@@ -58,7 +59,7 @@ const News = () => {
         <main className="max-w-11/12 mx-auto flex flex-col gap-2 px-[16px]">
           <section className="flex justify-between items-center">
             <h1 className="text-text-primary font-bold clamp3">News</h1>
-            {permissionStatus?.yang_edit && (
+            {userData?.role?.yang_edit && (
               <>
                 <button
                   onClick={() => {
@@ -98,8 +99,8 @@ const News = () => {
                     >
                       {item?.title}
                     </NavLink>
-                    {permissionStatus?.yang_edit &&
-                      permissionStatus?.yang_delete && (
+                    {userData?.role?.yang_edit &&
+                      userData?.role?.yang_delete && (
                         <div
                           onClick={() => setSelectId(item)}
                           className="absolute right-1 top-1"
@@ -120,7 +121,7 @@ const News = () => {
                                 anchor="bottom end"
                                 className="w-52 origin-top-right rounded-xl bg-card mt-[5px] z-[999] shadow-btn_shadow outline-none"
                               >
-                                {permissionStatus?.yang_delete && (
+                                {userData?.role?.yang_delete && (
                                   <MenuItem onClick={handleDelete}>
                                     <button className="group text-red-400 flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
                                       <FaRegTrashAlt className="size-4 fill-thin " />
@@ -131,7 +132,7 @@ const News = () => {
                                     </button>
                                   </MenuItem>
                                 )}
-                                {permissionStatus?.yang_edit && (
+                                {userData?.role?.yang_edit && (
                                   <MenuItem onClick={toggleModal}>
                                     <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
                                       <MdModeEdit className="size-4 fill-thin" />

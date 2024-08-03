@@ -1,14 +1,17 @@
 import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { userDetailSlice } from "../reducer/event";
 
 export default function ExitModal({ isOpen, handleClose }) {
   const navigate = useNavigate();
-  
+  const dispatch = useDispatch();
   const handleLogOut = () => {
     localStorage.removeItem("register");
     localStorage.removeItem("your-group");
-    navigate('/login');
+    navigate("/login");
     handleClose();
+    dispatch(userDetailSlice({}));
   };
 
   return (
@@ -21,9 +24,7 @@ export default function ExitModal({ isOpen, handleClose }) {
       >
         <div className="fixed inset-0 z-[999] w-screen overflow-y-auto bg-black/50">
           <div className="flex min-h-full items-center justify-center p-4">
-            <DialogPanel
-              className="w-full max-w-md rounded-xl bg-card p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
-            >
+            <DialogPanel className="w-full max-w-md rounded-xl bg-card p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0">
               <DialogTitle
                 as="h3"
                 className="text-clamp2 font-medium text-text-primary"

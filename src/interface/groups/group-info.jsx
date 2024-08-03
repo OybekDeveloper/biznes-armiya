@@ -25,7 +25,7 @@ const GroupInfo = ({
   handleAddUser,
   addUser,
 }) => {
-  const { permissionStatus } = useSelector((state) => state.event);
+  const { userData } = useSelector((state) => state.event);
 
   const handleCopyCode = () => {
     navigator.clipboard
@@ -49,7 +49,7 @@ const GroupInfo = ({
               className="mb-[10px] w-full h-full rounded-xl border-border border object-cover"
             />
           </div>
-          {permissionStatus?.chat_edit ? (
+          {userData?.role?.chat_edit ? (
             <>
               <div className="flex justify-between items-center w-full gap-3">
                 <div className="flex gap-2">

@@ -19,11 +19,18 @@ export default function AddUser({ isOpen, handleClose }) {
   const [errorMessage, setErrorMessage] = useState({});
   const [uploadPhoto, setUploadPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  // const [showPasswordModal, setShowPasswordModal] = useState(false);
   // const [showPassword, setShowPassword] = useState(true);
 
-  const [formData, setFormData] = useState();
-
+  // Initialize formData with default values
+  const [formData, setFormData] = useState({
+    email: "",
+    first_name: "",
+    last_name: "",
+    profile_photo: "",
+    phone_number: "",
+    password: "",
+  });
   const fileInputRef = useRef(null);
 
   const handleFileInputClick = () => {
@@ -55,7 +62,6 @@ export default function AddUser({ isOpen, handleClose }) {
       return;
     } else {
       setErrorMessage({});
-      setShowPasswordModal(true);
     }
   };
 
@@ -63,7 +69,7 @@ export default function AddUser({ isOpen, handleClose }) {
     setLoading(true);
     const fetchData = async () => {
       const register = JSON.parse(localStorage.getItem("register"));
-      console.log(formData)
+      console.log(formData);
       try {
         const formD = new FormData();
         formD.append("email", formData.email);
@@ -81,7 +87,6 @@ export default function AddUser({ isOpen, handleClose }) {
         toast.success("Profile updated successfully");
         setUploadPhoto(null);
         handleClose();
-        setShowPasswordModal(false);
       } catch (error) {
         console.log(error);
         if (error?.response?.data?.email) {
@@ -90,7 +95,6 @@ export default function AddUser({ isOpen, handleClose }) {
               ? error?.response?.data?.email
               : {},
           });
-          setShowPasswordModal(false);
           setFormData({
             ...formData,
             password: "",
@@ -105,11 +109,16 @@ export default function AddUser({ isOpen, handleClose }) {
   };
 
   const handleCloseModal = () => {
-    if (!showPasswordModal) {
-      setUploadPhoto(null);
-      setFormData();
-      handleClose();
-    }
+    setUploadPhoto(null);
+    setFormData({
+      email: "",
+      first_name: "",
+      last_name: "",
+      profile_photo: "",
+      phone_number: "",
+      password: "",
+    });
+    handleClose();
   };
 
   const handleChange = (e) => {
@@ -133,7 +142,7 @@ export default function AddUser({ isOpen, handleClose }) {
     });
   }, [userData]);
 
-  console.log(formData);
+  console.log(formData, "edit profile");
   return (
     <>
       <Transition appear show={isOpen}>

@@ -11,7 +11,7 @@ import { MdModeEdit } from "react-icons/md";
 import DeleteModal from "./delete-req";
 
 const Requirements = () => {
-  const { permissionStatus } = useSelector((state) => state.event);
+  const { userData } = useSelector((state) => state.event);
 
   const [isActive, setIsActive] = useState(false);
   const [loading, setLoading] = useState(true);

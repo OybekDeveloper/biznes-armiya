@@ -17,7 +17,7 @@ const GroupItem = () => {
   const [editGroup, setEditGroup] = useState(false);
   const [isGenerate, setIsGenerate] = useState(false);
   const [addUser, setAddUser] = useState(false);
-  const { permissionStatus } = useSelector((state) => state.event);
+  const { userData } = useSelector((state) => state.event);
 
   const handleGenerateCode = () => {
     setIsGenerate(!isGenerate);
@@ -102,7 +102,7 @@ const GroupItem = () => {
                 <h1 className="font-bold clamp4">
                   There are no tasks in this group yet Let's add them
                 </h1>
-                {permissionStatus?.chat_edit && (
+                {userData?.role?.chat_edit && (
                   <button
                     onClick={handleAddUser}
                     className="max-md:hidden bg-button-color  flex justify-start items-center gap-2 rounded-[14px] py-2 px-4 text-white shadow-btn_shadow"

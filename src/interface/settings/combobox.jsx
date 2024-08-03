@@ -69,7 +69,7 @@ export default function AddListbox({ data, handleChange, status }) {
           )}
         >
           {filteredData.map((item) => {
-            if (userData?.id === item?.id) {
+            if (userData?.id === item?.id && item?.email) {
               return null;
             }
             return (

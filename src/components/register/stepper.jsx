@@ -75,7 +75,7 @@ const Stepper = ({ steps, currentStep }) => {
                 : "text-[#475467]  border-[#9fc6ff]"
             } bg-[#79afff] border-[2px]`}
           ></div>
-          <div className=" text-center font-[500] text-[#fff]">
+          <div className=" text-start  font-[500] text-[#fff]">
             {step.description}
           </div>
         </div>

@@ -5,8 +5,6 @@ import Navbar from "./components/navbar/navbar";
 import { useEffect } from "react";
 import Loader1 from "./components/loader/loader1";
 import { useDispatch } from "react-redux";
-import { setPermissionStatus } from "./reducer/event";
-import { ApiService } from "./components/api.server";
 //dashboard
 const Dashboard = React.lazy(() => import("./interface/dashboard/layout"));
 const NearestOvents = React.lazy(() =>
@@ -110,22 +108,6 @@ const App = () => {
     if (pathname === "/login" || pathname === "/register") {
       return;
     }
-    const permissionFetch = async () => {
-      try {
-        const permission = await ApiService.getData(
-          `/role/${register?.role_id?register?.role_id:register?.role}`,
-          register?.access
-        );
-        dispatch(setPermissionStatus(permission));
-        console.log(permission);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    permissionFetch();
-
-    dispatch(setPermissionStatus({ hi: "hello" }));
-
     return () => {
       socket.close();
     };

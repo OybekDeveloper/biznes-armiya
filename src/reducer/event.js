@@ -15,7 +15,6 @@ export const initialState = {
   userData: {},
   groupData: [],
   registerSuccessData: {},
-  permissionStatus: {},
 };
 
 export const eventSlice = createSlice({
@@ -79,12 +78,6 @@ export const eventSlice = createSlice({
         registerData: action.payload,
       };
     },
-    setPermissionStatus: (state, action) => {
-      return {
-        ...state,
-        permissionStatus: action.payload,
-      };
-    },
   },
 });
 
@@ -99,7 +92,7 @@ export const {
   groupDetailSlice,
   setRegisterSuccessData,
   resetRegisterData,
-  setPermissionStatus,
+  
 } = eventSlice.actions;
 
 export default eventSlice.reducer;

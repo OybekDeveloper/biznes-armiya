@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { FaArrowLeft } from "react-icons/fa";
 
 const Groups = () => {
-  const { permissionStatus } = useSelector((state) => state.event);
+  const { userData } = useSelector((state) => state.event);
   const register = JSON.parse(localStorage.getItem("register"));
   const [isAddGroup, setIsAddGroup] = useState(false);
   const [groupData, setGroupData] = useState([]);
@@ -56,7 +56,7 @@ const Groups = () => {
               <LuFilter className="text-xl text-text-primary" />
             </button>
           </div>
-          {permissionStatus?.chat_edit && (
+          {userData?.role?.chat_edit && (
             <>
               <button
                 onClick={handleOpenAddGroup}
