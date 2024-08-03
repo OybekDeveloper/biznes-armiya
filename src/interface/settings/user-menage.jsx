@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { ApiService } from "../../components/api.server";
-import AddListbox from "./combobox";
 import Loader1 from "../../components/loader/loader1";
 import SimpleLoading from "../../components/loader/simple-loading";
+import AddListboxSetting from "./combobox";
 
 const UserMenage = () => {
   const register = JSON.parse(localStorage.getItem("register"));
@@ -84,7 +84,7 @@ const UserMenage = () => {
       <section className="w-full grid max-sm:grid-cols-1 grid-cols-4 gap-4">
         <div className="w-full flex flex-col gap-3 col-span-2">
           <h1>Selected user</h1>
-          <AddListbox
+          <AddListboxSetting
             data={users}
             handleChange={handleChangeData}
             status="user"
@@ -95,7 +95,7 @@ const UserMenage = () => {
         </div>
         <div className="w-full flex flex-col gap-3 col-span-2">
           <h1>Selected role</h1>
-          <AddListbox
+          <AddListboxSetting
             data={roles}
             handleChange={handleChangeData}
             status="role"

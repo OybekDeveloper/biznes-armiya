@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { photoUrl } from "../../images";
 import { useSelector } from "react-redux";
 
-export default function AddListbox({ data, handleChange, status }) {
+export default function AddListboxSetting({ data, handleChange, status }) {
   const [selected, setSelected] = useState(null);
   const [query, setQuery] = useState("");
   const { userData } = useSelector((state) => state.event);
@@ -21,7 +21,7 @@ export default function AddListbox({ data, handleChange, status }) {
       const event = {
         target: {
           name: status,
-          value: status === "user" ? selected?.id : selected?.id,
+          value: selected?.id,
         },
       };
       handleChange(event);

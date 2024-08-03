@@ -1,28 +1,85 @@
 import {
+  Button,
   Dialog,
   DialogPanel,
   DialogTitle,
   Transition,
+  TransitionChild,
 } from "@headlessui/react";
 import { IoClose } from "react-icons/io5";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { ApiService } from "../../components/api.server";
 import toast from "react-hot-toast";
+import { close } from "../../images";
+import { FaPlus } from "react-icons/fa";
+import AddListbox from "../tasks/add-listbox";
+import AddListboxSetting from "../settings/combobox";
 import SimpleLoading from "../../components/loader/simple-loading";
 
-export default function AddGroup({ isOpen, handleClose, updateItem }) {
-  const register = JSON.parse(localStorage.getItem("register"));
-  const [errorMessage, setErrorMessage] = useState({});
-  const [loading, setLoading] = useState(false);
+export default function AddTasks({ isOpen, handleClose, roles }) {
+  const [errorMessage, setErrorMessage] = useState();
+  const [status, setStatus] = useState([
+    { id: 1, name: "Asked" },
+    { id: 2, name: "Expected" },
+    { id: 3, name: "Done" },
+  ]);
+  const [users, setUsers] = useState([]);
   const [formData, setFormData] = useState({
-    mavzu: "",
-    content: "",
-    user_id: register?.user_id || "",
+    name: "",
+    vab: "",
+    definition: "",
+    status: "",
+    users: "",
+    role_id: "",
   });
+  const [newUsers, setNewUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const newError = {};
+    console.log(formData);
+    const register = JSON.parse(localStorage.getItem("register"));
+
+    const groupFetch = async () => {
+      setLoading(true);
+      try {
+        const { role_id, ...rest } = formData;
+        const res = await ApiService.postData(
+          "/tasksreq",
+          rest,
+          register?.access
+        );
+        if (res.id) {
+          const req = await ApiService.postData(
+            "/talablar",
+            {
+              task_id: res.id,
+              role_id: role_id,
+            },
+            register?.access
+          );
+          if (req) {
+            toast.success("Group added successfully");
+            console.log(res);
+            handleClose();
+            setFormData({
+              name: "",
+              vab: "",
+              definition: "",
+              status: "",
+              users: "",
+            });
+            setNewUsers([]);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     Object.keys(formData).forEach((key) => {
       if (!formData[key]) {
         newError[key] = `${key} field is required`;
@@ -32,82 +89,92 @@ export default function AddGroup({ isOpen, handleClose, updateItem }) {
       setErrorMessage(newError);
       return;
     } else {
-      setErrorMessage({});
+      setErrorMessage(null);
+      groupFetch();
     }
+  };
 
-    const groupFetch = async () => {
-      setLoading(true);
-      try {
-        if (updateItem) {
-          await ApiService.putData(
-            `/talablar/${updateItem.id}`,
-            formData,
-            register?.access
-          );
-          toast.success("Requirement updated successfully");
-          updateItem.mavzu = formData.mavzu;
-          updateItem.content = formData.content;
-          handleClose();
-        } else {
-          await ApiService.postMediaData(
-            "/talablar",
-            formData,
-            register?.access
-          );
-          toast.success("Requirement added successfully");
-          setFormData({
-            mavzu: "",
-            content: "",
-            user_id: register?.user_id || "",
-          });
-          handleClose();
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    groupFetch();
+  const handleChangeData = (e) => {
+    const { value } = e.target;
+    setFormData({ ...formData, role_id: value });
   };
 
   const handleCloseModal = () => {
-    if (loading) {
-      return;
-    }
-    setFormData({
-      mavzu: "",
-      content: "",
-      user_id: register?.user_id || "",
-    });
     handleClose();
+    setFormData({
+      name: "",
+      vab: "",
+      definition: "",
+      status: "",
+      users: "",
+      role_id: "",
+    });
+    setNewUsers([]);
   };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({ ...prevState, [name]: value }));
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleAddUser = (e) => {
+    e.preventDefault();
+    setNewUsers([
+      ...newUsers,
+      {
+        user: "",
+        vab: 0,
+      },
+    ]);
+  };
+  console.log(roles);
+
+  const handleDeleteUser = (index) => {
+    const updatedUsers = newUsers.filter((_, i) => i !== index);
+    setNewUsers(updatedUsers);
+  };
+
+  const handleChangeNewUsers = (e, index) => {
+    const { name, value } = e.target;
+
+    const updateUser = [...newUsers];
+    updateUser[index] = {
+      ...updateUser[index],
+      [name]: value,
+    };
+    setNewUsers(updateUser);
   };
 
   useEffect(() => {
-    if (updateItem) {
-      setFormData(updateItem);
-    }
-  }, [updateItem]);
+    const register = JSON.parse(localStorage.getItem("register"));
+    const usersFetch = async () => {
+      try {
+        const res = await ApiService.getData(`/users`, register?.access);
+        if (res.length > 0) {
+          setUsers(res);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    usersFetch();
+  }, []);
 
+  useEffect(() => {
+    setFormData({ ...formData, users: newUsers });
+  }, [newUsers]);
+  console.log(formData);
+
+  console.log(errorMessage);
   return (
     <Transition appear show={isOpen}>
       <Dialog
         as="div"
         className="relative z-[998] focus:outline-none"
-        onClose={handleCloseModal}
+        onClose={() => {}}
       >
         <div className="fixed inset-0 z-[999] w-screen overflow-y-auto bg-black/50">
-          {loading && (
-            <div className="fixed inset-0 z-[1000] w-screen overflow-y-auto bg-transparent" />
-          )}
-
           <div className="flex min-h-full items-center justify-center p-4">
-            <Transition.Child
+            <TransitionChild
               enter="ease-out duration-300"
               enterFrom="opacity-0 transform-[scale(95%)]"
               enterTo="opacity-100 transform-[scale(100%)]"
@@ -115,69 +182,231 @@ export default function AddGroup({ isOpen, handleClose, updateItem }) {
               leaveFrom="opacity-100 transform-[scale(100%)]"
               leaveTo="opacity-0 transform-[scale(95%)]"
             >
-              <DialogPanel className="w-full max-w-md rounded-xl bg-card p-6 backdrop-blur-2xl relative">
+              <DialogPanel
+                className="max-w-11/12 rounded-xl bg-card p-6 
+              "
+              >
                 <DialogTitle as="h3" className="text-base/7 font-medium">
-                  <div className="flex items-end justify-between">
-                    <h1 className="font-[600] clamp3">
-                      {updateItem ? "Update Requirement" : "Add Requirement"}
-                    </h1>
-                    <button
-                      className="p-[10px] bg-background-secondary rounded-[12px]"
+                  <div className="flex items-end justify-between cursor-pointer">
+                    <h1 className="font-[600] clamp3">Add Task</h1>
+                    <div
                       onClick={handleCloseModal}
+                      className="p-[10px] bg-background-secondary rounded-[12px]"
                     >
-                      <IoClose className="text-text-primary text-[24px]" />
-                    </button>
+                      <IoClose
+                        className="border-border text-[24px]"
+                        src={close}
+                        alt="close"
+                      />
+                    </div>
                   </div>
                 </DialogTitle>
-                <form
-                  className="mt-4 flex flex-col gap-3"
-                  onSubmit={handleSubmit}
-                >
+                <form className="mt-4 flex flex-col gap-3">
                   <div>
                     <label
                       className="text-[14px] font-[700] text-thin"
-                      htmlFor="mavzu"
+                      htmlFor="name"
                     >
-                      Topic
+                      Name
                     </label>
                     <input
                       onChange={handleChange}
-                      value={formData.mavzu}
-                      className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
+                      value={formData?.name}
+                      className="border-border px-[18px] py-[12px] w-full border-[1.5px] border-solid bg-card rounded-[14px] outline-none focus:border-primary"
                       type="text"
-                      id="mavzu"
-                      name="mavzu"
-                      placeholder="Topic type..."
+                      id="name"
+                      name="name"
+                      placeholder="Task name"
                     />
-                    {errorMessage.mavzu && (
-                      <p className="text-red-500">{errorMessage.mavzu}</p>
+                    {errorMessage?.name && (
+                      <p className="text-red-500">
+                        The name field is not filled
+                      </p>
                     )}
                   </div>
                   <div>
                     <label
                       className="text-[14px] font-[700] text-thin"
-                      htmlFor="content"
+                      htmlFor="name"
                     >
-                      Content
+                      VAB
                     </label>
                     <input
-                      value={formData.content}
                       onChange={handleChange}
-                      className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
-                      type="text"
-                      id="content"
-                      name="content"
-                      placeholder="Content type here..."
+                      value={formData?.vab}
+                      className="border-border px-[18px] py-[12px] w-full border-[1.5px] border-solid bg-card rounded-[14px] outline-none focus:border-primary"
+                      type="number"
+                      id="vab"
+                      name="vab"
+                      placeholder="Enter vab value"
                     />
-                    {errorMessage.content && (
-                      <p className="text-red-500">{errorMessage.content}</p>
+                    {errorMessage?.vab && (
+                      <p className="text-red-500">
+                        The vab field is not filled
+                      </p>
                     )}
                   </div>
-                  <div className="w-full flex justify-end items-center">
+                  {/* <div className="w-full flex justify-between items-center gap-4 max-sm:flex-col">
+                    <div className="w-full">
+                      <label
+                        className="text-[14px] font-[700] text-thin"
+                        htmlFor="start_time"
+                      >
+                        Starts
+                      </label>
+                      <input
+                        value={formData?.start_time}
+                        onChange={handleChange}
+                        className="border-border px-[18px] py-[12px] w-full border-[1.5px] border-solid bg-card rounded-[14px] outline-none focus:border-primary"
+                        type="datetime-local"
+                        id="start_time"
+                        name="start_time"
+                        placeholder="Start time is in unity"
+                      />
+                      {errorMessage?.start_time && (
+                        <p className="text-red-500">
+                          The start time field is not filled
+                        </p>
+                      )}
+                    </div>
+                    <div className="w-full">
+                      <label
+                        className="text-[14px] font-[700] text-thin"
+                        htmlFor="stop_time"
+                      >
+                        Dead Line
+                      </label>
+                      <input
+                        value={formData?.stop_time}
+                        onChange={handleChange}
+                        className="border-border px-[18px] py-[12px] w-full border-[1.5px] border-solid bg-card rounded-[14px] outline-none focus:border-primary"
+                        type="datetime-local"
+                        id="stop_time"
+                        name="stop_time"
+                        placeholder="Stop time is in unity"
+                      />
+                      {errorMessage?.stop_time && (
+                        <p className="text-red-500">
+                          The dead line field is not filled
+                        </p>
+                      )}
+                    </div>
+                  </div> */}
+                  <div>
+                    <label
+                      className="text-[14px] font-[700] text-thin"
+                      htmlFor="name"
+                    >
+                      Task status
+                    </label>
+                    <AddListbox
+                      index={null}
+                      data={status}
+                      handleChange={handleChange}
+                    />
+                    {errorMessage?.status && (
+                      <p className="text-red-500">
+                        The status field is not selected
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label
+                      className="text-[14px] font-[700] text-thin"
+                      htmlFor="definition"
+                    >
+                      Definition
+                    </label>
+                    <textarea
+                      value={formData?.definition}
+                      onChange={handleChange}
+                      className="border-border min-h-[130px] px-[18px] py-[12px] w-full border-[1.5px] border-solid bg-card rounded-[14px] outline-none focus:border-primary"
+                      type="datetime-local"
+                      id="definition"
+                      name="definition"
+                      placeholder="Strength is in unity"
+                    />
+                    {errorMessage?.definition && (
+                      <p className="text-red-500">
+                        The definition field is not filled
+                      </p>
+                    )}
+                  </div>
+                  <div className="w-full flex flex-col gap-3 col-span-2">
+                    <h1>Selected role</h1>
+                    <AddListboxSetting
+                      data={roles}
+                      handleChange={handleChangeData}
+                      status="role"
+                    />
+                    {errorMessage?.role_id && (
+                      <p className="text-red-500">{errorMessage?.role_id}</p>
+                    )}
+                  </div>
+                  {newUsers.map((item, idx) => (
+                    <div key={idx} className="grid grid-cols-3 gap-3">
+                      <div className="col-span-2">
+                        <label
+                          className="text-[14px] font-[700] text-thin"
+                          htmlFor="role_id"
+                        >
+                          Add a soldier
+                        </label>
+                        <AddListbox
+                          newUsers={newUsers}
+                          index={idx}
+                          data={users}
+                          handleChange={handleChangeNewUsers}
+                        />
+                        {errorMessage?.role_id && (
+                          <p className="text-red-500">
+                            The solider field is not selected
+                          </p>
+                        )}
+                      </div>
+                      <div className="col-span-1">
+                        <label
+                          className="text-[14px] font-[700] text-thin"
+                          htmlFor="vab"
+                        >
+                          VAB
+                        </label>
+                        <input
+                          value={item?.vab}
+                          onChange={(e) => handleChangeNewUsers(e, idx)}
+                          className="border-border px-[18px] py-[12px] w-full border-[1.5px] border-solid bg-card rounded-[14px] outline-none focus:border-primary"
+                          type="number"
+                          id="vab"
+                          name="vab"
+                          placeholder="Strength is in unity"
+                        />
+                        {errorMessage?.ball && (
+                          <p className="text-red-500">
+                            The VAB field is not filled
+                          </p>
+                        )}
+                      </div>
+                      <button
+                        onClick={() => handleDeleteUser(idx)}
+                        className="col-span-3 flex justify-end items-center gap-2 text-red-500"
+                      >
+                        <FaPlus />
+                        <h1>Delete Tab</h1>
+                      </button>
+                    </div>
+                  ))}
+                  <div className="flex justify-end items-center gap-3">
                     <button
-                      type="submit"
+                      onClick={handleAddUser}
+                      className="w-full flex justify-start items-center gap-2 text-primary"
+                    >
+                      <FaPlus />
+                      <h1>Add new user</h1>
+                    </button>
+                    <div className="w-full flex justify-end items-center">
+                    <button
+                      onClick={handleSubmit}
                       className="px-[20px] py-[13px] rounded-[14px] bg-button-color text-white clamp4 font-bold"
-                      disabled={loading}
                     >
                       {loading ? (
                         <div className="flex justify-start items-center gap-2 opacity-[0.8]">
@@ -185,15 +414,14 @@ export default function AddGroup({ isOpen, handleClose, updateItem }) {
                           <h1>Loading...</h1>
                         </div>
                       ) : (
-                        <h1>
-                          {updateItem ? "Save" : "Submit"}
-                        </h1>
+                        <h1>Add Req</h1>
                       )}
                     </button>
                   </div>
+                  </div>
                 </form>
               </DialogPanel>
-            </Transition.Child>
+            </TransitionChild>
           </div>
         </div>
       </Dialog>

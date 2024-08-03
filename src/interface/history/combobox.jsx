@@ -29,7 +29,7 @@ import {
     const filteredData =
       query === ""
         ? data
-        : data.filter((item) =>
+        : data?.filter((item) =>
             status === "user"
               ? item?.email?.toLowerCase()?.includes(query.toLowerCase())
               : item?.role?.toLowerCase()?.includes(query.toLowerCase())

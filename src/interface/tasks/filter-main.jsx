@@ -23,7 +23,6 @@ const filterData = [
 
 const FilterMain = ({ handleFilterStatus }) => {
   const [activeTab, setActiveTab] = useState(1);
-
   const handleActiveTab = (active) => {
     setActiveTab(active.id);
     handleFilterStatus(active.status);

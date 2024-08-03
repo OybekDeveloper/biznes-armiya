@@ -1,4 +1,7 @@
 export const TimeFormatFunction = (time) => {
+  if(!time){
+    return "pending..."
+  }
   const date = new Date(time);
 
   const year = date.getFullYear();
