@@ -79,6 +79,7 @@ const Login = () => {
 
   useEffect(() => {
     localStorage.setItem("theme", "light");
+    document.body.classList.add("light");
   }, []);
 
   if (register) {
