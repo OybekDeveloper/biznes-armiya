@@ -68,8 +68,6 @@ const App = () => {
     if (selectedTheme) {
       document.body.classList.add(selectedTheme);
     } else if (window.matchMedia("(prefers-color-scheme: light)").matches) {
-      document.body.classList.add("dark");
-    } else {
       document.body.classList.add("light");
     }
   }, [selectedTheme]);

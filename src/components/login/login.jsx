@@ -87,7 +87,7 @@ const Login = () => {
   return (
     <main className="flex max-md:flex-col max-md:justify-center max-md:h-screen max-md:items-center h-full md:h-[calc(100vh-40px)] px-[20px] md:px-[40px] py-[20px] bg-bg_primary">
       <section className="max-md:hidden w-1/2 h-full bg-primary rounded-l-[24px] flex justify-center items-center overflow-hidden">
-        <div className="grid grid-cols-1 w-full h-full p-4">
+        <div className="grid grid-cols-1 w-full max-h-full p-4">
           <div className="flex flex-col justify-start items-center mb-6">
             <img className="w-[50px] h-[50px]" src={darkLogo} alt="logo" />
             <h1 className="clamp3 text-white font-bold">Biznes Armiya</h1>
