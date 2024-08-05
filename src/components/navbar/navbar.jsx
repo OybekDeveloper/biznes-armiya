@@ -107,6 +107,8 @@ const Navbar = () => {
       } catch (error) {
         if (error?.response?.status === 401) {
           localStorage.removeItem("register");
+          navigate("/login");
+
         } else {
           navigate("/not-found");
         }

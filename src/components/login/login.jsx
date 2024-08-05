@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
 const Login = () => {
+  const { pathname } = useLocation();
   const register = JSON.parse(localStorage.getItem("register"));
   const [showPassword, setShowPassword] = useState(true);
   const [errorMessage, setErrorMessage] = useState();
@@ -67,24 +68,30 @@ const Login = () => {
     };
     fetchLogin();
   };
-  const handleChange = (e) => [
-    setFormData({ ...formData, [e.target.name]: e.target.value }),
-  ];
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   useEffect(() => {
     if (register) {
       navigate("/");
     }
-  }, [register]);
+  }, [register, navigate]);
 
   useEffect(() => {
-    localStorage.setItem("theme", "light");
-    document.body.classList.add("light");
-  }, []);
+    const setLightTheme = () => {
+      localStorage.setItem("theme", "light");
+      document.body.classList.add("light");
+      document.body.classList.remove("dark");
+    };
+    setLightTheme();
+  }, []); // Run only once on mount
 
   if (register) {
     return <Loader1 />;
   }
+
   return (
     <main className="flex max-md:flex-col max-md:justify-center max-md:h-screen max-md:items-center h-full md:h-[calc(100vh-40px)] px-[20px] md:px-[40px] py-[20px] bg-bg_primary">
       <section className="max-md:hidden w-1/2 h-full bg-primary rounded-l-[24px] flex justify-center items-center overflow-hidden">

@@ -73,7 +73,7 @@ const Register = () => {
   };
 
   const fetchVerifyEmail = async (code) => {
-    console.log(registerData)
+    console.log(registerData);
     dispatch(Action.registerLoadingSlice(true));
     try {
       await ApiService.postRegisterData("/verify-email", {
@@ -180,10 +180,13 @@ const Register = () => {
         password: "",
       })
     );
-    localStorage.setItem("theme", "light");
-    document.body.classList.add("light");
+    const setLightTheme = () => {
+      localStorage.setItem("theme", "light");
+      document.body.classList.add("light");
+      document.body.classList.remove("dark");
+    };
+    setLightTheme();
   }, []);
-
 
   if (register) {
     navigate("/");

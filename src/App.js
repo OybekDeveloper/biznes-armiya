@@ -62,15 +62,18 @@ const App = () => {
   const navigate = useNavigate();
   const selectedTheme = localStorage.getItem("theme");
   const register = JSON.parse(localStorage.getItem("register"));
-  const [messages, setMessages] = useState([]);
-  const dispatch = useDispatch();
+
   useEffect(() => {
+    if (pathname === "/login" || pathname === "/register") {
+      document.body.classList.add("light");
+      return;
+    }
     if (selectedTheme) {
       document.body.classList.add(selectedTheme);
     } else if (window.matchMedia("(prefers-color-scheme: light)").matches) {
       document.body.classList.add("light");
     }
-  }, [selectedTheme]);
+  }, [selectedTheme, pathname]);
 
   useEffect(() => {
     if (!register && pathname !== "/login" && pathname !== "/register") {
@@ -78,11 +81,6 @@ const App = () => {
     }
   }, [register, pathname]);
 
-  useEffect(() => {
-    if (!selectedTheme) {
-      document.body.classList.add("ligth");
-    }
-  }, []);
 
   useEffect(() => {
     const socket = new WebSocket(
@@ -96,7 +94,6 @@ const App = () => {
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       console.log("Received message:", data.message);
-      setMessages((prevMessages) => [...prevMessages, data.message]);
       console.log(data, "socket message");
     };
 
