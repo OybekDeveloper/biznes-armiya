@@ -55,6 +55,8 @@ const Navbar = () => {
   useEffect(() => {
     if (selectedTheme === "dark") {
       document.body.classList.add("dark");
+    } else if (selectedTheme === "light") {
+      document.body.classList.add("light");
     } else {
       document.body.classList.add("light");
     }
@@ -89,7 +91,7 @@ const Navbar = () => {
   }, [isOpen]);
 
   useEffect(() => {
-    console.log(register)
+    console.log(register);
     if (!register && pathname !== "/register") navigate("/login");
     const fetchUserData = async () => {
       try {
@@ -98,7 +100,7 @@ const Navbar = () => {
           register?.access
         );
         const role = await ApiService.getData(
-          `/role/${register?.role_id?register?.role_id:register?.role}`,
+          `/role/${register?.role_id ? register?.role_id : register?.role}`,
           register?.access
         );
         dispatch(userDetailSlice({ ...res, role: role }));
@@ -185,7 +187,11 @@ const Navbar = () => {
                 <MdDarkMode className="text-xl text-text-primary" />
               </button>
             )}
-            <button data-count={2} className="relative notf-cound" onClick={handleOpenNotification}>
+            <button
+              data-count={2}
+              className="relative notf-cound"
+              onClick={handleOpenNotification}
+            >
               <IoMdNotificationsOutline className="text-xl text-text-primary" />
             </button>
             <div>

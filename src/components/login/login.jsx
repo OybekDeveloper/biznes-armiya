@@ -53,7 +53,7 @@ const Login = () => {
         toast.success("Siz muvoffaqiyatli kirdingiz!", { id: toastId });
       } catch (error) {
         setLoading(false);
-        console.log(error)
+        console.log(error);
         setErrorMessage(error?.response?.data);
         toast.error(
           <h1 className="text-center">
@@ -72,41 +72,56 @@ const Login = () => {
   ];
 
   useEffect(() => {
-    localStorage.setItem("theme", "light");
     if (register) {
       navigate("/");
     }
   }, [register]);
+
+  useEffect(() => {
+    localStorage.setItem("theme", "light");
+  }, []);
 
   if (register) {
     return <Loader1 />;
   }
   return (
     <main className="flex max-md:flex-col max-md:justify-center max-md:h-screen max-md:items-center h-full md:h-[calc(100vh-40px)] px-[20px] md:px-[40px] py-[20px] bg-bg_primary">
-      <section className="max-md:hidden w-1/2 h-full bg-primary rounded-l-[24px] flex flex-col justify-center items-center gap-[32px]">
-        <div className="flex flex-col justify-start items-center">
-          <img className="w-20 h-20" src={darkLogo} alt="logo" />
-          <h1 className="text-3xl text-white font-bold">Biznes Armiya</h1>
+      <section className="max-md:hidden w-1/2 h-full bg-primary rounded-l-[24px] flex justify-center items-center overflow-hidden">
+        <div className="grid grid-cols-1 w-full h-full p-4">
+          <div className="flex flex-col justify-start items-center mb-6">
+            <img className="w-[50px] h-[50px]" src={darkLogo} alt="logo" />
+            <h1 className="clamp3 text-white font-bold">Biznes Armiya</h1>
+          </div>
+          <h1 className="clamp3 font-[700] text-white text-center mb-6">
+            Sizning ish joyingiz rejasi. Yaratish. Boshqarish.
+          </h1>
+          <div className="flex justify-center items-center">
+            <img
+              className="w-full max-w-[400px] h-auto object-contain"
+              src={loginbgsvg}
+              alt=""
+            />
+          </div>
         </div>
-        <h1 className="clamp3 font-[700] text-white text-center">
-          Sizning ish joyingiz rejasi. Yaratish. Boshqarish.
-        </h1>
-        <img src={loginbgsvg} alt="" />
       </section>
+
       <section className="md:hidden flex justify-center items-center">
         <img className="w-20 h-20" src={lightLogo} alt="logo" />
         <h1 className="text-3xl font-[700] text-primary">Biznes Armiya</h1>
       </section>
-      <section className="md:rounded-r-[24px] max-md:shadow-custom md:w-1/2 w-full md:h-full md:bg-white max-md:rounded-[24px] max-md:py-[26px]">
+      <section className="md:rounded-r-[24px] max-md:shadow-custom md:w-1/2 w-full md:h-full md:bg-white max-md:rounded-[24px] max-md:py-[26px] flex justify-center items-center">
         <div className="mx-auto w-11/12 md:w-[80%] lg:w-[60%] h-full flex flex-col justify-center items-center gap-[33px]">
           <h1 className="text-[#0A1629] text-[22px] font-[700]">
             Tizimga kirish
           </h1>
-          <form action="" className="w-[300px] flex flex-col gap-[16px]">
+          <form
+            action=""
+            className="w-full max-w-[300px] flex flex-col gap-[16px] p-1"
+          >
             {errorMessage?.non_field_errors && (
               <p className="text-red-500">E-mail yoki parol noto'g'ri!</p>
             )}
-            <div>
+            <div className="p-2">
               <label
                 className="text-[14px] font-[700] text-thin"
                 htmlFor="email"
@@ -126,7 +141,7 @@ const Login = () => {
                 <p className="text-red-500">{errorMessage?.email}</p>
               )}
             </div>
-            <div>
+            <div className="p-2">
               <label
                 className="text-[14px] font-[700] text-thin"
                 htmlFor="password"
@@ -146,6 +161,7 @@ const Login = () => {
                 {formData?.password !== "" &&
                   (showPassword ? (
                     <button
+                      type="button"
                       className="absolute right-4"
                       onClick={togglePasswordVisibility}
                     >
@@ -153,6 +169,7 @@ const Login = () => {
                     </button>
                   ) : (
                     <button
+                      type="button"
                       className="absolute right-4"
                       onClick={togglePasswordVisibility}
                     >
@@ -165,6 +182,7 @@ const Login = () => {
               )}
             </div>
             <button
+              type="button"
               onClick={handleSubmit}
               className="px-[40px] py-[12px] rounded-[14px] bg-primary text-[16px] font-[600] text-white flex justify-center gap-2"
             >
@@ -173,13 +191,14 @@ const Login = () => {
             </button>
           </form>
           <NavLink
-            to={"/register"}
-            className={"text-primary text-[16px] font-[600]"}
+            to="/register"
+            className="text-primary text-[16px] font-[600]"
           >
             Sizda hisob mavjud emasmi?
           </NavLink>
         </div>
       </section>
+
       {loading && (
         <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex justify-center items-center flex-col">
           <div className="flex justify-center items-center flex-col gap-4">
