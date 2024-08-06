@@ -63,7 +63,7 @@ const NowAuction = () => {
   const maxVabItem = bids.find((bid) => bid.ekb === maxVab);
 
   const handleAddVab = () => {
-    // Validate addVab input
+    // // Validate addVab input
     // if (addVab.vab <= 0) {
     //   toast.error("Vab must be a positive number!");
     //   return;
@@ -77,15 +77,15 @@ const NowAuction = () => {
     const fetchData = async () => {
       try {
         const res = await ApiService.putData(
-          "/buyum/" + id,
+          `/buyum/${id}`,
           {
-            buyumusers:[
+            buyumusers: [
               ...item.buyumusers,
               {
                 user_id: register?.user_id,
-                ekb: addVab.vab
-              }
-            ]
+                ekb: addVab.vab,
+              },
+            ],
           },
           register?.access
         );
@@ -114,7 +114,7 @@ const NowAuction = () => {
             <FaArrowLeft className="text-[14px]" />
             <p className="text-[14px]">Back to back</p>
           </button>
-          <main className="relative h-full min-h-[calc(100vh-110px)] w-full bg-card rounded-xl shadow-btn_shadow">
+          <main className="relative h-full min-h-[calc(100vh-150px)] w-full bg-card rounded-xl shadow-btn_shadow">
             <section className="bg-background-secondary rounded-md">
               <div className="grid grid-cols-3 gap-4 rounded-md sm:p-4">
                 <div className="col-span-1 max-sm:col-span-3 sm:col-span-1 lg:col-span-1 h-[150px] object-cover">

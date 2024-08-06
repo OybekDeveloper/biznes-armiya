@@ -1,7 +1,7 @@
 import React from "react";
 import ReactApexChart from "react-apexcharts";
 
-const ChartMain = ({ series, categories }) => {
+const ChartMain = ({ series, categories, filter }) => {
   const options = {
     chart: {
       type: "area",
@@ -10,7 +10,7 @@ const ChartMain = ({ series, categories }) => {
       },
     },
     dataLabels: {
-      enabled: false,
+      enabled: true,
     },
     stroke: {
       curve: "smooth",
@@ -18,6 +18,10 @@ const ChartMain = ({ series, categories }) => {
     xaxis: {
       type: "datetime",
       categories: categories,
+      tickAmount: filter === "DAILY" ? 10 : filter === "MONTHLY" ? 6 : 5, // Adjust ticks based on filter
+      labels: {
+        format: filter === "DAILY" ? "dd MMM" : filter === "MONTHLY" ? "MMM yyyy" : "yyyy",
+      },
     },
     colors: ["#0B5CB5"],
     fill: {
@@ -31,7 +35,7 @@ const ChartMain = ({ series, categories }) => {
     },
     tooltip: {
       x: {
-        format: "dd/MM/yy HH:mm",
+        format: filter === "DAILY" ? "dd/MM/yy HH:mm" : filter === "MONTHLY" ? "MMM dd, yyyy" : "yyyy",
       },
     },
   };
@@ -46,7 +50,6 @@ const ChartMain = ({ series, categories }) => {
           height={500}
         />
       </div>
-      <div id="html-dist"></div>
     </div>
   );
 };

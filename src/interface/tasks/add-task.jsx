@@ -15,7 +15,7 @@ import { close } from "../../images";
 import { FaPlus } from "react-icons/fa";
 import SimpleLoading from "../../components/loader/simple-loading";
 
-export default function AddTasks({ isOpen, handleClose }) {
+export default function AddTasks({ isOpen, handleClose, updateItem }) {
   const [errorMessage, setErrorMessage] = useState();
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState([
@@ -45,13 +45,18 @@ export default function AddTasks({ isOpen, handleClose }) {
     const groupFetch = async () => {
       setLoading(true);
       try {
-        const res = await ApiService.postData(
-          "/tasks",
-          formData,
-          register?.access
-        );
-        toast.success("Group added successfully");
-        console.log(res);
+        if (updateItem) {
+          await ApiService.putData(
+            `/tasks/${updateItem?.id}`,
+            formData,
+            register?.access
+          );
+          toast.success("Group update successfully");
+        } else {
+          await ApiService.postData("/tasks", formData, register?.access);
+          toast.success("Group added successfully");
+        }
+
         handleClose();
         setFormData({
           name: "",
@@ -74,6 +79,7 @@ export default function AddTasks({ isOpen, handleClose }) {
         newError[key] = `${key} field is required`;
       }
     });
+    console.log(newUsers)
     newUsers.forEach((userObj) => {
       if (
         userObj.user === undefined ||
@@ -157,14 +163,33 @@ export default function AddTasks({ isOpen, handleClose }) {
 
   useEffect(() => {
     setFormData({ ...formData, user: newUsers });
-    if (newUsers.length > 0) {
+    if (newUsers?.length > 0) {
       setStatus([{ id: 2, name: "Expected" }]);
     } else {
       setStatus([{ id: 1, name: "Asked" }]);
+     
     }
-  }, [newUsers]);
+  }, [newUsers,updateItem]);
 
-  console.log(errorMessage);
+
+  useEffect(() => {
+    if (updateItem) {
+      console.log(updateItem);
+      setFormData({
+        name: updateItem?.name,
+        definition: updateItem?.definition,
+        start_time: updateItem?.start_time,
+        stop_time: updateItem?.stop_time,
+        status: updateItem?.status,
+        user: updateItem?.user,
+        vab: updateItem?.vab,
+      });
+      setStatus([{ id: 2, name: updateItem?.status }]);
+      setNewUsers(updateItem?.user);
+    }
+  }, [updateItem]);
+  console.log(formData);
+
   return (
     <Transition appear show={isOpen}>
       <Dialog
@@ -336,7 +361,7 @@ export default function AddTasks({ isOpen, handleClose }) {
                       </p>
                     )}
                   </div>
-                  {newUsers.map((item, idx) => (
+                  {newUsers?.map((item, idx) => (
                     <div key={idx} className="grid grid-cols-3 gap-3">
                       <div className="col-span-2">
                         <label
@@ -346,6 +371,7 @@ export default function AddTasks({ isOpen, handleClose }) {
                           Add a soldier
                         </label>
                         <AddListbox
+                          updateItem={updateItem}
                           newUsers={newUsers}
                           index={idx}
                           data={users}

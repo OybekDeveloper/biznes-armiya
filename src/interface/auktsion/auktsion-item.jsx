@@ -7,12 +7,18 @@ import { FaShoppingCart } from "react-icons/fa";
 import { MdOutlineWorkHistory } from "react-icons/md";
 import { NavLink, useParams } from "react-router-dom";
 import { ApiService } from "../../components/api.server";
+import AddItemModal from "./item-add";
 
 const Auktsion = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [allItems, setAllItems] = useState([]);
   const [pendingAuction, setPendingAuction] = useState({});
+  const [addItem, setAddItem] = useState(false);
+
+  const handleAddItem = () => {
+    setAddItem(!addItem);
+  };
 
   useEffect(() => {
     const register = JSON.parse(localStorage.getItem("register"));
@@ -39,7 +45,7 @@ const Auktsion = () => {
       }
     };
     fetchItem();
-  }, []);
+  }, [addItem]);
   return (
     <>
       {loading ? (
@@ -55,7 +61,7 @@ const Auktsion = () => {
                 onClick={() => window.history.back()}
               >
                 <FaArrowLeft className="text-[14px]" />
-                <p className="text-[14px]">Back to back</p>
+                <p className="text-[14px]">Go to back</p>
               </button>
               <h1 className="font-bold text-text-primary clamp2">
                 {pendingAuction?.name}
@@ -69,7 +75,17 @@ const Auktsion = () => {
               >
                 <MdOutlineWorkHistory />
               </NavLink>
-              <button className="z-[800] md:hidden fixed bottom-[16px] right-[16px] bg-button-color  flex justify-start items-center gap-2 rounded-full p-4 text-white shadow-btn_shadow">
+              <button
+                onClick={handleAddItem}
+                className="max-md:hidden bg-button-color flex justify-start items-center gap-2 rounded-[14px] py-2.5 px-4 text-white shadow-btn_shadow"
+              >
+                <FaPlus />
+                <h1>Add Item</h1>
+              </button>
+              <button
+                onClick={handleAddItem}
+                className="z-[800] md:hidden fixed bottom-[16px] right-[16px] bg-button-color  flex justify-start items-center gap-2 rounded-full p-4 text-white shadow-btn_shadow"
+              >
                 <FaPlus />
               </button>
             </div>
@@ -79,6 +95,11 @@ const Auktsion = () => {
               <PandingAuction allItems={allItems} id={id} />
             </div>
           </section>
+          <AddItemModal
+            pendingAuction={pendingAuction}
+            isOpen={addItem}
+            handleClose={handleAddItem}
+          />
         </main>
       )}
     </>

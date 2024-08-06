@@ -17,14 +17,16 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { MdModeEdit } from "react-icons/md";
 import DeleteModal from "./delete-task";
 import { groupEventSlice } from "../../reducer/event";
+import AddTasks from "./add-task";
 
 const Tasks = ({ toggleFilter, tasks, status }) => {
   const [usersInfoMap, setUsersInfoMap] = useState({}); // State to store users info by task ID
   const register = JSON.parse(localStorage.getItem("register"));
   const { userData } = useSelector((state) => state.event);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editModal, setEditModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [delModal, setDelModal] = useState(false);
+  const [editModalData, setEditModalData] = useState({});
   const [selectId, setSelectId] = useState(null);
   const dispatch = useDispatch();
   const handleDeleteModal = () => {
@@ -36,8 +38,9 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
     dispatch(groupEventSlice());
   };
 
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
+  const handleEdit = (item) => {
+    setEditModalData(item);
+    setEditModal(!editModal);
     dispatch(groupEventSlice());
   };
 
@@ -223,7 +226,7 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
                               </MenuItem>
                             )}
                             {userData?.role?.yang_edit && (
-                              <MenuItem onClick={toggleModal}>
+                              <MenuItem onClick={() => handleEdit(item)}>
                                 <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
                                   <MdModeEdit className="size-4 fill-thin" />
                                   Edit
@@ -254,6 +257,12 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
           <h1 className="clam3 font-bold">Tasks do not exist!</h1>
         </div>
       )}
+      <AddTasks
+        isOpen={editModal}
+        handleClose={handleEdit}
+        updateItem={editModalData}
+      />
+
       <DeleteModal
         id={selectId?.id}
         isOpen={delModal}
