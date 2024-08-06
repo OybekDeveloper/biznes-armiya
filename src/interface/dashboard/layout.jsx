@@ -97,7 +97,7 @@ const Dashboard = () => {
                           {item?.shiori}
                         </p>
                         <p className="text-gray-500">
-                          {item?.user?.length > 0 ? item.user.length : 0} user
+                          {item?.users?.length > 0 ? item.users.length : 0} user
                         </p>
                         <p className="text-gray-500 py-1 px-2 border-border border-[1px] rounded-[4px] text-[12px]">
                           {item?.admin}

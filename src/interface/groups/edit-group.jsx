@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 import { IoAddCircleOutline } from "react-icons/io5";
 import axios from "axios";
 import ModalLoader from "../../components/loader/modal-loader";
+import SimpleLoading from "../../components/loader/simple-loading";
 
 export default function EditGroup({ isOpen, handleClose, group }) {
   const [errorMessage, setErrorMessage] = useState({});
@@ -28,6 +29,7 @@ export default function EditGroup({ isOpen, handleClose, group }) {
     shiori: group?.shiori || "",
     group_photo: group?.group_photo || "",
   });
+  console.log(formData)
   const fileInputRef = useRef(null);
 
   const handleFileInputClick = () => {
@@ -71,8 +73,6 @@ export default function EditGroup({ isOpen, handleClose, group }) {
         formD.append("shiori", formData.shiori);
         if (uploadPhoto) {
           formD.append("group_photo", uploadPhoto);
-        } else if (formData.group_photo) {
-          formD.append("group_photo", formData.group_photo);
         }
 
         const res = await ApiService.putMediaData(
@@ -82,7 +82,7 @@ export default function EditGroup({ isOpen, handleClose, group }) {
         );
         setLoading(false);
         toast.success("Group updated successfully");
-        handleClose();
+        handleCloseModal();
       } catch (error) {
         console.log(error);
         setLoading(false);
@@ -92,6 +92,9 @@ export default function EditGroup({ isOpen, handleClose, group }) {
   };
 
   const handleCloseModal = () => {
+    if(loading){
+      return;
+    }
     handleClose();
     setUploadPhoto(null);
   };
@@ -120,8 +123,7 @@ export default function EditGroup({ isOpen, handleClose, group }) {
                 <DialogTitle as="h3" className="text-base/7 font-medium">
                   <div className="flex items-end justify-between cursor-pointer">
                     {loading && (
-                      <div className="absolute top-0 left-0 w-full h-full bg-black/55 rounded-xl z-[1002] flex justify-center items-center">
-                        <ModalLoader />
+                      <div className="absolute top-0 left-0 w-full h-full rounded-xl z-[1002] flex justify-center items-center">
                       </div>
                     )}
                     <h1 className="font-[600] clamp3">Add Group</h1>
@@ -208,13 +210,20 @@ export default function EditGroup({ isOpen, handleClose, group }) {
                     )}
                   </div>
                   <div className="w-full flex justify-end items-center">
-                    <button
-                      onClick={handleSubmit}
-                      className="px-[20px] py-[13px] rounded-[14px] bg-button-color text-white clamp4 font-bold"
-                    >
-                      Send Group
-                    </button>
-                  </div>
+                      <button
+                        onClick={handleSubmit}
+                        className="px-[20px] py-[13px] rounded-[14px] bg-button-color text-white clamp4 font-bold"
+                      >
+                        {loading ? (
+                          <div className="flex justify-start items-center gap-2 opacity-[0.8]">
+                            <SimpleLoading />
+                            <h1>Loading...</h1>
+                          </div>
+                        ) : (
+                          <h1>Edit Group</h1>
+                        )}
+                      </button>
+                    </div>
                 </form>
               </DialogPanel>
             </TransitionChild>

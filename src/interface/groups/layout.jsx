@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { FaArrowLeft } from "react-icons/fa";
 
 const Groups = () => {
-  const { userData } = useSelector((state) => state.event);
+  const { userData, groupEvent } = useSelector((state) => state.event);
   const register = JSON.parse(localStorage.getItem("register"));
   const [isAddGroup, setIsAddGroup] = useState(false);
   const [groupData, setGroupData] = useState([]);
@@ -32,7 +32,7 @@ const Groups = () => {
       }
     };
     groupFetch();
-  }, [isAddGroup]);
+  }, [isAddGroup, isAddGroup, groupEvent]);
 
   return (
     <main className="col-span-3 max-lg:grid-cols-1 flex flex-col gap-2 md:px-[16px]">

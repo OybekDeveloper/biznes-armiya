@@ -4,15 +4,19 @@ import { useNavigate } from "react-router-dom";
 import { ApiService } from "../../components/api.server";
 import toast from "react-hot-toast";
 
-export default function DeleteUser({ isOpen, handleClose, group }) {
-  const navigate = useNavigate();
+export default function DeleteUser({ group, delId, isOpen, handleClose }) {
   const handleDeleteGroup = () => {
+    const delUser = group?.users?.filter((item) => item !== delId);
+
     const groupFetch = async () => {
       const register = JSON.parse(localStorage.getItem("register"));
       try {
-        await ApiService.delData(`/group/${group?.id}`, register?.access);
-        toast.success("Group deleted successfully!");
-        navigate("/groups");
+        await ApiService.putData(
+          `/group/${group?.id}`,
+          { users: delUser },
+          register?.access
+        );
+        toast.success("User deleted successfully!");
         handleClose();
       } catch (error) {
         console.log(error);
@@ -39,10 +43,10 @@ export default function DeleteUser({ isOpen, handleClose, group }) {
                 as="h3"
                 className="text-clamp2 font-medium text-text-primary"
               >
-                Delete group
+                Delete user
               </DialogTitle>
               <p className="mt-2 text-sm/6 text-thin-color">
-                Are you sure you want to delete the group named {group?.name}?
+                Are you sure you want to delete this user?
               </p>
               <div className="mt-4 flex justify-between items-center gap-3">
                 <Button

@@ -12,20 +12,46 @@ import SendMessage from "./send-message";
 import ChatMessage from "./chat-message";
 import { ApiService } from "../../components/api.server";
 import Loader1 from "../../components/loader/loader1";
-import { dataempty } from "../../images";
+import { dataempty, photoUrl } from "../../images";
+import { useSelector } from "react-redux";
 
 const Project = () => {
   const register = JSON.parse(localStorage.getItem("register"));
+  const { userData } = useSelector((state) => state.event);
   const { id } = useParams();
   const [tasks, setTasks] = useState();
   const [loading, setLoading] = useState(true);
   console.log(id);
 
   useEffect(() => {
+    const fetchUsers = async (userList) => {
+      try {
+        const dataPromises = userList.map(async (user) => {
+          try {
+            const res = await ApiService.getData(
+              `/users/${user?.user}`,
+              register?.access
+            );
+            return res;
+          } catch (error) {
+            console.error(`Error fetching data for user ${user?.user}:`, error);
+            return null;
+          }
+        });
+
+        const data = await Promise.all(dataPromises);
+        return data.filter((info) => info !== null);
+      } catch (error) {
+        console.error("Error in fetchData:", error);
+        return [];
+      }
+    };
     const fetchData = async () => {
       try {
         const res = await ApiService.getData(`/tasks/${id}`, register?.access);
-        setTasks(res);
+        const usersInfo = await fetchUsers(res.user);
+
+        setTasks({ ...res, user: usersInfo });
         console.log(res);
       } catch (error) {
         console.log(error);
@@ -39,13 +65,15 @@ const Project = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  console.log(userData);
   return (
     <>
       {loading ? (
         <Loader1 />
       ) : (
         <>
-          {tasks ? (
+          {(tasks && tasks?.user?.find((c) => c.id === userData?.id)) ||
+          userData.role.talab_views ? (
             <main className="md:px-[16px] flex flex-col gap-3">
               <NavLink
                 to={"/homework"}
@@ -55,9 +83,7 @@ const Project = () => {
                 <h1>Back Tasks</h1>
               </NavLink>
               <section className="w-full flex justify-between items-center">
-                <h1 className="font-bold text-text-primary clamp2">
-                  {tasks?.name}
-                </h1>
+                <h1 className="font-bold text-text-primary clamp2">Tasks</h1>
                 <div className="flex justify-start items-center gap-2">
                   <button className="max-md:hidden bg-button-color  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow">
                     <FaPlus />
@@ -68,13 +94,13 @@ const Project = () => {
                   </button>
                 </div>
               </section>
-              <section className="grid max-lg:grid-cols-2 lg:grid-cols-8 gap-3 mt-2">
+              <section className="relative grid max-lg:grid-cols-2 lg:grid-cols-8 gap-3 mt-2">
                 <div className="max-lg:col-span-2 lg:col-span-3">
                   <div className=" bg-card rounded-[24px] p-3 sm:p-[24px] flex flex-col gap-4">
                     <div className="flex justify-between items-start w-full">
                       <div className="flex flex-col">
-                        <h1 className="text-thin-color">Task Number</h1>
-                        <p>{tasks?.id}</p>
+                        <h1 className="text-thin-color">Task Name</h1>
+                        <p className="font-bold">{tasks?.name}</p>
                       </div>
                       <BiEdit className="text-[24px] cursor-pointer" />
                     </div>
@@ -94,29 +120,30 @@ const Project = () => {
            </div>
          </div> */}
                     <div className="flex flex-col gap-1">
-                      <h1 className="text-thin-color">Assignees</h1>
-                      <div className="flex gap-3">
-                        <div className="flex -space-x-1">
-                          <img
-                            className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                            src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                            alt=""
-                          />
-                          <img
-                            className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                            src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                            alt=""
-                          />
-                          <img
-                            className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                            src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
-                            alt=""
-                          />
-                          <div className="inline-flex h-6 w-6 rounded-full ring-2 ring-white bg-blue-300 text-white text-sm text-center font-bold justify-center items-center">
-                            <h1>2+</h1>
+                      {tasks?.user?.length > 0 && (
+                        <div className="col-span-1 flex flex-col w-full">
+                          <p className="text-thin-color clamp4">Assignee</p>
+                          <div>
+                            {tasks?.user?.slice(0, 3)?.map((user, idx) => (
+                              <img
+                                key={idx}
+                                className="inline-flex h-6 w-6 rounded-full ring-2 ring-white"
+                                src={
+                                  user?.profile_photo
+                                    ? user?.profile_photo
+                                    : photoUrl
+                                }
+                                alt=""
+                              />
+                            ))}
+                            {tasks?.user?.length > 3 && (
+                              <div className="inline-flex h-6 w-6 rounded-full ring-2 ring-white bg-blue-300 text-white text-sm text-center font-bold justify-center items-center">
+                                <h1>{tasks?.user?.length - 3}+</h1>
+                              </div>
+                            )}
                           </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                     <div className="flex flex-col gap-1 justify-start items-start">
                       <h1 className="text-thin-color">Priority</h1>

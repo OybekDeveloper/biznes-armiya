@@ -24,6 +24,7 @@ const GroupInfo = ({
   handleGenerateCode,
   handleAddUser,
   addUser,
+  groupId
 }) => {
   const { userData } = useSelector((state) => state.event);
 
@@ -76,7 +77,7 @@ const GroupInfo = ({
                   </button>
                 </div>
               </div>
-              <div className="flex justify-between items-center gap-2 w-full">
+              <div className="flex flex-col justify-start items-start gap-2 w-full">
                 {group?.generate_code ? (
                   <button
                     className="w-full cursor-pointer flex justify-between items-center p-4 bg-background-secondary rounded-xl mt-2"
@@ -125,7 +126,7 @@ const GroupInfo = ({
         handleClose={handleGenerateCode}
         group={group}
       />
-      <AddUser isOpen={addUser} handleClose={handleAddUser} group={group} />
+      <AddUser groupId={groupId} isOpen={addUser} handleClose={handleAddUser} group={group} />
     </main>
   );
 };

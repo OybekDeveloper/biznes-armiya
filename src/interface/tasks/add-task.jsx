@@ -13,13 +13,14 @@ import toast from "react-hot-toast";
 import AddListbox from "./add-listbox";
 import { close } from "../../images";
 import { FaPlus } from "react-icons/fa";
+import SimpleLoading from "../../components/loader/simple-loading";
 
 export default function AddTasks({ isOpen, handleClose }) {
   const [errorMessage, setErrorMessage] = useState();
+  const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState([
     { id: 1, name: "Asked" },
     { id: 2, name: "Expected" },
-    { id: 3, name: "Done" },
   ]);
   const [users, setUsers] = useState([]);
   const [formData, setFormData] = useState({
@@ -28,15 +29,21 @@ export default function AddTasks({ isOpen, handleClose }) {
     start_time: "",
     stop_time: "",
     status: "",
-    users: "",
+    user: "",
+    vab: "",
   });
   const [newUsers, setNewUsers] = useState([]);
+
+  const handleChangeStatus = (status) => {
+    setStatus(status);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const newError = {};
     const register = JSON.parse(localStorage.getItem("register"));
     const groupFetch = async () => {
+      setLoading(true);
       try {
         const res = await ApiService.postData(
           "/tasks",
@@ -52,16 +59,30 @@ export default function AddTasks({ isOpen, handleClose }) {
           start_time: "",
           stop_time: "",
           status: "",
-          users: "",
+          user: "",
+          vab: "",
         });
         setNewUsers([]);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
     Object.keys(formData).forEach((key) => {
       if (!formData[key]) {
         newError[key] = `${key} field is required`;
+      }
+    });
+    newUsers.forEach((userObj) => {
+      if (
+        userObj.user === undefined ||
+        userObj.user === "" ||
+        userObj.vab === undefined ||
+        userObj.vab === ""
+      ) {
+        console.log("error blaaa");
+        newError["users"] = "Users field is required";
       }
     });
     if (Object.keys(newError).length > 0) {
@@ -81,13 +102,17 @@ export default function AddTasks({ isOpen, handleClose }) {
       start_time: "",
       stop_time: "",
       status: "",
-      users: "",
+      user: "",
+      vab: "",
     });
     setNewUsers([]);
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   };
 
   const handleAddUser = (e) => {
@@ -131,10 +156,15 @@ export default function AddTasks({ isOpen, handleClose }) {
   }, []);
 
   useEffect(() => {
-    setFormData({ ...formData, users: newUsers });
+    setFormData({ ...formData, user: newUsers });
+    if (newUsers.length > 0) {
+      setStatus([{ id: 2, name: "Expected" }]);
+    } else {
+      setStatus([{ id: 1, name: "Asked" }]);
+    }
   }, [newUsers]);
 
-  console.log(users);
+  console.log(errorMessage);
   return (
     <Transition appear show={isOpen}>
       <Dialog
@@ -171,6 +201,9 @@ export default function AddTasks({ isOpen, handleClose }) {
                     </div>
                   </div>
                 </DialogTitle>
+                {loading && (
+                  <div className="absolute top-0 left-0 w-full h-full rounded-xl z-[1002] flex justify-center items-center"></div>
+                )}
                 <form className="mt-4 flex flex-col gap-3">
                   <div>
                     <label
@@ -191,6 +224,28 @@ export default function AddTasks({ isOpen, handleClose }) {
                     {errorMessage?.name && (
                       <p className="text-red-500">
                         The name field is not filled
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label
+                      className="text-[14px] font-[700] text-thin"
+                      htmlFor="name"
+                    >
+                      VAB
+                    </label>
+                    <input
+                      onChange={handleChange}
+                      value={formData?.vab}
+                      className="border-border px-[18px] py-[12px] w-full border-[1.5px] border-solid bg-card rounded-[14px] outline-none focus:border-primary"
+                      type="number"
+                      id="vab"
+                      name="vab"
+                      placeholder="Add VAB"
+                    />
+                    {errorMessage?.vab && (
+                      <p className="text-red-500">
+                        The VAB field is not filled
                       </p>
                     )}
                   </div>
@@ -248,6 +303,7 @@ export default function AddTasks({ isOpen, handleClose }) {
                       Task status
                     </label>
                     <AddListbox
+                      handleChangeStatus={handleChangeStatus}
                       index={null}
                       data={status}
                       handleChange={handleChange}
@@ -332,6 +388,9 @@ export default function AddTasks({ isOpen, handleClose }) {
                       </button>
                     </div>
                   ))}
+                  {errorMessage?.users && (
+                    <p className="text-red-500">{errorMessage?.users}</p>
+                  )}
                   <div className="flex justify-end items-center gap-3">
                     <button
                       onClick={handleAddUser}
@@ -345,7 +404,14 @@ export default function AddTasks({ isOpen, handleClose }) {
                         onClick={handleSubmit}
                         className="px-[20px] py-[13px] rounded-[14px] bg-button-color text-white clamp4 font-bold"
                       >
-                        Add Task
+                        {loading ? (
+                          <div className="flex justify-start items-center gap-2 opacity-[0.8]">
+                            <SimpleLoading />
+                            <h1>Loading...</h1>
+                          </div>
+                        ) : (
+                          <h1>Add task</h1>
+                        )}
                       </button>
                     </div>
                   </div>

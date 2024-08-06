@@ -13,10 +13,14 @@ import toast from "react-hot-toast";
 import AddListbox from "./add-listbox";
 import { close } from "../../images";
 import { FaPlus } from "react-icons/fa";
+import SimpleLoading from "../../components/loader/simple-loading";
+import { useSelector } from "react-redux";
 
-export default function AddTasks({ isOpen, handleClose }) {
+export default function AddUser({ groupId, isOpen, handleClose }) {
+  const { groupEvent } = useSelector((state) => state.event);
   const [errorMessage, setErrorMessage] = useState();
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     users: [],
   });
@@ -27,32 +31,53 @@ export default function AddTasks({ isOpen, handleClose }) {
     const newError = {};
     const register = JSON.parse(localStorage.getItem("register"));
     const groupFetch = async () => {
+      setLoading(true);
       try {
-        const res = await ApiService.postData(
-          "/tasks",
-          formData,
+        const groups = await ApiService.getData(
+          `/group/${groupId}`,
           register?.access
         );
-        toast.success("Group added successfully");
-        handleClose();
-        setFormData({
-          name: "",
-          definition: "",
-          start_time: "",
-          stop_time: "",
-          status: "",
-          users: "",
-        });
-        setNewUsers([]);
+        if (groups) {
+          // Extract user IDs from the existing group users and new form data users
+          const groupUserIds = groups.users.map((user) => user);
+          const newUserIds = formData.users.map((user) => user.user);
+
+          // Merge the existing user IDs with the new user IDs
+          const updateUsers = [...groupUserIds, ...newUserIds];
+          const addUser = await ApiService.putData(
+            `/group/${groupId}`,
+            { users: updateUsers },
+            register?.access
+          );
+          if (addUser?.users) {
+            toast.success("Group added successfully");
+            handleClose();
+            setFormData({
+              users: [],
+            });
+            setNewUsers([]);
+          }
+          console.log(addUser);
+        }
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
-    Object.keys(formData).forEach((key) => {
-      if (!formData[key]) {
-        newError[key] = `${key} field is required`;
+    console.log(formData);
+    if (formData.users.length === 0) {
+      toast.error("Please select at least one user!");
+      return;
+    }
+
+    Object.keys(formData.users).forEach((key) => {
+      console.log(formData.users, "ddddd");
+      if (!formData.users[key]) {
+        newError["name"] = `Please select a another user!`;
       }
     });
+
     if (Object.keys(newError).length > 0) {
       setErrorMessage(newError);
       return;
@@ -65,12 +90,7 @@ export default function AddTasks({ isOpen, handleClose }) {
   const handleCloseModal = () => {
     handleClose();
     setFormData({
-      name: "",
-      definition: "",
-      start_time: "",
-      stop_time: "",
-      status: "",
-      users: "",
+      users: [],
     });
     setNewUsers([]);
   };
@@ -101,18 +121,29 @@ export default function AddTasks({ isOpen, handleClose }) {
   };
   useEffect(() => {
     const register = JSON.parse(localStorage.getItem("register"));
+
     const usersFetch = async () => {
       try {
-        const res = await ApiService.getData(`/users`, register?.access);
-        if (res.length > 0) {
-          setUsers(res);
+        const groupData = await ApiService.getData(
+          `/group/${groupId}`,
+          register?.access
+        );
+        const allUsers = await ApiService.getData(`/users`, register?.access);
+
+        if (allUsers.length > 0) {
+          const groupUserIds = groupData.users.map((user) => user);
+          const filteredUsers = allUsers.filter(
+            (user) => !groupUserIds.includes(user.id)
+          );
+          setUsers(filteredUsers);
         }
       } catch (error) {
         console.log(error);
       }
     };
+
     usersFetch();
-  }, []);
+  }, [groupId, groupEvent]); // Add `groupId` as a dependency to re-run the effect if it changes
 
   useEffect(() => {
     setFormData({ ...formData, users: newUsers });
@@ -156,10 +187,7 @@ export default function AddTasks({ isOpen, handleClose }) {
                 </DialogTitle>
                 <form className="mt-4 flex flex-col gap-3">
                   {newUsers.map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="min-w-[400px] grid grid-cols-3 gap-3"
-                    >
+                    <div key={idx} className="grid grid-cols-3 gap-3">
                       <div className="col-span-3">
                         <AddListbox
                           newUsers={newUsers}
@@ -182,6 +210,9 @@ export default function AddTasks({ isOpen, handleClose }) {
                       </button>
                     </div>
                   ))}
+                  {errorMessage?.select && (
+                    <p className="text-red-500">The VAB field is not filled</p>
+                  )}
                   <div className="flex justify-end items-center gap-3">
                     <button
                       onClick={handleAddUser}
@@ -195,7 +226,14 @@ export default function AddTasks({ isOpen, handleClose }) {
                         onClick={handleSubmit}
                         className="px-[20px] py-[13px] rounded-[14px] bg-button-color text-white clamp4 font-bold"
                       >
-                        Add User
+                        {loading ? (
+                          <div className="flex justify-start items-center gap-2 opacity-[0.8]">
+                            <SimpleLoading />
+                            <h1>Loading...</h1>
+                          </div>
+                        ) : (
+                          <h1>Add Group</h1>
+                        )}
                       </button>
                     </div>
                   </div>

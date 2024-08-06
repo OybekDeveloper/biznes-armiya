@@ -14,7 +14,7 @@ const HomeWork = () => {
   const [filterStatus, setFilterStatus] = useState("Asked");
   const [addTask, setAddTask] = useState(false);
   const [loading, setLoading] = useState(true);
-  const { userData } = useSelector((state) => state.event);
+  const { groupEvent } = useSelector((state) => state.event);
   const toggleFilter = () => {
     setIsFilterOpen(!isFilterOpen);
   };
@@ -40,7 +40,7 @@ const HomeWork = () => {
       }
     };
     taskFetch();
-  }, [addTask]);
+  }, [addTask, groupEvent]);
   return (
     <>
       {loading ? (
