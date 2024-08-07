@@ -72,6 +72,8 @@ export default function TransactionPay({ isOpen, handleClose }) {
           register?.access
         );
         if (toUser && userData) {
+          const toUserValue = toUser.vab ? toUser.vab : 0;
+          console.log(+toUserValue + +formData?.vab )
           console.log(toUser, "toUser");
           console.log(userData, "userData");
           const res1 = await ApiService.putData(
@@ -84,23 +86,25 @@ export default function TransactionPay({ isOpen, handleClose }) {
           const res2 = await ApiService.putData(
             `/update-user/${toUser?.id}/`,
             {
-              vab: toUser?.vab ? toUser.vab : 0 + formData?.vab,
+              vab: +toUserValue + +formData?.vab,
             },
             register?.access
           );
 
           console.log(res1, res2);
+          if (res1 && res2) {
+            toast.success(
+              `VAB sent successfully.Your VAB ${userData?.vab - formData?.vab}`
+            );
+            setFormData({
+              vab: "",
+              from_user: register?.user_id,
+              to_user: "",
+            });
+            handleClose();
+            dispatch(eventSliceAction());
+          }
         }
-        toast.success(
-          `VAB sent successfully.Your VAB ${userData?.vab - formData?.vab}`
-        );
-        setFormData({
-          vab: "",
-          from_user: register?.user_id,
-          to_user: "",
-        });
-        handleClose();
-        dispatch(eventSliceAction());
       } catch (error) {
         console.log(error);
       } finally {
