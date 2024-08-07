@@ -14,7 +14,7 @@ const History = () => {
     series: [{ name: "VAB Series", data: [] }],
     categories: [],
   });
-  const [filter, setFilter] = useState("DAILY"); // Default filter value
+  const [filter, setFilter] = useState("MONTHLY"); // Default filter value
 
   const onFilterChange = (selectedKey) => {
     setFilter(selectedKey);
@@ -101,6 +101,7 @@ const History = () => {
     };
     fetchVab();
   }, [filter, addVab]);
+
 
   return (
     <main className="max-w-11/12 sm:px-4 flex flex-col gap-3">

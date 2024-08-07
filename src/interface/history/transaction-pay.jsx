@@ -10,11 +10,13 @@ import { ApiService } from "../../components/api.server";
 import toast from "react-hot-toast";
 import SimpleLoading from "../../components/loader/simple-loading";
 import ComboboxTransaction from "./combobox";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import AddListboxSetting from "../settings/combobox";
+import { eventSliceAction } from "../../reducer/event";
 
 export default function TransactionPay({ isOpen, handleClose }) {
   const { userData } = useSelector((state) => state.event);
-
+  const dispatch = useDispatch();
   const register = JSON.parse(localStorage.getItem("register"));
   const [errorMessage, setErrorMessage] = useState({});
   const [loading, setLoading] = useState(false);
@@ -58,20 +60,47 @@ export default function TransactionPay({ isOpen, handleClose }) {
         );
         return;
       }
-      setLoading(true);
       try {
+        setLoading(true);
         await ApiService.postMediaData(
           "/tranzaksiya",
           formData,
           register?.access
         );
-        toast.success("VAB sent successfully");
+        const toUser = await ApiService.getData(
+          `/users/${formData?.to_user}`,
+          register?.access
+        );
+        if (toUser && userData) {
+          console.log(toUser, "toUser");
+          console.log(userData, "userData");
+          const res1 = await ApiService.putData(
+            `/update-user/${userData?.id}/`,
+            {
+              vab: userData?.vab - formData?.vab,
+            },
+            register?.access
+          );
+          const res2 = await ApiService.putData(
+            `/update-user/${toUser?.id}/`,
+            {
+              vab: toUser?.vab ? toUser.vab : 0 + formData?.vab,
+            },
+            register?.access
+          );
+
+          console.log(res1, res2);
+        }
+        toast.success(
+          `VAB sent successfully.Your VAB ${userData?.vab - formData?.vab}`
+        );
         setFormData({
           vab: "",
           from_user: register?.user_id,
           to_user: "",
         });
         handleClose();
+        dispatch(eventSliceAction());
       } catch (error) {
         console.log(error);
       } finally {
@@ -160,7 +189,7 @@ export default function TransactionPay({ isOpen, handleClose }) {
                     >
                       to whom you want to transfer VAB
                     </label>
-                    <ComboboxTransaction
+                    <AddListboxSetting
                       data={usersData}
                       handleChange={handleChangeData}
                       status={"user"}

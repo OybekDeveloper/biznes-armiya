@@ -16,6 +16,7 @@ export const initialState = {
   groupData: [],
   registerSuccessData: {},
   groupEvent: false,
+  eventSliceBool: false,
 };
 
 export const eventSlice = createSlice({
@@ -85,6 +86,12 @@ export const eventSlice = createSlice({
         groupEvent: !state.groupEvent,
       };
     },
+    eventSliceAction: (state) => {
+      return {
+        ...state,
+        eventSliceBool: !state.eventSliceBool,
+      };
+    },
   },
 });
 
@@ -99,7 +106,8 @@ export const {
   groupDetailSlice,
   setRegisterSuccessData,
   resetRegisterData,
-  groupEventSlice
+  groupEventSlice,
+  eventSliceAction,
 } = eventSlice.actions;
 
 export default eventSlice.reducer;

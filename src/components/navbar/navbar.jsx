@@ -19,6 +19,7 @@ import "./index.css";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const { eventSliceBool } = useSelector((state) => state.event);
   const register = JSON.parse(localStorage.getItem("register"));
   const selectedTheme = localStorage.getItem("theme");
   const { pathname } = useLocation();
@@ -108,7 +109,6 @@ const Navbar = () => {
         if (error?.response?.status === 401) {
           localStorage.removeItem("register");
           navigate("/login");
-
         } else {
           navigate("/not-found");
         }
@@ -117,7 +117,7 @@ const Navbar = () => {
     if (register) {
       fetchUserData();
     }
-  }, [register?.user_id, pathname]);
+  }, [register?.user_id, pathname, eventSliceBool]);
 
   return (
     <>
