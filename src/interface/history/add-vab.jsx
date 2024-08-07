@@ -1,5 +1,4 @@
 import {
-  Button,
   Dialog,
   DialogPanel,
   DialogTitle,
@@ -11,9 +10,9 @@ import { useEffect, useState } from "react";
 import SimpleLoading from "../../components/loader/simple-loading";
 import { ApiService } from "../../components/api.server";
 import toast from "react-hot-toast";
-import { close } from "../../images";
 import { FaEquals } from "react-icons/fa";
 import { LiaDollarSignSolid } from "react-icons/lia";
+import { close } from "../../images";
 
 export default function AddVabModal({ isOpen, handleClose }) {
   const register = JSON.parse(localStorage.getItem("register"));
@@ -22,28 +21,24 @@ export default function AddVabModal({ isOpen, handleClose }) {
   const [vab, setVab] = useState([]);
   const [formData, setFormData] = useState({
     date: isoString,
-    history: [],
+    history: [{ vab: "", data: isoString }],
   });
   const [errorMessage, setErrorMessage] = useState({});
   const [loading, setLoading] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleCloseModal = () => {
-    if (!showConfirmation) {
-      setVab([]);
-      handleClose();
-      setFormData({
-        date: isoString,
-        history: [],
-      });
-    }
+    setVab([]);
+    handleClose();
+    setFormData({
+      date: isoString,
+      history: [{ vab: "", data: isoString }],
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const newErrors = {};
-
-    // Check if vab input is empty
     if (!formData.history.length || !formData.history[0].vab) {
       newErrors.vab = "VAB field is required";
     }
@@ -55,7 +50,6 @@ export default function AddVabModal({ isOpen, handleClose }) {
       setErrorMessage({});
     }
 
-    // Show confirmation modal
     setShowConfirmation(true);
   };
 
@@ -71,10 +65,11 @@ export default function AddVabModal({ isOpen, handleClose }) {
         },
         register?.access
       );
-      toast.success("Successfully added vab!");
+      toast.success("Successfully added VAB!");
       handleCloseModal();
     } catch (error) {
       console.error(error);
+      toast.error("Failed to add VAB!");
     } finally {
       setLoading(false);
     }
@@ -105,21 +100,20 @@ export default function AddVabModal({ isOpen, handleClose }) {
         console.error(error);
       }
     };
-    fetchData();
+    if (isOpen) fetchData();
   }, [isOpen]);
 
   return (
     <>
-      {/* Main Modal */}
       <Transition appear show={isOpen}>
         <Dialog
           as="div"
-          className="relative z-[996] focus:outline-none"
+          className="relative z-[1300] focus:outline-none"
           onClose={handleCloseModal}
         >
-          <div className="fixed inset-0 z-[997] w-screen overflow-y-auto bg-black/50">
+          <div className="fixed inset-0 z-[1330] w-screen overflow-y-auto bg-black/50">
             {loading && (
-              <div className="fixed inset-0 z-[1009] w-screen overflow-y-auto bg-transparent" />
+              <div className="fixed inset-0 z-[1400] w-screen overflow-y-auto bg-transparent" />
             )}
             <div className="flex min-h-full items-center justify-center p-4">
               <TransitionChild
@@ -130,10 +124,10 @@ export default function AddVabModal({ isOpen, handleClose }) {
                 leaveFrom="opacity-100 transform-[scale(100%)]"
                 leaveTo="opacity-0 transform-[scale(95%)]"
               >
-                <DialogPanel className="w-full max-sm:max-w-11/12 max-w-md rounded-xl bg-card p-6 backdrop-blur-2xl">
+                <DialogPanel className="w-11/12 max-sm:max-w-11/12 max-w-md rounded-xl bg-card p-6 backdrop-blur-2xl">
                   <DialogTitle as="h3" className="text-base/7 font-medium">
                     <div className="flex items-end justify-between cursor-pointer">
-                      <h1 className="font-[600] clamp3">Add Auktsion</h1>
+                      <h1 className="font-[600] clamp3">Add VAB</h1>
                       <div className="p-[10px] bg-background-secondary rounded-[12px]">
                         <IoClose
                           onClick={handleCloseModal}
@@ -174,7 +168,7 @@ export default function AddVabModal({ isOpen, handleClose }) {
                           type="number"
                           id="vab"
                           name="vab"
-                          placeholder="Enter the vab"
+                          placeholder="Enter the VAB"
                         />
                         {errorMessage.vab && (
                           <p className="text-red-500">{errorMessage.vab}</p>
@@ -183,7 +177,7 @@ export default function AddVabModal({ isOpen, handleClose }) {
                     </div>
                     <div className="w-full flex justify-end items-center">
                       <button
-                        type="submit"
+                        onClick={handleSubmit}
                         className="px-[20px] py-[13px] rounded-[14px] bg-button-color text-white clamp4 font-bold"
                       >
                         {loading ? (
@@ -192,7 +186,7 @@ export default function AddVabModal({ isOpen, handleClose }) {
                             <h1>Loading...</h1>
                           </div>
                         ) : (
-                          <h1>Add Group</h1>
+                          <h1>Add VAB</h1>
                         )}
                       </button>
                     </div>
@@ -204,14 +198,13 @@ export default function AddVabModal({ isOpen, handleClose }) {
         </Dialog>
       </Transition>
 
-      {/* Confirmation Modal */}
       <Transition appear show={showConfirmation}>
         <Dialog
           as="div"
-          className="relative z-[998] focus:outline-none"
+          className="relative z-[1500] focus:outline-none"
           onClose={() => setShowConfirmation(false)}
         >
-          <div className="fixed inset-0 z-[999] w-screen overflow-y-auto bg-black/50">
+          <div className="fixed inset-0 z-[1530] w-screen overflow-y-auto bg-black/50">
             <div className="flex min-h-full items-center justify-center p-4">
               <TransitionChild
                 enter="ease-out duration-300"
@@ -238,23 +231,20 @@ export default function AddVabModal({ isOpen, handleClose }) {
                   <div className="mt-4">
                     <p>Are you sure you want to submit this data?</p>
                     <div className="flex justify-end gap-4 mt-4">
-                      <Button
+                      <button
                         type="button"
                         onClick={() => setShowConfirmation(false)}
-                        className="px-[20px] py-[13px] rounded-[14px] bg-background-secondary text-white clamp4 font-bold"
+                        className="px-[20px] py-[13px] rounded-[14px] bg-background text-primary clamp4 font-bold"
                       >
                         Cancel
-                      </Button>
-                      <Button
+                      </button>
+                      <button
                         type="button"
-                        onClick={() => {
-                          confirmSubmission();
-                          setShowConfirmation(false);
-                        }}
+                        onClick={confirmSubmission}
                         className="px-[20px] py-[13px] rounded-[14px] bg-button-color text-white clamp4 font-bold"
                       >
                         Confirm
-                      </Button>
+                      </button>
                     </div>
                   </div>
                 </DialogPanel>

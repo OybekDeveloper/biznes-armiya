@@ -30,7 +30,7 @@ export default function FilterDate({ onFilterChange }) {
   };
 
   return (
-    <div className="h-full z-[100]">
+    <div className="h-full z-[1200]">
       <Listbox value={selected} onChange={handleChange}>
         <ListboxButton
           className={clsx(
@@ -51,7 +51,7 @@ export default function FilterDate({ onFilterChange }) {
         >
           <ListboxOptions
             anchor="bottom"
-            className="w-[var(--input-width)] rounded-xl shadow-custom border-[1px] border-border bg-card p-1 mt-1 focus:outline-none z-[200]"
+            className="w-[var(--input-width)] rounded-xl shadow-custom border-[1px] border-border bg-card p-1 mt-1 focus:outline-none z-[1100]"
           >
             {people.map((person) => (
               <ListboxOption
