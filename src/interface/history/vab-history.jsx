@@ -30,7 +30,9 @@ export default function VabHistory({ isOpen, handleClose }) {
   };
 
   const handleCloseModal = () => {
-    handleClose();
+    if (!addVab) {
+      handleClose();
+    }
   };
 
   const handleAddVab = () => {
@@ -93,6 +95,14 @@ export default function VabHistory({ isOpen, handleClose }) {
             .map((item) => item.data);
         }
 
+        // Check for NaN values and log the data for debugging
+        console.log("Series Data:", seriesData);
+        console.log("Categories Data:", categoriesData);
+
+        // Filter out any NaN values from the data
+        seriesData = seriesData.filter((value) => !isNaN(value));
+        categoriesData = categoriesData.filter((value) => value);
+
         setHistoryVab({
           series: [{ name: "VAB Series", data: seriesData }],
           categories: categoriesData,
@@ -115,6 +125,11 @@ export default function VabHistory({ isOpen, handleClose }) {
           onClose={handleCloseModal}
         >
           <div className="fixed inset-0 z-[997] w-screen overflow-y-auto bg-black/50">
+            {loading && (
+              <div className="fixed inset-0 z-[1009] w-screen overflow-y-auto bg-transparent">
+                <SimpleLoading />
+              </div>
+            )}
             <div className="flex w-full h-full items-center justify-center p-4">
               <TransitionChild
                 enter="ease-out duration-300"
