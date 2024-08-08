@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import Loader1 from "../../components/loader/loader1";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
+import Countdown, { getLocalISOString } from "../../components/count-down";
 
 const allItems = [];
 
@@ -61,36 +62,38 @@ const NowAuction = () => {
 
   const maxVab = Math.max(...bids.map((bid) => bid.ekb));
   const maxVabItem = bids.find((bid) => bid.ekb === maxVab);
-
   const handleAddVab = () => {
-    // // Validate addVab input
-    // if (addVab.vab <= 0) {
-    //   toast.error("Vab must be a positive number!");
-    //   return;
-    // }
-    // if (userData?.vab < addVab?.vab) {
-    //   toast.error("Not enough vab!");
-    //   return;
-    // }
+    // Validate addVab input
+    if (addVab.vab <= 0) {
+      toast.error("Vab must be a positive number!");
+      return;
+    }
+    if (userData?.vab < addVab?.vab) {
+      toast.error("Not enough vab!");
+      return;
+    }
 
     // Proceed to add vab
     const fetchData = async () => {
       try {
-        const res = await ApiService.putData(
-          `/buyum/${id}`,
-          {
-            buyumusers: [
-              ...item.buyumusers,
-              {
-                user_id: register?.user_id,
-                ekb: addVab.vab,
-              },
-            ],
-          },
+        const res = await ApiService.postData(
+          `/buyumusers`,
+          addVab,
           register?.access
         );
-        toast.success("Successfully added vab!");
-        console.log(res);
+        if (res.id) {
+          const update = await ApiService.putData(
+            `/buyum/${id}`,
+            {
+              buyumusers: [...item.buyumusers, res.id],
+            },
+            register?.access
+          );
+          if (update) {
+            toast.success("Successfully added vab!");
+            console.log(res);
+          }
+        }
       } catch (error) {
         toast.error("Failed to add vab!");
         console.log(error);
@@ -142,6 +145,11 @@ const NowAuction = () => {
                       </div>
                     </div>
                   </div>
+                  {getLocalISOString() > item?.start_time && (
+                    <div>
+                      <Countdown eventTime={item.end_time} />
+                    </div>
+                  )}
                 </div>
                 <div className="col-span-2 max-sm:col-span-3 sm:col-span-3 lg:col-span-2 mb-2">
                   <table className="min-w-full bg-card shadow-sm overflow-hidden">
@@ -181,7 +189,7 @@ const NowAuction = () => {
               </div>
             </section>
             <section className="overflow-x-auto p-4">
-              <h1 className="font-bold clamp3">Davogarlar</h1>
+              <h1 className="font-bold clamp3">Applicants</h1>
               <table className="min-w-full bg-card rounded-xl shadow-sm">
                 <thead>
                   <tr>

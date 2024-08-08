@@ -20,7 +20,7 @@ import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 
 export default function DropDown({ handleLogOut }) {
   const { userData } = useSelector((state) => state.event);
-
+  console.log(userData);
   const navigate = useNavigate();
   return (
     <div className="">
@@ -77,10 +77,10 @@ export default function DropDown({ handleLogOut }) {
                   })}
                 />
               </div>
-            </div>  
+            </div>
             <MenuItem>
               <NavLink
-                to={"/profile"}
+                to={userData?.role?.role_edit ? "/settings/user" : "/profile"}
                 className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10"
               >
                 <PencilIcon className="size-4 fill-thin" />

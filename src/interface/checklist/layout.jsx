@@ -1,68 +1,211 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { LuFilter } from "react-icons/lu";
 import { NavLink } from "react-router-dom";
+import { ApiService } from "../../components/api.server";
+import { dataempty, photoUrl } from "../../images";
+import { TimeFormatFunction } from "../../components/time-format";
+import { useSelector } from "react-redux";
+import Loader1 from "../../components/loader/loader1";
 
 const Checklist = () => {
+  const { userData } = useSelector((state) => state.event);
+  const { role } = userData;
+  const [loading, setLoading] = useState(true);
+  const register = JSON.parse(localStorage.getItem("register"));
+  const [usersInfoMap, setUsersInfoMap] = useState({}); // State to store users info by task ID
+  const [taskDones, setTasksDones] = useState([]);
+  async function fetchData() {
+    try {
+      const res = await ApiService.getData("/task-dones", register?.access);
+      console.log(res);
+      setTasksDones(res);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-  useEffect(()=>{
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  },)
+  useEffect(() => {
+    const fetchData = async (userList) => {
+      try {
+        const dataPromises = userList.map(async (user) => {
+          try {
+            const res = await ApiService.getData(
+              `/users/${user?.user}`,
+              register?.access
+            );
+            return res;
+          } catch (error) {
+            console.error(`Error fetching data for user ${user?.user}:`, error);
+            return null;
+          }
+        });
+
+        const data = await Promise.all(dataPromises);
+        return data.filter((info) => info !== null);
+      } catch (error) {
+        console.error("Error in fetchData:", error);
+        return [];
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const fetchAllUsersInfo = async () => {
+      const usersInfoPromises = taskDones.map(async (item) => {
+        if (item?.user.length > 0) {
+          const usersInfo = await fetchData(item.user);
+          return { id: item.id, usersInfo };
+        }
+        return { id: item.id, usersInfo: [] };
+      });
+
+      const usersInfoArray = await Promise.all(usersInfoPromises);
+      const usersInfoMap = usersInfoArray.reduce((map, { id, usersInfo }) => {
+        map[id] = usersInfo;
+        return map;
+      }, {});
+      setUsersInfoMap(usersInfoMap);
+    };
+
+    fetchAllUsersInfo();
+  }, [taskDones]);
 
   return (
-    <main className="col-span-3 max-lg:grid-cols-1 flex flex-col gap-2">
-      <section className="flex justify-between items-center">
-        <h1 className="text-text-primary font-bold clamp3">
-          Tekshirish Ro’yxati
-        </h1>
-        <button className="max-md:hidden bg-button-color  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow">
-          <FaPlus />
-          <h1>AAdd Request</h1>
-        </button>
-        <button className="md:hidden fixed bottom-[16px] right-[16px] bg-button-color  flex justify-start items-center gap-2 rounded-full p-4 text-white shadow-btn_shadow">
-          <FaPlus />
-        </button>
-      </section>
-      <section className="flex flex-col gap-3">
-        {[1, 2, 3, 4, 5, 6, 7].map((task, i) => (
-          <NavLink
-            to={`/project/${i}`}
-            key={i}
-            className="cursor-pointer hover:bg-hover-card bg-card shadow-btn_shadow rounded-[14px] w-full grid grid-cols-6 max-lg:grid-cols-3 max-xl:grid-cols-4 px-[24px] py-[16px] gap-3"
-          >
-            <div className="col-span-1">
-              <p className="text-thin-color clamp4">Task name</p>
-              <h1 className="text-text-primary font-bold">Sick Leave</h1>
-            </div>
-            <div className="col-span-1">
-              <p className="text-thin-color clamp4">Estimate</p>
-              <h1 className="text-text-primary font-[500]">1d 2h </h1>
-            </div>
-            <div className="col-span-1">
-              <p className="text-thin-color clamp4">Deadline</p>
-              <h1 className="text-text-primary font-[500]">Sep 13, 2020</h1>
-            </div>
-            <div className="col-span-1 flex flex-col">
-              <p className="text-thin-color clamp4">Assignee</p>
-              <img
-                className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                alt=""
-              />
-            </div>
-            <div className="col-span-1">
-              <p className="text-thin-color clamp4">Priority</p>
-              <h1 className="text-text-primary font-[500]">Sick Leave</h1>
-            </div>
-            <div className="col-span-1 flex justify-start items-center ">
-              <div className="text-[12px] px-2 py-1 rounded-[14px] bg-yellow-500 text-white">
-                Bajarilmoqda
+    <>
+      {loading ? (
+        <Loader1 />
+      ) : (
+        <main className="col-span-3 max-lg:grid-cols-1 flex flex-col gap-2">
+          <section className="flex justify-between items-center">
+            <h1 className="text-text-primary font-bold clamp3">
+              Tekshirish Ro’yxati
+            </h1>
+            <button className="max-md:hidden bg-button-color  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow">
+              <FaPlus />
+              <h1>AAdd Request</h1>
+            </button>
+            <button className="md:hidden fixed bottom-[16px] right-[16px] bg-button-color  flex justify-start items-center gap-2 rounded-full p-4 text-white shadow-btn_shadow">
+              <FaPlus />
+            </button>
+          </section>
+          {taskDones.length > 0 ? (
+            <section className="flex flex-col gap-3">
+              {taskDones
+                .slice()
+                .reverse()
+                .map((item, idx) => {
+                  const usersInfo = usersInfoMap[item.id] || [];
+                  return (
+                    <div key={idx} className="relative">
+                      <NavLink
+                        to={
+                          (role?.tasks_views &&
+                            role.tasks_edit &&
+                            role.tasks_delete) ||
+                          item.user.find((c) => +c.user === +userData.id)
+                            ? `/project/${item?.id}`
+                            : null
+                        }
+                        className="relative cursor-pointer hover:bg-hover-card bg-card shadow-btn_shadow rounded-[14px] w-full grid grid-cols-6 max-lg:grid-cols-3 max-xl:grid-cols-4 px-[24px] py-[16px] gap-3"
+                      >
+                        <div className="col-span-1">
+                          <p className="text-thin-color clamp4">Task name</p>
+                          <h1 className="text-text-primary font-bold whitespace-normal">
+                            {item?.name.length > 10
+                              ? item?.name.slice(0, 10) + "..."
+                              : item?.name}
+                          </h1>
+                        </div>
+                        <div className="col-span-1">
+                          <p className="text-thin-color clamp4">VAB</p>
+                          <h1 className="text-text-primary font-bold">
+                            {item?.vab}
+                          </h1>
+                        </div>
+                        <div className="col-span-1">
+                          <p className="text-thin-color clamp4">Estimate</p>
+                          <h1 className="text-text-primary font-[500]">
+                            {TimeFormatFunction(item?.start_time)}
+                          </h1>
+                        </div>
+                        <div className="col-span-1">
+                          <p className="text-thin-color clamp4">Deadline</p>
+                          <h1 className="text-text-primary font-[500]">
+                            {TimeFormatFunction(item?.stop_time)}
+                          </h1>
+                        </div>
+                        {usersInfo.length > 0 && (
+                          <div className="col-span-1 flex flex-col w-full">
+                            <p className="text-thin-color clamp4">Assignee</p>
+                            <div>
+                              {usersInfo?.slice(0, 3)?.map((user, idx) => (
+                                <img
+                                  key={idx}
+                                  className="inline-flex h-6 w-6 rounded-full ring-2 ring-white"
+                                  src={
+                                    user?.profile_photo
+                                      ? user?.profile_photo
+                                      : photoUrl
+                                  }
+                                  alt=""
+                                />
+                              ))}
+                              {usersInfo?.length > 3 && (
+                                <div className="inline-flex h-6 w-6 rounded-full ring-2 ring-white bg-blue-300 text-white text-sm text-center font-bold justify-center items-center">
+                                  <h1>{usersInfo?.length - 3}+</h1>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                        <div className="col-span-1">
+                          <p className="text-thin-color clamp4">Definition</p>
+                          <h1 className="text-text-primary font-[500]">
+                            {item?.definition.length > 20
+                              ? item?.definition.slice(0, 20) + "..."
+                              : item?.definition}
+                          </h1>
+                        </div>
+                        <div className="col-span-1 flex justify-start items-center ">
+                          <div
+                            className={`
+                ${
+                  item?.status == "Done"
+                    ? "bg-green-500"
+                    : item?.status === "Expected"
+                    ? "bg-blue-500"
+                    : "bg-green-500"
+                } 
+                text-[12px] px-2 py-1 rounded-[14px]  text-white`}
+                          >
+                            {item?.status}
+                          </div>
+                        </div>
+                      </NavLink>
+                    </div>
+                  );
+                })}
+            </section>
+          ) : (
+            <div className="w-full h-full flex justify-center items-center flex-col mt-4">
+              <div className="w-full h-[200px]">
+                <img
+                  className="w-full h-full object-contain"
+                  src={dataempty}
+                  alt=""
+                />
               </div>
+              <h1 className="clam3 font-bold">Tasks do not exist!</h1>
             </div>
-          </NavLink>
-        ))}
-      </section>
-    </main>
+          )}
+        </main>
+      )}
+    </>
   );
 };
 

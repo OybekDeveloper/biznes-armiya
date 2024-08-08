@@ -13,30 +13,58 @@ import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { eventSliceAction } from "../../reducer/event";
 
-export default function DeleteModal({ isOpen, handleClose, id }) {
-  const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
+export default function TakeOverUser({ isOpen, handleClose, item, status }) {
+  console.log(item);
+  const register = JSON.parse(localStorage.getItem("register"));
 
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const handleDelete = () => {
     const deleteFetch = async () => {
       setLoading(true);
+      const takeOver = {
+        definition: item.definition,
+        name: item.name,
+        status: "Expected",
+        user: [
+          {
+            user: register.user_id,
+            vab: item.vab,
+          },
+        ],
+      };
+      const doneTask = {
+        definition: item.definition,
+        name: item.name,
+        status: "Done",
+        user: item.user,
+      };
       try {
-        const register = JSON.parse(localStorage.getItem("register"));
-        await ApiService.delData(`/tasks/${id}`, register?.access);
-        toast.success("Successfully deleted task.", {
-          style: {
-            backgroundColor: "red",
-            border: "1px solid red",
-            padding: "16px",
-            color: "#fff",
-          },
-          position: "right-top",
-          iconTheme: {
-            primary: "#fff",
-            secondary: "red",
-          },
-        });
+        await ApiService.putData(
+          `/tasks/${item.id}`,
+          status === "take_over" ? takeOver : doneTask,
+          register?.access
+        );
         dispatch(eventSliceAction());
+        toast.success(
+          status === "take_over"
+            ? "Task mastered successfully!"
+            : "Task successfully finished!!!",
+          {
+            style: {
+              backgroundColor: "green",
+              border: "1px solid green",
+              padding: "16px",
+              color: "#fff",
+            },
+            position: "right-top",
+            iconTheme: {
+              primary: "#fff",
+              secondary: "green",
+            },
+          }
+        );
+        handleClose();
       } catch (error) {
         console.error("Error deleting tasks:", error);
       } finally {
@@ -44,7 +72,6 @@ export default function DeleteModal({ isOpen, handleClose, id }) {
       }
     };
     deleteFetch();
-    handleClose();
   };
 
   return (
@@ -69,10 +96,13 @@ export default function DeleteModal({ isOpen, handleClose, id }) {
                   as="h3"
                   className="text-clamp2 font-medium text-text-primary"
                 >
-                  Delete task
+                  {status === "take_over"
+                    ? "Accepting the task"
+                    : "Finished task!!!"}
                 </DialogTitle>
                 <p className="mt-2 text-sm/6 text-thin-color">
-                  Are you sure you want to delete this task?
+                {status === "take_over"?"Do you really want to accept this task?":"Do you really want to finishing this task?"}
+                  
                 </p>
                 <div className="mt-4 flex justify-between items-center gap-3">
                   <Button

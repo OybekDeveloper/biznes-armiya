@@ -7,8 +7,11 @@ import { ApiService } from "../../components/api.server";
 import AddTasks from "./add-task";
 import Loader1 from "../../components/loader/loader1";
 import { useSelector } from "react-redux";
+import { ToolbarLineBreakView } from "ckeditor5";
 
 const HomeWork = () => {
+  const { eventSliceBool, userData } = useSelector((state) => state.event);
+  const { role } = userData;
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [filterStatus, setFilterStatus] = useState("Asked");
@@ -31,7 +34,7 @@ const HomeWork = () => {
     const taskFetch = async () => {
       try {
         const tasks = await ApiService.getData("/tasks", register?.access);
-        console.log(tasks);
+        console.log(tasks, "tasks");
         setTasks(tasks);
         setLoading(false);
       } catch (error) {
@@ -40,7 +43,7 @@ const HomeWork = () => {
       }
     };
     taskFetch();
-  }, [addTask, groupEvent]);
+  }, [addTask, groupEvent, eventSliceBool]);
   return (
     <>
       {loading ? (
@@ -52,21 +55,23 @@ const HomeWork = () => {
               <h1 className="font-bold text-text-primary clamp2">
                 Assignments
               </h1>
-              <div className="flex justify-start items-center gap-2">
-                <button
-                  onClick={handleAddTask}
-                  className="max-md:hidden bg-button-color  flex justify-start items-center gap-2 rounded-[14px] p-2 text-white shadow-btn_shadow"
-                >
-                  <FaPlus />
-                  <h1>Add Tasks</h1>
-                </button>
-                <button
-                  onClick={handleAddTask}
-                  className="z-[800] md:hidden fixed bottom-[16px] right-[16px] bg-button-color  flex justify-start items-center gap-2 rounded-full p-4 text-white shadow-btn_shadow"
-                >
-                  <FaPlus />
-                </button>
-              </div>
+              {role?.tasks_edit && (
+                <div className="flex justify-start items-center gap-2">
+                  <button
+                    onClick={handleAddTask}
+                    className="max-md:hidden bg-button-color  flex justify-start items-center gap-2 rounded-[14px] p-2 text-white shadow-btn_shadow"
+                  >
+                    <FaPlus />
+                    <h1>Add Tasks</h1>
+                  </button>
+                  <button
+                    onClick={handleAddTask}
+                    className="z-[800] md:hidden fixed bottom-[16px] right-[16px] bg-button-color  flex justify-start items-center gap-2 rounded-full p-4 text-white shadow-btn_shadow"
+                  >
+                    <FaPlus />
+                  </button>
+                </div>
+              )}
             </section>
             <section className="grid max-md:grid-cols-1 max-xl:grid-cols-5 xl:grid-cols-4  max-lg:grid-cols-1 lg:gap-3">
               <div className="max-xl:col-span-2 col-span-1">

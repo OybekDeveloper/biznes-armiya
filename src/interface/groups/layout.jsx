@@ -15,7 +15,6 @@ const Groups = () => {
   const [isAddGroup, setIsAddGroup] = useState(false);
   const [groupData, setGroupData] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const handleOpenAddGroup = () => {
     setIsAddGroup(!isAddGroup);
   };
@@ -25,6 +24,7 @@ const Groups = () => {
       try {
         const group = await ApiService.getData(`/group`, register?.access);
         setGroupData(group);
+        console.log(group)
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -110,10 +110,10 @@ const Groups = () => {
                         : item?.shiori}
                     </p>
                     <p className="text-gray-500">
-                      {item?.user?.length > 0 ? item.user.length : 0} user
+                      {item?.users?.length > 0 ? item.users.length : 0} user
                     </p>
                     <p className="text-gray-500 py-1 px-2 border-border border-[1px] rounded-[4px] text-[12px]">
-                      {item?.admin}
+                      {item?.admin?item.admin:"no admin"}
                     </p>
                   </NavLink>
                 ))}

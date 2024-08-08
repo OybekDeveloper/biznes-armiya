@@ -27,6 +27,7 @@ import dataempty from "./data-empty.png";
 import newsempty from "./page.png";
 import emptygrouplogo from "./empty-group-logo.webp";
 import emptyGroup from './empty-group1.svg'
+import emptyimg from './empty-img.jpg'
 export {
   search,
   notification,
@@ -56,5 +57,6 @@ export {
   searchempty,
   newsempty,
   emptygrouplogo,
-  emptyGroup
+  emptyGroup,
+  emptyimg
 };

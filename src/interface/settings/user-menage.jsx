@@ -51,7 +51,7 @@ const UserMenage = () => {
       // Optionally, update the user list or other state based on the response
     } catch (error) {
       console.log(error);
-      setErrorMessage({ save: "Failed to save data" });
+      setErrorMessage({ save:"Failed to save data"});
     } finally {
       setSaveLoading(false);
     }

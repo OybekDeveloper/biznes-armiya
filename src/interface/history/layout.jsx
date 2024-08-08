@@ -72,11 +72,11 @@ const History = () => {
           >
             <Transaction />
           </div>
-          <div className="p-[10px] rounded-[14px] bg-card cursor-pointer shadow-btn_shadow flex justify-center items-center">
+          {/* <div className="p-[10px] rounded-[14px] bg-card cursor-pointer shadow-btn_shadow flex justify-center items-center">
             <button onClick={handleFilterHistory} aria-label="Filter">
               <LuFilter className="text-xl text-text-primary" />
             </button>
-          </div>
+          </div> */}
         </div>
 
         <button
@@ -93,11 +93,11 @@ const History = () => {
         <div onClick={handleTransaction} aria-label="Toggle Transaction Modal">
           <Transaction />
         </div>
-        <div className="p-[10px] rounded-[14px] bg-card cursor-pointer shadow-btn_shadow flex justify-center items-center">
+        {/* <div className="p-[10px] rounded-[14px] bg-card cursor-pointer shadow-btn_shadow flex justify-center items-center">
           <button onClick={handleFilterHistory} aria-label="Filter">
             <LuFilter className="text-xl text-text-primary" />
           </button>
-        </div>
+        </div> */}
       </div>
 
       <section className="grid grid-cols-2 max-xl:grid-cols-1 gap-3">

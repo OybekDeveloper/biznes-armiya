@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { ApiService } from "../../components/api.server";
 import { photoUrl } from "../../images";
 
-const ChatMessage = ({ chatMessageData }) => {
+const ChatMessage = ({ chatMessageData, task_id }) => {
   const register = JSON.parse(localStorage.getItem("register"));
   const lastMessageRef = useRef();
   const { userData } = useSelector((state) => state.event);
@@ -55,6 +55,9 @@ const ChatMessage = ({ chatMessageData }) => {
         const messageTime = message?.time ? new Date(message.time) : null;
         const updatedTime = messageTime ? addHours(messageTime, 5) : null;
 
+        if (+message.task_id !== +task_id) {
+          return null;
+        }
         return (
           <div
             ref={lastMessageRef}
@@ -86,7 +89,11 @@ const ChatMessage = ({ chatMessageData }) => {
               >
                 <h1 className="text-text-primary font-bold">
                   {userData1.first_name || userData1.last_name ? (
-                    <>{userData1.first_name + " " + userData1.last_name}</>
+                    <>
+                      {userData1.first_name +
+                        "." +
+                        userData1.last_name.slice(0, 1)}
+                    </>
                   ) : (
                     "No name"
                   )}

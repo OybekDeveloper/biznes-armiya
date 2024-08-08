@@ -13,7 +13,7 @@ const ProfileInfo = ({ handleUpdateUser }) => {
       <section className=" flex flex-col gap-3">
         <div className="flex justify-between items-start">
           <img
-            className="inline-block w-24 h-24 rounded-full ring-2 ring-white"
+            className="inline-block w-24 h-24 rounded-full ring-2 ring-white object-cover"
             src={
               userData?.profile_photo?.includes(".")
                 ? userData.profile_photo

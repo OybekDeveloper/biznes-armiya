@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { dataempty, emptygrouplogo } from "../../images";
+import { dataempty, emptygrouplogo, emptyimg } from "../../images";
 import { FaCalendar } from "react-icons/fa";
 import Countdown from "../../components/count-down";
 import { ApiService } from "../../components/api.server";
 import { NavLink } from "react-router-dom";
 
 const PandingAuction = ({ allItems, loading, id }) => {
+  console.log(allItems);
   return (
     <>
       {allItems.length > 0 ? (
@@ -20,7 +21,7 @@ const PandingAuction = ({ allItems, loading, id }) => {
                 <div className="col-span-1 object-cover h-[120px]">
                   <img
                     className="w-full h-full object-cover rounded-md"
-                    src={emptygrouplogo}
+                    src={item?.img ? item?.img : emptyimg}
                     alt=""
                   />
                 </div>

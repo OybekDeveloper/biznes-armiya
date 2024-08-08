@@ -19,7 +19,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import DeleteModal from "./delete-news";
 
 const News = () => {
-  const { userData } = useSelector((state) => state.event);
+  const { userData, eventSliceBool } = useSelector((state) => state.event);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newsList, setNewsList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -49,8 +49,8 @@ const News = () => {
       }
     };
     fetchNews();
-  }, [isModalOpen, delModal]);
-  console.log(userData)
+  }, [isModalOpen, delModal, eventSliceBool]);
+  console.log(userData);
   return (
     <>
       {loading ? (

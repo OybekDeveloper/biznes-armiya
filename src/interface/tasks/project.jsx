@@ -15,14 +15,21 @@ import Loader1 from "../../components/loader/loader1";
 import { dataempty, photoUrl } from "../../images";
 import { useSelector } from "react-redux";
 import ChatMessage from "./chat-message";
+import TakeOverUser from "./take-over-user";
 
 const Project = () => {
   const register = JSON.parse(localStorage.getItem("register"));
   const { userData, eventSliceBool } = useSelector((state) => state.event);
+  const { role } = userData;
   const [chatMessageData, setChatMessageData] = useState([]);
   const { id } = useParams();
   const [tasks, setTasks] = useState();
   const [loading, setLoading] = useState(true);
+  const [takeOverModal, setTakeOverModal] = useState(false);
+
+  const handleTakeOverModal = () => {
+    setTakeOverModal(!takeOverModal);
+  };
 
   useEffect(() => {
     const fetchUsers = async (userList) => {
@@ -52,7 +59,7 @@ const Project = () => {
         const res = await ApiService.getData(`/tasks/${id}`, register?.access);
         const usersInfo = await fetchUsers(res.user);
 
-        setTasks({ ...res, user: usersInfo });
+        setTasks({ ...res, users: usersInfo });
         console.log(res);
       } catch (error) {
         console.log(error);
@@ -61,7 +68,7 @@ const Project = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [eventSliceBool]);
 
   useEffect(() => {
     const fetchMessage = async () => {
@@ -88,7 +95,7 @@ const Project = () => {
       ) : (
         <>
           {(tasks && tasks?.user?.find((c) => c.id === userData?.id)) ||
-          userData.role.talab_views ? (
+          role.talab_views ? (
             <main className="md:px-[16px] flex flex-col gap-3">
               <NavLink
                 to={"/homework"}
@@ -100,12 +107,11 @@ const Project = () => {
               <section className="w-full flex justify-between items-center">
                 <h1 className="font-bold text-text-primary clamp2">Tasks</h1>
                 <div className="flex justify-start items-center gap-2">
-                  <button className="max-md:hidden bg-button-color  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow">
-                    <FaPlus />
-                    <h1>Add Task</h1>
-                  </button>
-                  <button className="z-[800] md:hidden fixed bottom-[80px] right-[16px] bg-button-color  flex justify-start items-center gap-2 rounded-full p-4 text-white shadow-btn_shadow">
-                    <FaPlus />
+                  <button
+                    onClick={handleTakeOverModal}
+                    className="bg-green-500 hover:bg-green-600 transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
+                  >
+                    <h1>Complete the task</h1>
                   </button>
                 </div>
               </section>
@@ -117,29 +123,17 @@ const Project = () => {
                         <h1 className="text-thin-color">Task Name</h1>
                         <p className="font-bold">{tasks?.name}</p>
                       </div>
-                      <BiEdit className="text-[24px] cursor-pointer" />
                     </div>
                     <div className="flex flex-col gap-1">
                       <h1>Description</h1>
                       <p className="text-thin-color">{tasks?.definition}</p>
                     </div>
-                    {/* <div className="flex flex-col gap-1">
-           <h1 className="text-thin-color">Reporter</h1>
-           <div className="flex gap-3">
-             <img
-               className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
-               src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-               alt=""
-             />
-             <h1>Evan Yates</h1>
-           </div>
-         </div> */}
                     <div className="flex flex-col gap-1">
                       {tasks?.user?.length > 0 && (
                         <div className="col-span-1 flex flex-col w-full">
                           <p className="text-thin-color clamp4">Assignee</p>
                           <div>
-                            {tasks?.user?.slice(0, 3)?.map((user, idx) => (
+                            {tasks?.users?.slice(0, 3)?.map((user, idx) => (
                               <img
                                 key={idx}
                                 className="inline-flex h-6 w-6 rounded-full ring-2 ring-white"
@@ -151,9 +145,9 @@ const Project = () => {
                                 alt=""
                               />
                             ))}
-                            {tasks?.user?.length > 3 && (
+                            {tasks?.users?.length > 3 && (
                               <div className="inline-flex h-6 w-6 rounded-full ring-2 ring-white bg-blue-300 text-white text-sm text-center font-bold justify-center items-center">
-                                <h1>{tasks?.user?.length - 3}+</h1>
+                                <h1>{tasks?.users?.length - 3}+</h1>
                               </div>
                             )}
                           </div>
@@ -184,22 +178,6 @@ const Project = () => {
                       <h1 className="text-thin-color">End Time</h1>
                       <p>{tasks?.stop_time?.split("T")[0]}</p>
                     </div>
-                    {/* <div className="flex gap-1 items-center">
-           <FaCalendar className="text-thin-color" />
-           <p>Created May 28, 2020</p>
-         </div>
-         <div className="flex flex-col gap-1">
-           <h1 className="text-thin-color">Dead Line</h1>
-           <p>Feb 23, 2020</p>
-         </div> */}
-                    {/* <div className="flex justify-start items-start gap-3">
-           <div className="cursor-pointer p-3 rounded-[14px] bg-[#F1effb]">
-             <GrAttachment className="text-[#6D5DD3]" />
-           </div>
-           <div className="cursor-pointer p-3 rounded-[14px] bg-[#e8f9fc]">
-             <GoLink className="text-[#15C0E6]" />
-           </div>
-         </div> */}
                   </div>
                 </div>
                 {/* Project details */}
@@ -211,7 +189,6 @@ const Project = () => {
                         UX Login + Registration
                       </h1>
                     </div>
-                    <SelectListBox />
                   </div>
                   <p className="text-thin-color">
                     Think over UX for Login and Registration, create a flow
@@ -281,6 +258,12 @@ const Project = () => {
           )}
         </>
       )}
+      <TakeOverUser
+        status="done_task"
+        item={tasks}
+        isOpen={takeOverModal}
+        handleClose={handleTakeOverModal}
+      />
     </>
   );
 };

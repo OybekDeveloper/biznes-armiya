@@ -14,6 +14,8 @@ import AddListbox from "./add-listbox";
 import { close } from "../../images";
 import { FaPlus } from "react-icons/fa";
 import SimpleLoading from "../../components/loader/simple-loading";
+import { useDispatch } from "react-redux";
+import { eventSliceAction } from "../../reducer/event";
 
 export default function AddTasks({ isOpen, handleClose, updateItem }) {
   const [errorMessage, setErrorMessage] = useState();
@@ -22,6 +24,7 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
     { id: 1, name: "Asked" },
     { id: 2, name: "Expected" },
   ]);
+
   const [users, setUsers] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
@@ -33,6 +36,7 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
     vab: "",
   });
   const [newUsers, setNewUsers] = useState([]);
+  const dispatch = useDispatch();
 
   const handleChangeStatus = (status) => {
     setStatus(status);
@@ -68,6 +72,7 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
           vab: "",
         });
         setNewUsers([]);
+        dispatch(eventSliceAction());
       } catch (error) {
         console.log(error);
       } finally {
@@ -79,7 +84,7 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
         newError[key] = `${key} field is required`;
       }
     });
-    console.log(newUsers)
+    console.log(newUsers);
     newUsers.forEach((userObj) => {
       if (
         userObj.user === undefined ||
@@ -167,27 +172,25 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
       setStatus([{ id: 2, name: "Expected" }]);
     } else {
       setStatus([{ id: 1, name: "Asked" }]);
-     
     }
-  }, [newUsers,updateItem]);
-
+  }, [newUsers, updateItem]);
 
   useEffect(() => {
     if (updateItem) {
-      console.log(updateItem);
       setFormData({
-        name: updateItem?.name,
-        definition: updateItem?.definition,
-        start_time: updateItem?.start_time,
-        stop_time: updateItem?.stop_time,
-        status: updateItem?.status,
-        user: updateItem?.user,
-        vab: updateItem?.vab,
+        name: updateItem.name || "",
+        definition: updateItem.definition || "",
+        start_time: updateItem.start_time || "",
+        stop_time: updateItem.stop_time || "",
+        status: updateItem.status || "",
+        user: updateItem.user || [],
+        vab: updateItem.vab || "",
       });
-      setStatus([{ id: 2, name: updateItem?.status }]);
-      setNewUsers(updateItem?.user);
+      setStatus([{ id: 2, name: updateItem.status }]);
+      setNewUsers(updateItem.user || []);
     }
   }, [updateItem]);
+
   console.log(formData);
 
   return (

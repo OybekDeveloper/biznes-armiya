@@ -18,16 +18,25 @@ import { MdModeEdit } from "react-icons/md";
 import DeleteModal from "./delete-task";
 import { groupEventSlice } from "../../reducer/event";
 import AddTasks from "./add-task";
+import { GoMoveToTop } from "react-icons/go";
+import TakeOverUser from "./take-over-user";
 
 const Tasks = ({ toggleFilter, tasks, status }) => {
   const [usersInfoMap, setUsersInfoMap] = useState({}); // State to store users info by task ID
   const register = JSON.parse(localStorage.getItem("register"));
-  const { userData } = useSelector((state) => state.event);
+  const { userData, eventSliceBool } = useSelector((state) => state.event);
+  const { role } = userData;
   const [editModal, setEditModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [delModal, setDelModal] = useState(false);
   const [editModalData, setEditModalData] = useState({});
   const [selectId, setSelectId] = useState(null);
+  const [takeOverModal, setTakeOverModal] = useState(false);
+
+  const handleTakeOverModal = () => {
+    setTakeOverModal(!takeOverModal);
+  };
+
   const dispatch = useDispatch();
   const handleDeleteModal = () => {
     setDelModal(!delModal);
@@ -87,9 +96,10 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
     };
 
     fetchAllUsersInfo();
-  }, [tasks, status, delModal]);
-
+  }, [tasks, status, eventSliceBool]);
   const filteredTasks = tasks.filter((task) => task.status === status);
+  console.log(role);
+  console.log(userData);
 
   return (
     <main className="col-span-3 max-lg:grid-cols-1 flex flex-col gap-2">
@@ -100,22 +110,28 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
         <section className="flex flex-col gap-3">
           {filteredTasks
             .slice()
-            ?.reverse()
-            ?.map((item, idx) => {
+            .reverse()
+            .map((item, idx) => {
               const usersInfo = usersInfoMap[item.id] || [];
-
               return (
                 <div className="relative">
                   <NavLink
-                    to={`/project/${item?.id}`}
+                    to={
+                      (role?.tasks_views &&
+                        role.tasks_edit &&
+                        role.tasks_delete) ||
+                      item.user.find((c) => +c.user === +userData.id)
+                        ? `/project/${item?.id}`
+                        : null
+                    }
                     key={idx}
                     className="relative cursor-pointer hover:bg-hover-card bg-card shadow-btn_shadow rounded-[14px] w-full grid grid-cols-6 max-lg:grid-cols-3 max-xl:grid-cols-4 px-[24px] py-[16px] gap-3"
                   >
                     <div className="col-span-1">
                       <p className="text-thin-color clamp4">Task name</p>
-                      <h1 className="text-text-primary font-bold">
-                        {item?.name.length > 15
-                          ? item?.name.slice(0, 15) + "..."
+                      <h1 className="text-text-primary font-bold whitespace-normal">
+                        {item?.name.length > 10
+                          ? item?.name.slice(0, 10) + "..."
                           : item?.name}
                       </h1>
                     </div>
@@ -185,7 +201,21 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
                       </div>
                     </div>
                   </NavLink>
-                  {userData?.role?.yang_edit && userData?.role?.yang_delete && (
+                  <div className="flex justify-end w-full mt-1">
+                    {item.status === "Asked" && (
+                      <button
+                        onClick={() => {
+                          handleTakeOverModal();
+                          setSelectId(item);
+                        }}
+                        className="flex justify-start items-center gap-1 px-2 py-1 rounded-md bg-green-600 text-white font-[500]"
+                      >
+                        <GoMoveToTop className="text-md" />
+                        take over
+                      </button>
+                    )}
+                  </div>
+                  {role?.tasks_delete && role?.tasks_edit && (
                     <div
                       onClick={() => setSelectId(item)}
                       className="absolute right-1 top-1"
@@ -259,6 +289,12 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
         id={selectId?.id}
         isOpen={delModal}
         handleClose={handleDeleteModal}
+      />
+      <TakeOverUser
+        status="take_over"
+        item={selectId}
+        isOpen={takeOverModal}
+        handleClose={handleTakeOverModal}
       />
     </main>
   );

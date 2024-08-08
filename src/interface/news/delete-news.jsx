@@ -11,9 +11,12 @@ import {
   import { ApiService } from "../../components/api.server";
   import SimpleLoading from "../../components/loader/simple-loading";
   import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { eventSliceAction } from "../../reducer/event";
   
   export default function DeleteModal({ isOpen, handleClose, id }) {
     const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch()
     const handleDelete = () => {
       const deleteFetch = async () => {
         setLoading(true);
@@ -33,6 +36,7 @@ import {
               secondary: "red",
             },
           });
+          dispatch(eventSliceAction());
         } catch (error) {
           console.error("Error deleting news:", error);
         } finally {
