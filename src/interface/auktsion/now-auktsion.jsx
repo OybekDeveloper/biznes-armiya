@@ -6,24 +6,28 @@ import { ApiService } from "../../components/api.server";
 import { useParams } from "react-router-dom";
 import Loader1 from "../../components/loader/loader1";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Countdown, { getLocalISOString } from "../../components/count-down";
-
-const allItems = [];
+import { eventSliceAction } from "../../reducer/event";
+import SimpleLoading from "../../components/loader/simple-loading";
 
 const NowAuction = () => {
-  const register = JSON.parse(localStorage.getItem("register"));
-  const { userData } = useSelector((state) => state.event);
-
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const { userData } = useSelector((state) => state.event);
+  const register = JSON.parse(localStorage.getItem("register"));
   const [loading, setLoading] = useState(true);
   const [item, setItem] = useState({});
+  const [addVabLoading, setAddVabLoading] = useState(false);
   const [bids, setBids] = useState([]);
   const [addVab, setAddVab] = useState({
     vab: null,
     buyum_id: id,
     user_id: register?.user_id,
   });
+  const [applicants, setApplicants] = useState([]);
+  const [topBidder, setTopBidder] = useState(null);
+  const [maxVab, setMaxVab] = useState(0);
 
   useEffect(() => {
     const fetchItem = async () => {
@@ -32,10 +36,39 @@ const NowAuction = () => {
           `/buyum/${id}`,
           register?.access
         );
+        if (items.buyumusers) {
+          const vabs = await Promise.all(
+            items.buyumusers.map(async (userId) =>
+              ApiService.getData(`/buyumusers/${userId}`, register?.access)
+            )
+          );
+          if (vabs) {
+            const users = await Promise.all(
+              vabs.map(async (item) =>
+                ApiService.getData(`/users/${item?.user_id}`, register?.access)
+              )
+            );
+            const combinedData = vabs.map((vab) => ({
+              user: users.find((c) => +c.id === +vab.user_id),
+              vab: vab.vab,
+              buyumuser_id: vab.id,
+            }));
+
+            // Sort the applicants based on VAB in descending order
+            const sortedApplicants = combinedData.sort((a, b) => b.vab - a.vab);
+
+            // Set the highest bidder's name and VAB
+            if (sortedApplicants.length > 0) {
+              setTopBidder(sortedApplicants[0].user?.email);
+              setMaxVab(sortedApplicants[0].vab);
+            }
+
+            setApplicants(sortedApplicants);
+          }
+        }
         setItem(items);
-        console.log(items);
       } catch (error) {
-        console.log(error);
+        toast.error("Failed to fetch item details.");
       } finally {
         setLoading(false);
       }
@@ -43,65 +76,66 @@ const NowAuction = () => {
     fetchItem();
   }, [id, register?.access]);
 
-  useEffect(() => {
-    const now = new Date();
-    const filteredBids = allItems.filter(
-      (bid) => new Date(bid.start_time) <= now
-    );
-    setBids(filteredBids.sort((a, b) => b.ekb - a.ekb));
-  }, []);
-
-  const handleBidChange = (e, id) => {
-    const { value } = e.target;
-    setBids((prevBids) =>
-      prevBids.map((bid) =>
-        bid.id === id ? { ...bid, currentBid: value } : bid
-      )
-    );
-  };
-
-  const maxVab = Math.max(...bids.map((bid) => bid.ekb));
-  const maxVabItem = bids.find((bid) => bid.ekb === maxVab);
-  const handleAddVab = () => {
-    // Validate addVab input
+  const handleAddVab = async () => {
     if (addVab.vab <= 0) {
       toast.error("Vab must be a positive number!");
       return;
     }
-    if (userData?.vab < addVab?.vab) {
+    if (item?.boshlangich_narx > addVab.vab) {
+      toast.error(`Minimum vab ${item?.boshlangich_narx}!`);
+      return;
+    }
+    if (userData?.vab < addVab.vab) {
       toast.error("Not enough vab!");
       return;
     }
 
-    // Proceed to add vab
-    const fetchData = async () => {
-      try {
-        const res = await ApiService.postData(
-          `/buyumusers`,
-          addVab,
+    try {
+      setAddVabLoading(true);
+      const filterVab = applicants.find((c) => +c.user.id === addVab.user_id);
+      if (filterVab?.user) {
+        //update vab
+        const update = await ApiService.patchData(
+          `/buyumusers/${filterVab?.buyumuser_id}`,
+          {
+            vab: addVab.vab,
+          },
           register?.access
         );
-        if (res.id) {
-          const update = await ApiService.putData(
-            `/buyum/${id}`,
-            {
-              buyumusers: [...item.buyumusers, res.id],
-            },
-            register?.access
-          );
-          if (update) {
-            toast.success("Successfully added vab!");
-            console.log(res);
-          }
+        if (update) {
+          console.log(update, "update vab");
+          toast.success("VAB updated successfully!");
+          dispatch(eventSliceAction());
         }
-      } catch (error) {
-        toast.error("Failed to add vab!");
-        console.log(error);
+        return null;
       }
-    };
-    fetchData();
+      //add vab
+      const res = await ApiService.postData(
+        `/buyumusers`,
+        addVab,
+        register?.access
+      );
+      console.log(res, "res");
+      if (res.id) {
+        const update = await ApiService.patchData(
+          `/buyum/${id}`,
+          { buyumusers: [...item.buyumusers, res.id] },
+          register?.access
+        );
+        console.log(update, "update vab");
+        if (update) {
+          toast.success("Successfully added vab!");
+          dispatch(eventSliceAction());
+        }
+      }
+    } catch (error) {
+      toast.error("Failed to add vab!");
+      console.log(error);
+    } finally {
+      setAddVabLoading(false);
+    }
   };
-
+  console.log(applicants);
   return (
     <>
       {loading ? (
@@ -109,9 +143,7 @@ const NowAuction = () => {
       ) : (
         <div className="sm:px-4">
           <button
-            className={
-              "py-2 flex justify-start items-center gap-2 text-blue-600"
-            }
+            className="py-2 flex justify-start items-center gap-2 text-blue-600"
             onClick={() => window.history.back()}
           >
             <FaArrowLeft className="text-[14px]" />
@@ -123,32 +155,30 @@ const NowAuction = () => {
                 <div className="col-span-1 max-sm:col-span-3 sm:col-span-1 lg:col-span-1 h-[150px] object-cover">
                   <img
                     className="w-full h-full object-cover rounded-md"
-                    src={item?.img}
-                    alt=""
+                    src={item?.img || emptygrouplogo}
+                    alt="Item"
                   />
                 </div>
                 <div className="col-span-1 max-sm:col-span-3 sm:col-span-2 lg:col-span-1 flex justify-between flex-col w-full h-full gap-2">
                   <h1 className="text-xl font-bold">{item?.name}</h1>
-                  <div className=" w-full h-full">
+                  <div className="w-full h-full">
                     <div className="w-[200px] max-sm:w-1/2 inline-flex justify-between gap-2 p-2 bg-green-400 rounded-md m-1">
                       <p className="font-bold text-white">Start</p>
                       <div className="text-white text-[12px] flex justify-start gap-2 items-center">
                         <FaCalendar />
-                        {item?.start_time.split("T")[0]}
+                        {item?.start_time?.split("T")[0]}
                       </div>
                     </div>
                     <div className="w-[200px] max-sm:w-1/2 inline-flex justify-between gap-2 p-2 bg-red-400 rounded-md m-1">
                       <p className="font-bold text-white">End</p>
                       <div className="text-white text-[12px] flex justify-start gap-2 items-center">
                         <FaCalendar />
-                        {item?.end_time.split("T")[0]}
+                        {item?.end_time?.split("T")[0]}
                       </div>
                     </div>
                   </div>
                   {getLocalISOString() > item?.start_time && (
-                    <div>
-                      <Countdown eventTime={item.end_time} />
-                    </div>
+                    <Countdown eventTime={item.end_time} />
                   )}
                 </div>
                 <div className="col-span-2 max-sm:col-span-3 sm:col-span-3 lg:col-span-2 mb-2">
@@ -171,16 +201,16 @@ const NowAuction = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="bg-card "
+                        className="bg-card"
                       >
                         <td className="px-4 py-2 border-b border-hr-color font-bold">
                           {item?.boshlangich_narx}
                         </td>
                         <td className="px-4 py-2 border-b border-hr-color">
-                          <div className="flex items-center">{item?.ekb}</div>
+                          <div className="flex items-center">${maxVab}</div>
                         </td>
                         <td className="px-4 py-2 border-b border-hr-color text-green-600 font-bold">
-                          {item?.ekb_name}
+                          {topBidder}
                         </td>
                       </tr>
                     </tbody>
@@ -197,7 +227,7 @@ const NowAuction = () => {
                       N
                     </th>
                     <th className="px-4 py-2 border-b border-hr-color text-start">
-                      Name
+                      Email
                     </th>
                     <th className="px-4 py-2 border-b border-hr-color text-start">
                       VAB
@@ -205,22 +235,24 @@ const NowAuction = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {bids.map((item, idx) => (
+                  {applicants?.map((applicant, idx) => (
                     <motion.tr
-                      key={item.id}
+                      key={idx}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3 }}
-                      className="bg-card "
+                      className="bg-card"
                     >
                       <td className="px-4 py-2 border-b border-hr-color font-bold">
                         {idx + 1}
                       </td>
                       <td className="px-4 py-2 border-b border-hr-color">
-                        <div className="flex items-center">{item.name}</div>
+                        <div className="flex items-center">
+                          {applicant?.user?.email}
+                        </div>
                       </td>
                       <td className="px-4 py-2 border-b border-hr-color text-green-600 font-bold">
-                        ${item.ekb}
+                        ${applicant?.vab}
                       </td>
                     </motion.tr>
                   ))}
@@ -240,10 +272,14 @@ const NowAuction = () => {
                 />
                 <div className="flex justify-end items-center">
                   <button
+                    disabled={addVabLoading || addVab?.vab <= 0}
                     onClick={handleAddVab}
-                    className="whitespace-nowrap w-full shadow-btn_shadow p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                    className={`${
+                      addVabLoading ||
+                      (addVab?.vab <= 0 ? "opacity-[0.7]" : "hover:bg-blue-700")
+                    } whitespace-nowrap w-full shadow-btn_shadow p-2 bg-blue-600 text-white rounded-md `}
                   >
-                    Add vab
+                    {addVabLoading ? <SimpleLoading /> : "Add Vab"}
                   </button>
                 </div>
               </div>
