@@ -84,7 +84,7 @@ const App = () => {
 
   useEffect(() => {
     const socket = new WebSocket(
-      "wss://biznes-armiya-api.uz/ws/yangiliklar/"
+      "wss://biznes-armiya-api.uz/ws/chat/"
     );
 
     socket.onopen = () => {

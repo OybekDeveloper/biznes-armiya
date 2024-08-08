@@ -63,48 +63,21 @@ export default function TransactionPay({ isOpen, handleClose }) {
       try {
         setLoading(true);
         await ApiService.postMediaData(
-          "/tranzaksiya",
+          "/tranzaksiya/post",
           formData,
           register?.access
         );
-        const toUser = await ApiService.getData(
-          `/users/${formData?.to_user}`,
-          register?.access
-        );
-        if (toUser && userData) {
-          const toUserValue = toUser.vab ? toUser.vab : 0;
-          console.log(+toUserValue + +formData?.vab )
-          console.log(toUser, "toUser");
-          console.log(userData, "userData");
-          const res1 = await ApiService.putData(
-            `/update-user/${userData?.id}/`,
-            {
-              vab: userData?.vab - formData?.vab,
-            },
-            register?.access
-          );
-          const res2 = await ApiService.putData(
-            `/update-user/${toUser?.id}/`,
-            {
-              vab: +toUserValue + +formData?.vab,
-            },
-            register?.access
-          );
 
-          console.log(res1, res2);
-          if (res1 && res2) {
-            toast.success(
-              `VAB sent successfully.Your VAB ${userData?.vab - formData?.vab}`
-            );
-            setFormData({
-              vab: "",
-              from_user: register?.user_id,
-              to_user: "",
-            });
-            handleClose();
-            dispatch(eventSliceAction());
-          }
-        }
+        toast.success(
+          `VAB sent successfully.Your VAB ${userData?.vab - formData?.vab}`
+        );
+        setFormData({
+          vab: "",
+          from_user: register?.user_id,
+          to_user: "",
+        });
+        handleClose();
+        dispatch(eventSliceAction());
       } catch (error) {
         console.log(error);
       } finally {

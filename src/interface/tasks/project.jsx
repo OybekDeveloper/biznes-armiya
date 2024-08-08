@@ -9,19 +9,20 @@ import { IoArrowBack } from "react-icons/io5";
 import { NavLink, useParams } from "react-router-dom";
 import SelectListBox from "./progress-listbox";
 import SendMessage from "./send-message";
-import ChatMessage from "./chat-message";
+import Data from "./chat-message";
 import { ApiService } from "../../components/api.server";
 import Loader1 from "../../components/loader/loader1";
 import { dataempty, photoUrl } from "../../images";
 import { useSelector } from "react-redux";
+import ChatMessage from "./chat-message";
 
 const Project = () => {
   const register = JSON.parse(localStorage.getItem("register"));
-  const { userData } = useSelector((state) => state.event);
+  const { userData, eventSliceBool } = useSelector((state) => state.event);
+  const [chatMessageData, setChatMessageData] = useState([]);
   const { id } = useParams();
   const [tasks, setTasks] = useState();
   const [loading, setLoading] = useState(true);
-  console.log(id);
 
   useEffect(() => {
     const fetchUsers = async (userList) => {
@@ -63,9 +64,23 @@ const Project = () => {
   }, []);
 
   useEffect(() => {
+    const fetchMessage = async () => {
+      try {
+        const message = await ApiService.getData("/chat/", register.access);
+        setChatMessageData(message);
+        console.log(message);
+      } catch (error) {
+        console.log(error);
+      } finally {
+      }
+    };
+    fetchMessage();
+  }, [eventSliceBool]);
+
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  console.log(userData);
+
   return (
     <>
       {loading ? (
@@ -243,8 +258,11 @@ const Project = () => {
                   {/* Chat section */}
                   <div className="w-full h-[1px] bg-slate-500" />
                   <div className="relative flex justify-between flex-col h-full w-full gap-2">
-                    <ChatMessage />
-                    <SendMessage />
+                    <ChatMessage
+                      chatMessageData={chatMessageData}
+                      task_id={id}
+                    />
+                    <SendMessage task_id={id} />
                   </div>
                 </div>
               </section>

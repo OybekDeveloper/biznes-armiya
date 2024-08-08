@@ -44,7 +44,7 @@ export default function VabHistory({ isOpen, handleClose }) {
       setLoading(true);
       try {
         const register = JSON.parse(localStorage.getItem("register"));
-        const res = await ApiService.getData(`/vab/9`, register?.access);
+        const res = await ApiService.getData(`/vab/1`, register?.access);
 
         const now = new Date();
         let seriesData = [];

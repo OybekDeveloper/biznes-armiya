@@ -95,14 +95,6 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
     <main className="col-span-3 max-lg:grid-cols-1 flex flex-col gap-2">
       <section className="flex justify-between items-center">
         <h1 className="text-text-primary font-bold clamp3">Tasks</h1>
-        <div
-          onClick={toggleFilter}
-          className="p-[12px] rounded-[14px] bg-card cursor-pointer shadow-btn_shadow flex justify-center items-center"
-        >
-          <button>
-            <LuFilter className="text-xl text-text-primary" />
-          </button>
-        </div>
       </section>
       {filteredTasks.length > 0 ? (
         <section className="flex flex-col gap-3">
