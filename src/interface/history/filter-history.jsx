@@ -1,101 +1,95 @@
 import {
-    Button,
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-    Transition,
-    TransitionChild,
-  } from "@headlessui/react";
-  import { addeventbg, close } from "../../images";
-  import SelectListBox from "../../components/listbox/listbox";
-  import { IoClose } from "react-icons/io5";
-  
-  export default function FilterHistory({ isOpen, handleClose }) {
-    const handleSubmit = (e) => {
-      e.preventDefault();
-    };
-    return (
-      <Transition appear show={isOpen}>
-        <Dialog
-          as="div"
-          className="relative z-[998] focus:outline-none"
-          onClose={handleClose}
-        >
-          <div className="fixed inset-0 z-[999] w-screen overflow-y-auto bg-black/50">
-            <div className="flex min-h-full items-end justify-end">
-              <TransitionChild
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 transform-[scale(95%)]"
-                enterTo="opacity-100 transform-[scale(100%)]"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 transform-[scale(100%)]"
-                leaveTo="opacity-0 transform-[scale(95%)]"
-              >
-                <DialogPanel className="w-full h-screen max-w-md rounded-xl p-2 sm:p-6 backdrop-blur-2xl">
-                  <main className="bg-card w-full h-full p-4 rounded-[14px]">
-                    <DialogTitle
-                      as="h3"
-                      className="text-base/7 font-medium text-white"
+  Button,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  Transition,
+  TransitionChild,
+} from "@headlessui/react";
+import { IoClose } from "react-icons/io5";
+import { useState } from "react";
+
+export default function FilterHistory({ isOpen, handleClose, applyFilters }) {
+  const [type, setType] = useState("all");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    applyFilters({ type, startDate, endDate });
+    handleClose();
+  };
+
+  return (
+    <Transition appear show={isOpen}>
+      <Dialog
+        as="div"
+        className="relative z-[998] focus:outline-none"
+        onClose={handleClose}
+      >
+        <div className="fixed inset-0 z-[999] w-screen overflow-y-auto bg-black/50">
+          <div className="flex min-h-full items-end justify-end">
+            <TransitionChild
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 transform-[scale(95%)]"
+              enterTo="opacity-100 transform-[scale(100%)]"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 transform-[scale(100%)]"
+              leaveTo="opacity-0 transform-[scale(95%)]"
+            >
+              <DialogPanel className="w-full h-screen max-w-md rounded-xl p-4 sm:p-6 backdrop-blur-2xl">
+                <form onSubmit={handleSubmit} className="w-full h-full p-3 rounded-md bg-background space-y-4">
+                  <div>
+                    <label>Type:</label>
+                    <select
+                      value={type}
+                      onChange={(e) => setType(e.target.value)}
+                      className="w-full p-2 rounded border"
                     >
-                      <div className="flex items-end justify-between cursor-pointer">
-                        <h1 className="text-text-primary font-[600] clamp3">
-                          Need some Help?
-                        </h1>
-                        <div className="p-[10px] bg-background-secondary rounded-[12px]">
-                          <IoClose
-                            onClick={handleClose}
-                            className="text-text-primary text-[24px]"
-                            src={close}
-                            alt="close"
-                          />
-                        </div>
-                      </div>
-                      <img src={addeventbg} alt="" />
-                    </DialogTitle>
-                    <p className="mt-2 clamp4 text-thin">
-                      Describe your question and our specialists will answer you
-                      within 24 hours.
-                    </p>
-                    <form className="mt-4 flex flex-col gap-3">
-                      <div className="flex flex-col gap-3">
-                        <label
-                          htmlFor="text"
-                          className="font-bold clamp4 text-thin"
-                        >
-                          Request Subject
-                        </label>
-                        <SelectListBox />
-                      </div>
-                      <div className="flex flex-col gap-3">
-                        <label
-                          htmlFor="text"
-                          className="font-bold clamp4 text-thin"
-                        >
-                          Description
-                        </label>
-                        <textarea
-                          name="description"
-                          id=""
-                          placeholder="Add some description of the request "
-                          className="border-[1px] border-border rounded-[14px] px-[18px] py-[11px] focus:border-primary outline-none bg-background-secondary"
-                        ></textarea>
-                      </div>
-                      <div className="w-full flex justify-end items-center">
-                        <button
-                          onClick={handleSubmit}
-                          className="px-[20px] py-[13px] rounded-[14px] bg-button-color clamp4 font-bold text-white"
-                        >
-                          Send Request
-                        </button>
-                      </div>
-                    </form>
-                  </main>
-                </DialogPanel>
-              </TransitionChild>
-            </div>
+                      <option value="all">All</option>
+                      <option value="income">Income</option>
+                      <option value="expense">Expense</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label>Start Date:</label>
+                    <input
+                      type="date"
+                      value={startDate}
+                      onChange={(e) => setStartDate(e.target.value)}
+                      className="w-full p-2 rounded border"
+                    />
+                  </div>
+                  <div>
+                    <label>End Date:</label>
+                    <input
+                      type="date"
+                      value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                      className="w-full p-2 rounded border"
+                    />
+                  </div>
+                  <div className="flex justify-end gap-4">
+                    <button
+                      type="button"
+                      onClick={handleClose}
+                      className="px-4 py-2 rounded bg-gray-500 text-white"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-4 py-2 rounded bg-blue-500 text-white"
+                    >
+                      Apply
+                    </button>
+                  </div>
+                </form>
+              </DialogPanel>
+            </TransitionChild>
           </div>
-        </Dialog>
-      </Transition>
-    );
-  }
-  
+        </div>
+      </Dialog>
+    </Transition>
+  );
+}

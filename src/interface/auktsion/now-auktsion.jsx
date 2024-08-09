@@ -177,11 +177,15 @@ const NowAuction = () => {
                       </div>
                     </div>
                   </div>
-                  {getLocalISOString() > item?.start_time && (
-                    <Countdown eventTime={item.end_time} />
-                  )}
+
+                  <div className="text-red-400 bg-background p-2 rounded-md flex justify-start items-center gap-1">
+                    <h1 className="text-text-primary font-bold">Almost finished :</h1>
+                    {getLocalISOString() > item?.start_time && (
+                      <Countdown eventTime={item.end_time} />
+                    )}
+                  </div>
                 </div>
-                <div className="col-span-2 max-sm:col-span-3 sm:col-span-3 lg:col-span-2 mb-2">
+                <div className="overflow-x-auto col-span-2 max-sm:col-span-3 sm:col-span-3 lg:col-span-2 mb-2">
                   <table className="min-w-full bg-card shadow-sm overflow-hidden">
                     <thead>
                       <tr>
@@ -218,7 +222,7 @@ const NowAuction = () => {
                 </div>
               </div>
             </section>
-            <section className="overflow-x-auto p-4">
+            <section className="overflow-x-auto p-4 max-sm:mb-10">
               <h1 className="font-bold clamp3">Applicants</h1>
               <table className="min-w-full bg-card rounded-xl shadow-sm">
                 <thead>
@@ -259,7 +263,7 @@ const NowAuction = () => {
                 </tbody>
               </table>
             </section>
-            <section className="absolute bottom-0 right-0 flex w-full justify-end items-end rounded-md p-2">
+            <section className="fixed max-sm:bg-background sm:absolute bottom-0 right-0 flex w-full justify-end items-end rounded-md p-2">
               <div className="w-full h-full flex justify-between items-center gap-4">
                 <input
                   onChange={(e) =>
