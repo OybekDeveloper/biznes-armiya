@@ -15,8 +15,11 @@ import { FaPlus } from "react-icons/fa";
 import FilterDate from "./filter-date";
 import ChartMain from "./chart-diogram";
 import AddVabModal from "./add-vab";
+import { useSelector } from "react-redux";
 
 export default function VabHistory({ isOpen, handleClose }) {
+  const { userData } = useSelector((state) => state.event);
+  const { role } = userData;
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("MONTHLY");
   const [addVab, setAddVab] = useState(false);
@@ -115,7 +118,7 @@ export default function VabHistory({ isOpen, handleClose }) {
     };
     fetchData();
   }, [filter, addVab]);
-
+  console.log(role);
   return (
     <>
       <Transition appear show={isOpen}>
@@ -152,22 +155,28 @@ export default function VabHistory({ isOpen, handleClose }) {
                     </div>
                   </DialogTitle>
                   <div>
-                    <div className="flex gap-2 justify-end mt-2">
-                      <button
-                        onClick={handleAddVab}
-                        className="md:hidden fixed bottom-4 right-4 bg-button-color flex items-center gap-2 rounded-full p-4 text-white shadow-btn_shadow"
-                      >
-                        <FaPlus />
-                      </button>
-                      <button
-                        onClick={handleAddVab}
-                        className="hidden md:flex bg-button-color items-center gap-2 rounded-md py-2 px-4 text-white shadow-btn_shadow"
-                      >
-                        <FaPlus />
-                        <span>Add Vab</span>
-                      </button>
-                      <FilterDate onFilterChange={onFilterChange} />
-                    </div>
+                    {role?.vab_edit ? (
+                      <div className="flex gap-2 justify-end mt-2">
+                        <button
+                          onClick={handleAddVab}
+                          className="md:hidden fixed bottom-4 right-4 bg-button-color flex items-center gap-2 rounded-full p-4 text-white shadow-btn_shadow"
+                        >
+                          <FaPlus />
+                        </button>
+                        <button
+                          onClick={handleAddVab}
+                          className="hidden md:flex bg-button-color items-center gap-2 rounded-md py-2 px-4 text-white shadow-btn_shadow"
+                        >
+                          <FaPlus />
+                          <span>Add Vab</span>
+                        </button>
+                        <FilterDate onFilterChange={onFilterChange} />
+                      </div>
+                    ) : (
+                      <div className="w-full flex justify-end mt-2 ">
+                        <FilterDate onFilterChange={onFilterChange} />
+                      </div>
+                    )}
                     <section className="w-full overflow-hidden">
                       <ChartMain
                         series={historyVab.series}

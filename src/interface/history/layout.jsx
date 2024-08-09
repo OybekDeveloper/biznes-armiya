@@ -13,8 +13,8 @@ import { useSelector } from "react-redux";
 import FilterHistory from "./filter-history";
 
 const History = () => {
-  const { eventSliceBool } = useSelector((state) => state.event);
-
+  const { eventSliceBool, userData } = useSelector((state) => state.event);
+  const { role } = userData;
   const register = JSON.parse(localStorage.getItem("register"));
   const [transaction, setTransaction] = useState(false);
   const [historyVab, setHistoryVab] = useState(false);
@@ -111,14 +111,16 @@ const History = () => {
           </div>
         </div>
 
-        <button
-          onClick={handleHistoryVab}
-          aria-label="Toggle VAB History"
-          className="flex bg-button-color items-center gap-2 rounded-md py-2 px-4 text-white shadow-btn_shadow"
-        >
-          <MdOutlineHistory className="text-xl" />
-          <span>VAB</span>
-        </button>
+        {role?.vab_views && (
+          <button
+            onClick={handleHistoryVab}
+            aria-label="Toggle VAB History"
+            className="flex bg-button-color items-center gap-2 rounded-md py-2 px-4 text-white shadow-btn_shadow"
+          >
+            <MdOutlineHistory className="text-xl" />
+            <span>VAB</span>
+          </button>
+        )}
       </section>
 
       <div className="gap-2 sm:hidden flex justify-end">
@@ -207,15 +209,15 @@ const History = () => {
         </section>
       ) : (
         <div className="w-full h-full flex justify-center items-center flex-col">
-        <div className="w-full h-[200px]">
-          <img
-            className="w-full h-full object-contain"
-            src={dataempty}
-            alt="No data"
-          />
+          <div className="w-full h-[200px]">
+            <img
+              className="w-full h-full object-contain"
+              src={dataempty}
+              alt="No data"
+            />
+          </div>
+          <h1 className="clamp3 font-bold">Data do not exist!</h1>
         </div>
-        <h1 className="clamp3 font-bold">Data do not exist!</h1>
-      </div>
       )}
 
       <TransactionPay isOpen={transaction} handleClose={handleTransaction} />

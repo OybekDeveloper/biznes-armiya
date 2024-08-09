@@ -24,7 +24,7 @@ const Groups = () => {
       try {
         const group = await ApiService.getData(`/group`, register?.access);
         setGroupData(group);
-        console.log(group)
+        console.log(group);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -33,7 +33,7 @@ const Groups = () => {
     };
     groupFetch();
   }, [isAddGroup, isAddGroup, groupEvent]);
-
+  console.log(userData);
   return (
     <main className="col-span-3 max-lg:grid-cols-1 flex flex-col gap-2 md:px-[16px]">
       <section className="flex justify-between items-center">
@@ -86,8 +86,17 @@ const Groups = () => {
                 .reverse()
                 .map((item, idx) => (
                   <NavLink
-                    to={`/groups/${item.id}`}
-                    className="w-full bg-background rounded-[24px] p-[16px] flex flex-col justify-start items-center gap-1"
+                    to={
+                      (item.users.find((c) => +c === userData.id) ||
+                        userData?.role?.chat_edit) &&
+                      `/groups/${item.id}`
+                    }
+                    className={`${
+                      item.users.find((c) => +c === userData.id) ||
+                      userData?.role?.chat_edit
+                        ? "opacity-1"
+                        : "opacity-[0.5]"
+                    } w-full bg-background rounded-[24px] p-[16px] flex flex-col justify-start items-center gap-1`}
                     key={idx}
                   >
                     <div className="w-24 h-24 flex justify-center items-center">
@@ -113,7 +122,7 @@ const Groups = () => {
                       {item?.users?.length > 0 ? item.users.length : 0} user
                     </p>
                     <p className="text-gray-500 py-1 px-2 border-border border-[1px] rounded-[4px] text-[12px]">
-                      {item?.admin?item.admin:"no admin"}
+                      {item?.admin ? item.admin : "no admin"}
                     </p>
                   </NavLink>
                 ))}
