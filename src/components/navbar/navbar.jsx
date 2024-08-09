@@ -93,7 +93,7 @@ const Navbar = () => {
     }
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown",  handleClickOutside);
     };
   }, [isOpen]);
 
