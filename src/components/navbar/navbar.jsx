@@ -172,7 +172,7 @@ const Navbar = () => {
       {/* mobile */}
       <div
         className={`${
-          (pathname === "/login" || pathname === "/register") && "hidden"
+          (pathname === "/login" || pathname === "/register") &&"hidden"
         } md:hidden w-full h-[88px] sticky top-0 left-0 flex items-center py-[10px] z-[700]`}
       >
         <nav className="bg-card w-full h-full rounded-[24px] px-[12px] py-[8px] flex justify-between">
