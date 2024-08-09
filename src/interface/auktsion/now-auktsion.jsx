@@ -181,7 +181,7 @@ const NowAuction = () => {
                   <div className="text-red-400 bg-background p-2 rounded-md flex justify-start items-center gap-1">
                     <h1 className="text-text-primary font-bold">Almost finished :</h1>
                     {getLocalISOString() > item?.start_time && (
-                      <Countdown eventTime={item.end_time} />
+                      <Countdown status={"for_finish"} eventTime={item.end_time} />
                     )}
                   </div>
                 </div>

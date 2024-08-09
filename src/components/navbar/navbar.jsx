@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { userDetailSlice } from "../../reducer/event";
 import ExitModal from "../exit-modal";
 import "./index.css";
+import SearchComponent from "../search-component";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ const Navbar = () => {
   const [isExit, setIsExit] = useState(false);
   const [theme, setTheme] = useState(selectedTheme ? selectedTheme : "light");
   const [isNotif, setIsNotif] = useState(false);
+  const [isSearchActive, setIsSearchActive] = useState(false); // New state for search expansion
   const mobileNavRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -51,6 +53,10 @@ const Navbar = () => {
   const handleLogOut = (e) => {
     setIsExit(!isExit);
     setIsOpen(false);
+  };
+
+  const handleSearchToggle = () => {
+    setIsSearchActive(!isSearchActive);
   };
 
   useEffect(() => {
@@ -170,36 +176,52 @@ const Navbar = () => {
         } md:hidden w-full h-[88px] sticky top-0 left-0 flex items-center py-[10px] z-[700]`}
       >
         <nav className="bg-card w-full h-full rounded-[24px] px-[12px] py-[8px] flex justify-between">
-          <div
-            onClick={() => setIsOpen(!isOpen)}
-            className="w-[50px] h-[50px] rounded-[12px] cursor-pointer"
-          >
-            <img src={lightLogo} alt="" />
-          </div>
-          <div className="flex justify-end items-center gap-3">
-            <button>
-              <FiSearch className="text-xl text-text-primary" />
-            </button>
-            {theme === "dark" ? (
-              <button onClick={handleToggleTheme} className="">
-                <MdOutlineLightMode className="text-xl text-text-primary" />
+          {isSearchActive ? (
+            <div className="flex w-full items-center">
+              <FiSearch className="text-xl text-text-primary ml-2" />
+              <input
+                type="text"
+                className="w-full py-[13px] px-[10px] outline-none rounded-[14px] shadow-btn_shadow bg-card"
+                placeholder="Search..."
+              />
+              <button onClick={handleSearchToggle} className="px-4">
+                Cancel
               </button>
-            ) : (
-              <button onClick={handleToggleTheme} className="">
-                <MdDarkMode className="text-xl text-text-primary" />
-              </button>
-            )}
-            <button
-              data-count={2}
-              className="relative notf-cound"
-              onClick={handleOpenNotification}
-            >
-              <IoMdNotificationsOutline className="text-xl text-text-primary" />
-            </button>
-            <div>
-              <DropDownMobile handleLogOut={handleLogOut} />
             </div>
-          </div>
+          ) : (
+            <>
+              <div
+                onClick={() => setIsOpen(!isOpen)}
+                className="w-[50px] h-[50px] rounded-[12px] cursor-pointer"
+              >
+                <img src={lightLogo} alt="" />
+              </div>
+              <div className="flex justify-end items-center gap-3">
+                <button onClick={handleSearchToggle}>
+                  <FiSearch className="text-xl text-text-primary" />
+                </button>
+                {theme === "dark" ? (
+                  <button onClick={handleToggleTheme} className="">
+                    <MdOutlineLightMode className="text-xl text-text-primary" />
+                  </button>
+                ) : (
+                  <button onClick={handleToggleTheme} className="">
+                    <MdDarkMode className="text-xl text-text-primary" />
+                  </button>
+                )}
+                <button
+                  data-count={2}
+                  className="relative notf-cound"
+                  onClick={handleOpenNotification}
+                >
+                  <IoMdNotificationsOutline className="text-xl text-text-primary" />
+                </button>
+                <div>
+                  <DropDownMobile handleLogOut={handleLogOut} />
+                </div>
+              </div>
+            </>
+          )}
         </nav>
         {isOpen && (
           <div className="fixed w-full h-full top-0 left-0 bg-black/10"></div>
@@ -269,6 +291,7 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
 export function DashboardSVG(color) {
   return (
     <svg

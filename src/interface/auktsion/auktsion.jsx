@@ -8,12 +8,20 @@ import { dataempty } from "../../images";
 import Loader1 from "../../components/loader/loader1";
 import AddAuktsion from "./add-auktsion";
 import { useSelector } from "react-redux";
+import FilterAuktsion from "./filter-auktion";
+import moment from "moment";
 
 const Auktsion = () => {
-  const [auktsion, setAuktsion] = useState();
+  const [auktsion, setAuktsion] = useState([]);
+  const [filteredAuktsion, setFilteredAuktsion] = useState([]);
   const [loading, setLoading] = useState(true);
   const [addAuktsion, setAddAuktsion] = useState(false);
   const { userData } = useSelector((state) => state.event);
+  const [filterAuktsion, setFilterAuktsion] = useState(false);
+
+  const handleFilterAuktsion = () => {
+    setFilterAuktsion(!filterAuktsion);
+  };
 
   const handleAddAuktsion = () => {
     setAddAuktsion(!addAuktsion);
@@ -25,6 +33,7 @@ const Auktsion = () => {
       try {
         const res = await ApiService.getData("/auktsion", register?.access);
         setAuktsion(res);
+        setFilteredAuktsion(res);
       } catch (error) {
         console.log(error);
       } finally {
@@ -34,8 +43,22 @@ const Auktsion = () => {
     auktionFetch();
   }, [addAuktsion]);
 
-  const navigate = useNavigate();
+  const applyFilters = ({ startDate, endDate }) => {
+    let filteredData = auktsion;
+    if (startDate && endDate) {
+      filteredData = auktsion.filter((item) => {
+        const itemDate = moment(item.kuni.split("T")[0]);
+        return (
+          itemDate.isSameOrAfter(startDate, "day") &&
+          itemDate.isSameOrBefore(endDate, "day")
+        );
+      });
+    }
+    setFilteredAuktsion(filteredData);
+  };
 
+  const navigate = useNavigate();
+  console.log(filteredAuktsion)
   return (
     <>
       {loading ? (
@@ -45,7 +68,10 @@ const Auktsion = () => {
           <section className="w-full flex justify-between items-center">
             <h1 className="font-bold text-text-primary clamp2">Auctions</h1>
             <div className="flex justify-start items-center gap-2">
-              <button className="hidden md:flex bg-card justify-start items-center gap-2 rounded-[14px] p-3 text-xl shadow-btn_shadow">
+              <button
+                onClick={handleFilterAuktsion}
+                className="flex bg-card justify-start items-center gap-2 rounded-[14px] p-3 text-xl shadow-btn_shadow"
+              >
                 <FiFilter />
               </button>
               {userData?.role?.auktsion_edit && (
@@ -59,7 +85,7 @@ const Auktsion = () => {
               )}
             </div>
           </section>
-          {auktsion?.length > 0 ? (
+          {filteredAuktsion?.length > 0 ? (
             <div className="overflow-x-auto">
               <table className="min-w-full bg-card rounded-xl shadow-sm">
                 <thead>
@@ -82,7 +108,7 @@ const Auktsion = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {auktsion
+                  {filteredAuktsion
                     ?.slice()
                     ?.reverse()
                     ?.map((item, idx) => (
@@ -108,10 +134,10 @@ const Auktsion = () => {
                           {item?.kuni?.split("T")[0]}
                         </td>
                         <td className="clamp4 px-4 py-2 border-b border-hr-color">
-                          {item?.yutganlar}
+                          {item?.winners?.length || 0}
                         </td>
                         <td className="clamp4 px-4 py-2 border-b border-hr-color">
-                          {item?.buyumlar}
+                          {item?.buyumlar?.length || 0}
                         </td>
                       </motion.tr>
                     ))}
@@ -119,20 +145,21 @@ const Auktsion = () => {
               </table>
             </div>
           ) : (
-            <div className="w-full h-full flex justify-center items-center flex-col">
-              <div className="w-full h-[200px]">
-                <img
-                  className="w-full h-full object-contain"
-                  src={dataempty}
-                  alt="No data"
-                />
-              </div>
-              <h1 className="clamp3 font-bold">Auktsion do not exist!</h1>
+            <div className="flex flex-col items-center justify-center h-[50vh]">
+              <img src={dataempty} alt="Empty data" className="w-48" />
+              <h1 className="mt-4 text-xl text-center text-text-primary">
+                No auctions available.
+              </h1>
             </div>
           )}
         </main>
       )}
       <AddAuktsion isOpen={addAuktsion} handleClose={handleAddAuktsion} />
+      <FilterAuktsion
+        isOpen={filterAuktsion}
+        handleClose={handleFilterAuktsion}
+        applyFilters={applyFilters}
+      />
     </>
   );
 };

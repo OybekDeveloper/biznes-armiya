@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 export function getLocalISOString() {
   const now = new Date();
   const localTimeOffset = now.getTimezoneOffset() * 60000; // Offset in milliseconds
@@ -7,8 +7,10 @@ export function getLocalISOString() {
     .slice(0, -1); // Remove the 'Z'
   return localISOTime;
 }
-const Countdown = ({ eventTime }) => {
-  const [timeRemaining, setTimeRemaining] = useState(calculateTimeRemaining(eventTime));
+const Countdown = ({ eventTime, status }) => {
+  const [timeRemaining, setTimeRemaining] = useState(
+    calculateTimeRemaining(eventTime)
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -25,17 +27,26 @@ const Countdown = ({ eventTime }) => {
 
     // Adjust for timezone offset (in hours) if necessary
     const timezoneOffsetInHours = 5; // Adjust this value based on your timezone difference
-    const adjustedTargetDate = new Date(targetDate.getTime() - timezoneOffsetInHours * 60 * 60 * 1000);
+    const adjustedTargetDate = new Date(
+      targetDate.getTime() - timezoneOffsetInHours * 60 * 60 * 1000
+    );
 
     const timeRemaining = adjustedTargetDate - now;
 
     if (timeRemaining <= 0) {
-      return 'Event has started!';
+      if (status === "for_finish") {
+        return "Event has finished!";
+      }
+      return "Event has started!";
     }
 
     const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+    const hours = Math.floor(
+      (timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    const minutes = Math.floor(
+      (timeRemaining % (1000 * 60 * 60)) / (1000 * 60)
+    );
     const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
 
     return `${days}d ${hours}h ${minutes}m ${seconds}s`;
@@ -45,5 +56,3 @@ const Countdown = ({ eventTime }) => {
 };
 
 export default Countdown;
-
-

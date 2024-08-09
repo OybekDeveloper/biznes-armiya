@@ -5,17 +5,12 @@ import {
   MenuItems,
   Transition,
 } from "@headlessui/react";
-import {
-  ArchiveBoxXMarkIcon,
-  ChevronDownIcon,
-  PencilIcon,
-  Square2StackIcon,
-  TrashIcon,
-} from "@heroicons/react/16/solid";
+import { PencilIcon } from "@heroicons/react/16/solid";
 import { ImExit } from "react-icons/im";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { photoUrl } from "../../images";
+import { coinimg, photoUrl } from "../../images";
+import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 
 export default function DropDownMobile({ handleLogOut }) {
   const { userData } = useSelector((state) => state.event);
@@ -46,6 +41,27 @@ export default function DropDownMobile({ handleLogOut }) {
             anchor="bottom end"
             className="w-52 origin-top-right rounded-xl shadow-custom bg-card mt-[10px]"
           >
+            {" "}
+            <div className="px-3 py-1.5 flex justify-between items-start">
+              <div className="w-32 cursor-pointer flex justify-between items-center gap-3 py-3 px-3 border-border border-[2px] rounded-[14px]">
+                <h1>{userData?.vab ? userData?.vab : 0}</h1>
+                <img src={coinimg} alt="" />
+              </div>
+              <div className="cursor-pointer w-12 h-12 relative flex justify-center items-center">
+                <h1 className="absolute clamp4 ">
+                  {userData?.reyting ? userData?.reyting : 0}
+                </h1>
+                <CircularProgressbar
+                  maxValue={10}
+                  value={userData?.reyting ? userData?.reyting : 0}
+                  styles={buildStyles({
+                    textColor: "#3F8CFF",
+                    pathColor: "#3F8CFF",
+                    trailColor: "rgba(0, 0, 0, 0.1)", // Ensure a valid color is provided
+                  })}
+                />
+              </div>
+            </div>
             <MenuItem>
               <NavLink
                 to={"/profile"}

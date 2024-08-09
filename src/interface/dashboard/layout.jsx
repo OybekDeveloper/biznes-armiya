@@ -82,12 +82,15 @@ const Dashboard = () => {
                       .map((item, idx) => (
                         <NavLink
                           to={
-                            item.users.find((c) => +c === userData.id) &&
+                            (item.users.find((c) => +c === userData.id) ||
+                              userData?.role?.chat_edit) &&
                             `/groups/${item.id}`
                           }
                           className={`${
-                            item.users.find((c) => +c === userData.id) ??
-                            "opacity-[0.5]"
+                            item.users.find((c) => +c === userData.id) ||
+                            userData?.role?.chat_edit
+                              ? "opacity-1"
+                              : "opacity-[0.5]"
                           } w-full bg-background rounded-[24px] p-[16px] flex flex-col justify-start items-center gap-1`}
                           key={idx}
                         >

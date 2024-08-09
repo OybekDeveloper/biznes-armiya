@@ -1,22 +1,31 @@
 import {
-  Button,
   Dialog,
   DialogPanel,
-  DialogTitle,
   Transition,
   TransitionChild,
 } from "@headlessui/react";
-import { IoClose } from "react-icons/io5";
 import { useState } from "react";
+import { DateRangePicker } from "react-dates";
+import "react-dates/initialize";
+import "react-dates/lib/css/_datepicker.css";
 
 export default function FilterHistory({ isOpen, handleClose, applyFilters }) {
   const [type, setType] = useState("all");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [focusedInput, setFocusedInput] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     applyFilters({ type, startDate, endDate });
+    handleClose();
+  };
+
+  const handleReset = () => {
+    setType("all");
+    setStartDate(null);
+    setEndDate(null);
+    applyFilters({ type: "all", startDate: null, endDate: null });
     handleClose();
   };
 
@@ -38,7 +47,10 @@ export default function FilterHistory({ isOpen, handleClose, applyFilters }) {
               leaveTo="opacity-0 transform-[scale(95%)]"
             >
               <DialogPanel className="w-full h-screen max-w-md rounded-xl p-4 sm:p-6 backdrop-blur-2xl">
-                <form onSubmit={handleSubmit} className="w-full h-full p-3 rounded-md bg-background space-y-4">
+                <form
+                  onSubmit={handleSubmit}
+                  className="w-full h-full p-3 rounded-md bg-background space-y-4"
+                >
                   <div>
                     <label>Type:</label>
                     <select
@@ -52,30 +64,33 @@ export default function FilterHistory({ isOpen, handleClose, applyFilters }) {
                     </select>
                   </div>
                   <div>
-                    <label>Start Date:</label>
-                    <input
-                      type="date"
-                      value={startDate}
-                      onChange={(e) => setStartDate(e.target.value)}
-                      className="w-full p-2 rounded border"
-                    />
-                  </div>
-                  <div>
-                    <label>End Date:</label>
-                    <input
-                      type="date"
-                      value={endDate}
-                      onChange={(e) => setEndDate(e.target.value)}
-                      className="w-full p-2 rounded border"
+                    <label>Date Range:</label>
+                    <DateRangePicker
+                      startDate={startDate}
+                      startDateId="start_date_id"
+                      endDate={endDate}
+                      endDateId="end_date_id"
+                      onDatesChange={({ startDate, endDate }) => {
+                        setStartDate(startDate);
+                        setEndDate(endDate);
+                      }}
+                      focusedInput={focusedInput}
+                      onFocusChange={(focusedInput) =>
+                        setFocusedInput(focusedInput)
+                      }
+                      displayFormat="YYYY-MM-DD"
+                      numberOfMonths={1}
+                      isOutsideRange={() => false}
+                      showClearDates={true}
                     />
                   </div>
                   <div className="flex justify-end gap-4">
                     <button
                       type="button"
-                      onClick={handleClose}
+                      onClick={handleReset}
                       className="px-4 py-2 rounded bg-gray-500 text-white"
                     >
-                      Cancel
+                      Reset
                     </button>
                     <button
                       type="submit"

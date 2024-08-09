@@ -104,8 +104,11 @@ const History = () => {
           >
             <Transaction />
           </div>
-          <div className="p-[10px] rounded-[14px] bg-card cursor-pointer shadow-btn_shadow flex justify-center items-center">
-            <button onClick={handleFilterHistory} aria-label="Filter">
+          <div
+            onClick={handleFilterHistory}
+            className="p-[10px] rounded-[14px] bg-card cursor-pointer shadow-btn_shadow flex justify-center items-center"
+          >
+            <button aria-label="Filter">
               <LuFilter className="text-xl text-text-primary" />
             </button>
           </div>
