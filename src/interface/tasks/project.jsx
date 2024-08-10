@@ -184,7 +184,7 @@ const Project = () => {
                 {/* Project CHat */}
                 <div className="max-lg:col-span-2 lg:col-span-5 bg-card rounded-[24px] p-3 sm:p-[24px] flex flex-col gap-4">
                   {/* Chat section */}
-                  <div className="relative flex justify-between flex-col h-full w-full gap-2">
+                  <div className="chat-back relative flex justify-between flex-col h-full w-full gap-2">
                     <ChatMessage
                       chatMessageData={chatMessageData}
                       task_id={id}

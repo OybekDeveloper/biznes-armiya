@@ -155,7 +155,7 @@ const Navbar = () => {
               </button>
             )}
           </div>
-          <div
+          {/* <div
             data-count={9}
             onClick={handleOpenNotification}
             className="p-[12px] rounded-[14px] bg-card cursor-pointer shadow-btn_shadow flex justify-center items-center notf-cound relative"
@@ -163,7 +163,7 @@ const Navbar = () => {
             <button>
               <IoMdNotificationsOutline className="text-xl text-text-primary" />
             </button>
-          </div>
+          </div> */}
           <div className="">
             <DropDown handleLogOut={handleLogOut} />
           </div>
@@ -209,13 +209,13 @@ const Navbar = () => {
                     <MdDarkMode className="text-xl text-text-primary" />
                   </button>
                 )}
-                <button
+                {/* <button
                   data-count={2}
                   className="relative notf-cound"
                   onClick={handleOpenNotification}
                 >
                   <IoMdNotificationsOutline className="text-xl text-text-primary" />
-                </button>
+                </button> */}
                 <div>
                   <DropDownMobile handleLogOut={handleLogOut} />
                 </div>
