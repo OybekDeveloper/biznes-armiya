@@ -28,6 +28,7 @@ import newsempty from "./page.png";
 import emptygrouplogo from "./empty-group-logo.webp";
 import emptyGroup from './empty-group1.svg'
 import emptyimg from './empty-img.jpg'
+import chatback from './chat-back1.svg'
 export {
   search,
   notification,
@@ -58,5 +59,6 @@ export {
   newsempty,
   emptygrouplogo,
   emptyGroup,
-  emptyimg
+  emptyimg,
+  chatback
 };

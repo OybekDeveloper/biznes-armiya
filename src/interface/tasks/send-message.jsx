@@ -39,7 +39,18 @@ const SendMessage = ({ task_id }) => {
       try {
         const newFormData = new FormData();
         if (formData.file) newFormData.append("file", formData.file);
-        newFormData.append("message", formData.message);
+        if (formData.message === "" && formData.file) {
+          newFormData.append(
+            "message",
+            formData.file.name.length > 10
+              ? formData.file.name.slice(0, 10) +
+                  "..." +
+                  formData.file.name.split(".")[1]
+              : formData.file.name
+          );
+        } else {
+          newFormData.append("message", formData.message);
+        }
         newFormData.append("task_id", formData.task_id);
         newFormData.append("user_id", formData.user_id);
 
@@ -117,8 +128,10 @@ const SendMessage = ({ task_id }) => {
         </div>
         {formData.file && (
           <div className="absolute -top-5 left-0 bg-background p-2 rounded-md transform -translate-y-1/2 text-sm text-gray-600">
-            {formData.file.name.length > 20
-              ? formData.file.name.slice(0, 20) + "..."
+            {formData.file.name.length > 10
+              ? formData.file.name.slice(0, 10) +
+                "..." +
+                formData.file.name.split(".")[1]
               : formData.file.name}
           </div>
         )}

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { ApiService } from "../../components/api.server";
-import { photoUrl } from "../../images";
+import { chatback, photoUrl } from "../../images";
 import OpenFile from "../../components/open-file";
 
 const ChatMessage = ({ chatMessageData, task_id }) => {
@@ -50,7 +50,7 @@ const ChatMessage = ({ chatMessageData, task_id }) => {
   };
 
   return (
-    <main className="flex flex-col gap-4 max-h-[400px] overflow-y-scroll px-1">
+    <main className="chat-back flex flex-col gap-4 h-[calc(100vh-309px)] overflow-y-scroll px-1">
       {chatMessageData.filter((c) => +c.task_id === +task_id).length > 0 ? (
         <>
           {chatMessageData?.map((message, idx) => {
@@ -65,14 +65,14 @@ const ChatMessage = ({ chatMessageData, task_id }) => {
               <div
                 ref={lastMessageRef}
                 key={idx}
-                className={`w-full flex gap-3 ${
+                className={`w-full flex gap-3  ${
                   +message.user_id === +userData?.id
                     ? "justify-start flex-row-reverse"
                     : "justify-start"
                 }`}
               >
                 <img
-                  className="inline-block h-6 w-6 rounded-full ring-2 ring-background-secondary"
+                  className="inline-block h-6 w-6 rounded-full bg-background-secondary"
                   src={userData1.profile_photo || photoUrl}
                   alt=""
                 />
@@ -90,7 +90,7 @@ const ChatMessage = ({ chatMessageData, task_id }) => {
                         : "justify-start"
                     } items-center gap-2`}
                   >
-                    <h1 className="text-text-primary font-bold">
+                    <h1 className="text-text-primary font-bold text-sm">
                       {userData1.first_name || userData1.last_name ? (
                         <>
                           {userData1.first_name +
@@ -108,7 +108,7 @@ const ChatMessage = ({ chatMessageData, task_id }) => {
                     </div>
                   )}
                   <p className="text-thin-color">{message.message}</p>
-                  <p className="text-thin-color">
+                  <p className="text-thin-color text-sm">
                     {updatedTime ? formatTime(updatedTime) : "No time"}
                   </p>
                 </div>
