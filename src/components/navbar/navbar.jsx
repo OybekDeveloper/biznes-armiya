@@ -16,11 +16,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { userDetailSlice } from "../../reducer/event";
 import ExitModal from "../exit-modal";
 import "./index.css";
-import SearchComponent from "../search-component";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { eventSliceBool } = useSelector((state) => state.event);
+  const { eventSliceBool ,userData} = useSelector((state) => state.event);
   const register = JSON.parse(localStorage.getItem("register"));
   const selectedTheme = localStorage.getItem("theme");
   const { pathname } = useLocation();
@@ -31,7 +30,7 @@ const Navbar = () => {
   const [isSearchActive, setIsSearchActive] = useState(false); // New state for search expansion
   const mobileNavRef = useRef(null);
   const dispatch = useDispatch();
-
+  console.log(userData)
   const handleOpenNotification = () => {
     setIsNotif(!isNotif);
   };

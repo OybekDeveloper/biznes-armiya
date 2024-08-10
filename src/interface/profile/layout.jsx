@@ -3,27 +3,25 @@ import ProfileInfo from "./profile-info";
 import { FaArrowDown, FaCalendar } from "react-icons/fa";
 import { motion } from "framer-motion";
 import Projects from "./projects";
-import Team from "./team";
-import Myvacations from "./my-vacations";
+import Team from "./my-group";
+import Myvacations from "./my-tasks";
 import { useDispatch, useSelector } from "react-redux";
 import Loader1 from "../../components/loader/loader1";
 import EditUser from "../settings/edit-user";
 import { ApiService } from "../../components/api.server";
 import { useLocation, useNavigate } from "react-router-dom";
 import { userDetailSlice } from "../../reducer/event";
+import MyTasks from "./my-tasks";
+import MyGroup from "./my-group";
 
 const filterProject = [
   {
-    id: 1,
-    title: "Projects",
+    id: 3,
+    title: "Tasks",
   },
   {
     id: 2,
-    title: "Team",
-  },
-  {
-    id: 3,
-    title: "My vacations",
+    title: "Groups",
   },
 ];
 
@@ -37,12 +35,12 @@ const Profile = () => {
   const { pathname } = useLocation();
   const activeProfileDetails = (id) => {
     switch (id) {
-      case 1:
-        return <Projects />;
+      // case 1:
+      //   return <Projects />;
       case 2:
-        return <Team />;
+        return <MyGroup />;
       case 3:
-        return <Myvacations />;
+        return <MyTasks />;
       default:
         return;
     }

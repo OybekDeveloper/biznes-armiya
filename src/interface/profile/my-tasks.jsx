@@ -5,7 +5,8 @@ import { NavLink } from "react-router-dom";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 const percentage = 16;
-const Myvacations = () => {
+const MyTasks = () => {
+
   return (
     <main className="flex flex-col gap-3">
       <section className="grid grid-cols-3 max-xl:grid-cols-2 max-lg:grid-cols-3  max-md:grid-cols-2 max-sm:grid-cols-1 gap-4">
@@ -97,4 +98,4 @@ const Myvacations = () => {
   );
 };
 
-export default Myvacations;
+export default MyTasks;

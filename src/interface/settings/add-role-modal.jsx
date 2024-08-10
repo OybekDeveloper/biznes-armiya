@@ -273,7 +273,8 @@ console.log(role)
                   <div className="mt-6">
                     <button
                       type="submit"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      className="px-[20px] py-[13px] rounded-[14px] bg-button-color text-white clamp4 font-bold"
+                      // className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                       disabled={loading}
                     >
                       {loading ? <SimpleLoading /> : updateItem ? "Update" : "Add"}

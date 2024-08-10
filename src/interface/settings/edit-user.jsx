@@ -325,7 +325,6 @@ export default function AddUser({ isOpen, handleClose }) {
                   <div className="w-full flex justify-end items-center">
                     <button
                       onClick={handleUpdateProfile}
-                      className="px-[20px] py-[13px] rounded-[14px] bg-button-color text-white clamp4 font-bold"
                     >
                       {loading ? (
                         <div className="flex justify-start items-center gap-2 opacity-[0.8]">
