@@ -18,9 +18,9 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
     yang_views: false,
     yang_edit: false,
     yang_delete: false,
-    talab_views: false,
-    talab_edit: false,
-    talab_delete: false,
+    request_views: false,
+    request_edit: false,
+    request_delete: false,
     sh_rivoj_views: false,
     sh_rivoj_edit: false,
     sh_rivoj_delete: false,
@@ -42,12 +42,12 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
     h_balls_views: false,
     h_balls_edit: false,
     h_balls_delete: false,
-    buyum_views: false,
-    buyum_edit: false,
-    buyum_delete: false,
-    auktsion_views: false,
-    auktsion_edit: false,
-    auktsion_delete: false,
+    item_views: false,
+    item_edit: false,
+    item_delete: false,
+    auction_views: false,
+    auction_edit: false,
+    auction_delete: false,
     chat_views: false,
     chat_edit: false,
     chat_delete: false,
@@ -55,8 +55,10 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
     role_edit: false,
     role_delete: false,
   };
+
   const [role, setRole] = useState(initialRoleState);
   const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     if (updateItem) {
@@ -95,11 +97,46 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
     }
   };
 
-  const handleCheckboxChange = (e) => {
-    const { name, checked } = e.target;
-    setRole({ ...role, [name]: checked });
+  const handleCheckboxChange = (category, type) => (e) => {
+    const checked = e.target.checked;
+    setRole((prevRole) => ({
+      ...prevRole,
+      [`${category}_${type}`]: checked,
+    }));
   };
 
+  const handleCategoryClick = (category) => {
+    const prefix = `${category}_`;
+    const allChecked =
+      role[`${prefix}views`] && role[`${prefix}edit`] && role[`${prefix}delete`];
+
+    setRole((prevRole) => ({
+      ...prevRole,
+      [`${prefix}views`]: !allChecked,
+      [`${prefix}edit`]: !allChecked,
+      [`${prefix}delete`]: !allChecked,
+    }));
+  };
+  const categories = [
+    { name: "News", key: "yang" },
+    { name: "Request", key: "request" },
+    { name: "Sh Rivoj", key: "sh_rivoj" },
+    { name: "Price", key: "price" },
+    { name: "Vab", key: "vab" },
+    { name: "Tasks", key: "tasks" },
+    { name: "Tasks Users", key: "tasks_users" },
+    { name: "Balls", key: "balls" },
+    { name: "H Balls", key: "h_balls" },
+    { name: "Item", key: "item" },
+    { name: "Auction", key: "auction" },
+    { name: "Chat", key: "chat" },
+    { name: "Role", key: "role" },
+  ];
+
+  const filteredCategories = categories.filter(category =>
+    category.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+console.log(role)
   return (
     <Transition appear show={isOpen}>
       <Dialog
@@ -117,77 +154,129 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
               leaveFrom="opacity-100 transform-[scale(100%)]"
               leaveTo="opacity-0 transform-[scale(95%)]"
             >
-              <DialogPanel className="rounded-xl bg-card p-6">
-                <DialogTitle as="h3" className="text-base/7 font-medium">
-                  <div className="flex items-end justify-between cursor-pointer">
-                    <h1 className="font-[600] clamp3">
-                      {updateItem ? "Update Role" : "Add Role"}
-                    </h1>
-                    <div
-                      onClick={handleCloseModal}
-                      className="p-[10px] bg-background-secondary rounded-[12px]"
-                    >
-                      <IoClose className="border-border text-[24px]" />
-                    </div>
-                  </div>
-                </DialogTitle>
-                <form
-                  className="mt-4 flex flex-col gap-3 h-full"
-                  onSubmit={handleAddNews}
-                >
-                  <div>
+              <DialogPanel className="mx-auto w-full max-w-[85%] overflow-hidden rounded-xl bg-white p-6 shadow-xl">
+                <div className="mb-5 flex items-center justify-between">
+                  <DialogTitle
+                    as="h3"
+                    className="text-[22px] font-semibold leading-6 text-gray-900"
+                  >
+                    {updateItem ? "Edit Role" : "Add Role"}
+                  </DialogTitle>
+                  <button
+                    type="button"
+                    className="ml-4 text-[22px] leading-[unset]"
+                    onClick={handleCloseModal}
+                  >
+                    <IoClose />
+                  </button>
+                </div>
+                <form onSubmit={handleAddNews}>
+                  <div className="mb-4">
                     <label
-                      className="text-[14px] font-[700] text-thin"
-                      htmlFor="title"
+                      htmlFor="role"
+                      className="mb-1 block text-sm font-medium text-gray-700"
                     >
-                      Role name
+                      Role
                     </label>
                     <input
-                      className="px-[18px] py-[12px] bg-background-secondary w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
+                    
+                      id="role"
+                      name="role"
                       type="text"
-                      id="title"
-                      name="title"
                       value={role.role}
-                      placeholder="Type role name"
                       onChange={(e) =>
                         setRole({ ...role, role: e.target.value })
                       }
                       required
-                    />
+                      className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
+                      />
                   </div>
+
+                  <div className="mb-4">
+                    <label
+                      htmlFor="search"
+                      className="mb-1 block text-sm font-medium text-gray-700"
+                    >
+                      Search Categories
+                    </label>
+                    <input
+                      id="search"
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
+                      />
+                  </div>
+
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {Object.keys(initialRoleState).map(
-                      (key) =>
-                        key !== "role" && (
-                          <div key={key} className="flex items-center">
+                    {filteredCategories.map(({ name, key }) => (
+                      <div key={key} className="category-group">
+                        <button
+                          className="flex items-center mb-2 cursor-pointer"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            handleCategoryClick(key)
+                          }}
+                        >
+                          <span className="font-semibold">{name}</span>
+                        </button>
+                        <div className="flex flex-col pl-4">
+                          <div className="flex items-center">
                             <input
                               type="checkbox"
-                              id={key}
-                              name={key}
-                              checked={role[key]}
-                              onChange={handleCheckboxChange}
+                              id={`${key}_views`}
+                              checked={role[`${key}_views`]}
+                              onChange={handleCheckboxChange(key, "views")}
                             />
-                            <label className="ml-2" htmlFor={key}>
-                              {key.replace(/_/g, " ")}
+                            <label
+                              className="ml-2"
+                              htmlFor={`${key}_views`}
+                            >
+                              View
                             </label>
                           </div>
-                        )
-                    )}
+                          <div className="flex items-center">
+                            <input
+                              type="checkbox"
+                              id={`${key}_edit`}
+                              checked={role[`${key}_edit`]}
+                              disabled={!role[`${key}_views`]}
+                              onChange={handleCheckboxChange(key, "edit")}
+                            />
+                            <label
+                              className="ml-2"
+                              htmlFor={`${key}_edit`}
+                            >
+                              Edit
+                            </label>
+                          </div>
+                          <div className="flex items-center">
+                            <input
+                              type="checkbox"
+                              id={`${key}_delete`}
+                              checked={role[`${key}_delete`]}
+                              disabled={!role[`${key}_views`]}
+                              onChange={handleCheckboxChange(key, "delete")}
+                            />
+                            <label
+                              className="ml-2"
+                              htmlFor={`${key}_delete`}
+                            >
+                              Delete
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <div className="relative w-full flex justify-end items-center">
+
+                  <div className="mt-6">
                     <button
                       type="submit"
-                      className="bottom-[16px] right-[16px] bg-button-color flex justify-start items-center gap-2 rounded-md px-4 py-2 text-white shadow-btn_shadow"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                       disabled={loading}
                     >
-                      {loading ? (
-                        <div className="flex justify-start items-center gap-2 opacity-[0.8]">
-                          <SimpleLoading />
-                          <h1>Loading...</h1>
-                        </div>
-                      ) : (
-                        <h1>{updateItem ? "Update Role" : "Add Role"}</h1>
-                      )}
+                      {loading ? <SimpleLoading /> : updateItem ? "Update" : "Add"}
                     </button>
                   </div>
                 </form>
