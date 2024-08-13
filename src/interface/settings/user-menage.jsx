@@ -47,7 +47,6 @@ const UserMenage = () => {
         },
         register?.access
       );
-      console.log(res);
       // Optionally, update the user list or other state based on the response
     } catch (error) {
       console.log(error);

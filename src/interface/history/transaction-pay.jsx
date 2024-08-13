@@ -120,8 +120,6 @@ export default function TransactionPay({ isOpen, handleClose }) {
     fetchData();
   }, []);
 
-  console.log(formData);
-
   return (
     <Transition appear show={isOpen}>
       <Dialog

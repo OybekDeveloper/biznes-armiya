@@ -20,7 +20,6 @@ import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 
 export default function DropDown({ handleLogOut }) {
   const { userData } = useSelector((state) => state.event);
-  console.log(userData);
   const navigate = useNavigate();
   return (
     <div className="">

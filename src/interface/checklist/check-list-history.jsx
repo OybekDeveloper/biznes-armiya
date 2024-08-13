@@ -1,56 +1,33 @@
 import React, { useEffect, useState } from "react";
+import { FaPlus } from "react-icons/fa";
 import { LuFilter } from "react-icons/lu";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
+import { ApiService } from "../../components/api.server";
 import { dataempty, photoUrl } from "../../images";
 import { TimeFormatFunction } from "../../components/time-format";
-import { ApiService } from "../../components/api.server";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  Transition,
-} from "@headlessui/react";
-import { CiMenuKebab } from "react-icons/ci";
-import { FaRegTrashAlt } from "react-icons/fa";
-import { MdModeEdit } from "react-icons/md";
-import DeleteModal from "./delete-task";
-import { groupEventSlice } from "../../reducer/event";
-import AddTasks from "./add-task";
-import { GoMoveToTop } from "react-icons/go";
-import TakeOverUser from "./take-over-user";
-
-const Tasks = ({ toggleFilter, tasks, status }) => {
-  const [usersInfoMap, setUsersInfoMap] = useState({}); // State to store users info by task ID
-  const register = JSON.parse(localStorage.getItem("register"));
-  const { userData, eventSliceBool } = useSelector((state) => state.event);
+import { useSelector } from "react-redux";
+import Loader1 from "../../components/loader/loader1";
+const CheckListHistory = () => {
+  const { id } = useParams();
+  const { userData } = useSelector((state) => state.event);
   const { role } = userData;
-  const [editModal, setEditModal] = useState(false);
-  const [delModal, setDelModal] = useState(false);
-  const [editModalData, setEditModalData] = useState({});
-  const [selectId, setSelectId] = useState(null);
-  const [takeOverModal, setTakeOverModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const register = JSON.parse(localStorage.getItem("register"));
+  const [usersInfoMap, setUsersInfoMap] = useState({}); // State to store users info by task ID
+  const [taskDones, setTasksDones] = useState([]);
+  async function fetchData() {
+    try {
+      const res = await ApiService.getData("/task-dones", register?.access);
+      const filterTasks = res.filter((tasks) => tasks.status === "Done");
+      setTasksDones(filterTasks);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-  const handleTakeOverModal = () => {
-    setTakeOverModal(!takeOverModal);
-  };
-
-  const dispatch = useDispatch();
-  const handleDeleteModal = () => {
-    setDelModal(!delModal);
-    dispatch(groupEventSlice());
-  };
-  const handleDelete = () => {
-    setDelModal(!delModal);
-    dispatch(groupEventSlice());
-  };
-
-  const handleEdit = (item) => {
-    setEditModalData(item);
-    setEditModal(!editModal);
-    dispatch(groupEventSlice());
-  };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const fetchData = async (userList) => {
@@ -73,12 +50,13 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
       } catch (error) {
         console.error("Error in fetchData:", error);
         return [];
+      } finally {
+        setLoading(false);
       }
     };
 
     const fetchAllUsersInfo = async () => {
-      const tasksWithUsers = tasks.filter((task) => task.status === status);
-      const usersInfoPromises = tasksWithUsers.map(async (item) => {
+      const usersInfoPromises = taskDones.map(async (item) => {
         if (item?.user.length > 0) {
           const usersInfo = await fetchData(item.user);
           return { id: item.id, usersInfo };
@@ -95,34 +73,32 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
     };
 
     fetchAllUsersInfo();
-  }, [tasks, status, eventSliceBool]);
-  const filteredTasks = tasks.filter((task) => task.status === status);
+  }, [taskDones]);
+
+  if (loading) {
+    return <Loader1 />;
+  }
 
   return (
-    <main className="col-span-3 max-lg:grid-cols-1 flex flex-col gap-2">
-      <section className="flex justify-between items-center">
-        <h1 className="text-text-primary font-bold clamp3">Tasks</h1>
-      </section>
-      {filteredTasks.length > 0 ? (
+    <div>
+      {taskDones.length > 0 ? (
         <section className="flex flex-col gap-3">
-          {filteredTasks
+          {taskDones
             .slice()
             .reverse()
             .map((item, idx) => {
               const usersInfo = usersInfoMap[item.id] || [];
               return (
-                <div className="relative">
+                <div key={idx} className="relative">
                   <NavLink
                     to={
                       (role?.tasks_views &&
                         role.tasks_edit &&
                         role.tasks_delete) ||
-                      item.status === "Asked" ||
                       item.user.find((c) => +c.user === +userData.id)
                         ? `/project/${item?.id}`
                         : null
                     }
-                    key={idx}
                     className="relative cursor-pointer hover:bg-hover-card bg-card shadow-btn_shadow rounded-[14px] w-full grid grid-cols-6 max-lg:grid-cols-3 max-xl:grid-cols-4 px-[24px] py-[16px] gap-3"
                   >
                     <div className="col-span-1">
@@ -186,69 +162,21 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
                     <div className="col-span-1 flex justify-start items-center ">
                       <div
                         className={`
-                   ${
-                     item?.status === "Asked"
-                       ? "bg-asked"
-                       : item?.status === "Expected"
-                       ? "bg-expected"
-                       : item?.status === "Finished"
-                       ? "bg-finished"
-                       : "bg-done"
-                   } 
-                  text-[12px] px-2 py-1 rounded-[14px]  text-white`}
+                              ${
+                                item?.status === "Asked"
+                                  ? "bg-asked"
+                                  : item?.status === "Expected"
+                                  ? "bg-expected"
+                                  : item?.status === "Finished"
+                                  ? "bg-finished"
+                                  : "bg-done"
+                              } 
+                              text-[12px] px-2 py-1 rounded-[14px]  text-white`}
                       >
                         {item?.status}
                       </div>
                     </div>
                   </NavLink>
-                  {role?.tasks_delete && role?.tasks_edit && (
-                    <div
-                      onClick={() => setSelectId(item)}
-                      className="absolute right-1 top-1"
-                    >
-                      <Menu>
-                        <MenuButton className="inline-flex items-center gap-2 bg-background-secondary p-1 rounded-md z-10">
-                          <CiMenuKebab className="text-text-primary" />
-                        </MenuButton>
-                        <Transition
-                          enter="transition ease-out duration-75"
-                          enterFrom="opacity-0 scale-95"
-                          enterTo="opacity-100 scale-100"
-                          leave="transition ease-in duration-100"
-                          leaveFrom="opacity-100 scale-100"
-                          leaveTo="opacity-0 scale-95"
-                        >
-                          <MenuItems
-                            anchor="bottom end"
-                            className="w-52 origin-top-right rounded-xl bg-card mt-[5px] z-[999] shadow-btn_shadow outline-none"
-                          >
-                            {userData?.role?.yang_delete && (
-                              <MenuItem onClick={handleDelete}>
-                                <button className="group text-red-400 flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-                                  <FaRegTrashAlt className="size-4 fill-thin " />
-                                  Delete
-                                  <kbd className="ml-auto hidden font-sans text-xs text-thin group-data-[focus]:inline">
-                                    ⌘D
-                                  </kbd>
-                                </button>
-                              </MenuItem>
-                            )}
-                            {userData?.role?.yang_edit && (
-                              <MenuItem onClick={() => handleEdit(item)}>
-                                <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-                                  <MdModeEdit className="size-4 fill-thin" />
-                                  Edit
-                                  <kbd className="ml-auto hidden font-sans text-xs text-thin group-data-[focus]:inline">
-                                    ⌘E
-                                  </kbd>
-                                </button>
-                              </MenuItem>
-                            )}
-                          </MenuItems>
-                        </Transition>
-                      </Menu>
-                    </div>
-                  )}
                 </div>
               );
             })}
@@ -265,25 +193,8 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
           <h1 className="clam3 font-bold">Tasks do not exist!</h1>
         </div>
       )}
-      <AddTasks
-        isOpen={editModal}
-        handleClose={handleEdit}
-        updateItem={editModalData}
-      />
-
-      <DeleteModal
-        id={selectId?.id}
-        isOpen={delModal}
-        handleClose={handleDeleteModal}
-      />
-      <TakeOverUser
-        status="take_over"
-        item={selectId}
-        isOpen={takeOverModal}
-        handleClose={handleTakeOverModal}
-      />
-    </main>
+    </div>
   );
 };
 
-export default Tasks;
+export default CheckListHistory;

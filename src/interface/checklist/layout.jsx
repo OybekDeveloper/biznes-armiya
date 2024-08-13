@@ -1,33 +1,39 @@
-import React, { useEffect, useState } from "react";
-import { FaPlus } from "react-icons/fa";
-import { LuFilter } from "react-icons/lu";
-import { NavLink } from "react-router-dom";
-import { ApiService } from "../../components/api.server";
-import { dataempty, photoUrl } from "../../images";
-import { TimeFormatFunction } from "../../components/time-format";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import Loader1 from "../../components/loader/loader1";
+import { dataempty, emptygrouplogo, photoUrl } from "../../images";
+import { useSelector } from "react-redux";
+import { ApiService } from "../../components/api.server";
+import { NavLink } from "react-router-dom";
+import { TimeFormatFunction } from "../../components/time-format";
+import { MdOutlineHistory } from "react-icons/md";
 
 const Checklist = () => {
-  const { userData } = useSelector((state) => state.event);
+  const { userData, groupEvent } = useSelector((state) => state.event);
   const { role } = userData;
-  const [loading, setLoading] = useState(true);
   const register = JSON.parse(localStorage.getItem("register"));
-  const [usersInfoMap, setUsersInfoMap] = useState({}); // State to store users info by task ID
+  const [isAddGroup] = useState(false);
+  const [groupData, setGroupData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [taskDones, setTasksDones] = useState([]);
-  async function fetchData() {
-    try {
-      const res = await ApiService.getData("/task-dones", register?.access);
-      console.log(res);
-      setTasksDones(res);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const [usersInfoMap, setUsersInfoMap] = useState({}); // State to store users info by task ID
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    const groupFetch = async () => {
+      try {
+        const group = await ApiService.getData(`/group`, register?.access);
+        setGroupData(group);
+        const res = await ApiService.getData("/task-dones", register?.access);
+        const filterTasks = res.filter((c) => c.status === "Finished");
+        setTasksDones(filterTasks);
+      } catch (error) {
+        setLoading(false);
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    groupFetch();
+  }, [isAddGroup, isAddGroup, groupEvent]);
 
   useEffect(() => {
     const fetchData = async (userList) => {
@@ -82,24 +88,94 @@ const Checklist = () => {
       ) : (
         <main className="col-span-3 max-lg:grid-cols-1 flex flex-col gap-2">
           <section className="flex justify-between items-center">
-            <h1 className="text-text-primary font-bold clamp3">
-              Tekshirish Ro’yxati
-            </h1>
-            <button className="max-md:hidden bg-button-color  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow">
-              <FaPlus />
-              <h1>AAdd Request</h1>
-            </button>
-            <button className="md:hidden fixed bottom-[16px] right-[16px] bg-button-color  flex justify-start items-center gap-2 rounded-full p-4 text-white shadow-btn_shadow">
-              <FaPlus />
-            </button>
+            <h1 className="text-text-primary font-bold clamp3">Check List</h1>
+            <NavLink
+              to={"/checklist-history"}
+              aria-label="Toggle VAB History"
+              className="flex bg-button-color items-center gap-2 rounded-md py-2 px-4 text-white shadow-btn_shadow"
+            >
+              <MdOutlineHistory className="text-xl" />
+              <span>History</span>
+            </NavLink>
           </section>
-          {taskDones.length > 0 ? (
+          {loading ? (
+            <Loader1 />
+          ) : (
+            <section className="min-h-[300px] lg:flex-1 bg-card shadow-btn_shadow rounded-[24px] p-[18px] flex flex-col">
+              {groupData.length > 0 ? (
+                <div className="grid xl:grid-cols-4 lg:grid-cols-2 max-sm:grid-cols-1 sm:grid-cols-2 flex-1 gap-2">
+                  {groupData
+                    .slice()
+                    .reverse()
+                    .map((item, idx) => (
+                      <NavLink
+                        to={
+                          (item.users.find((c) => +c === userData.id) ||
+                            userData?.role?.chat_edit) &&
+                          `/checklist/${item.id}`
+                        }
+                        className={`${
+                          item.users.find((c) => +c === userData.id) ||
+                          userData?.role?.chat_edit
+                            ? "opacity-1"
+                            : "opacity-[0.5]"
+                        } w-full bg-background rounded-[24px] p-[16px] flex flex-col justify-start items-center gap-1`}
+                        key={idx}
+                      >
+                        <div className="w-24 h-24 flex justify-center items-center">
+                          <img
+                            src={
+                              item?.group_photo
+                                ? item?.group_photo
+                                : emptygrouplogo
+                            }
+                            alt="logo"
+                            className="mb-[10px] w-16 h-16 rounded-full object-cover"
+                          />
+                        </div>
+                        <h1 className="text-text-primary font-medium">
+                          {item?.name.length > 20
+                            ? item?.name.slice(0, 20) + "..."
+                            : item?.name}
+                        </h1>
+                        <p className="text-gray-500 font-bold">
+                          {item?.shiori.length > 25
+                            ? item?.shiori.slice(0, 25) + "..."
+                            : item?.shiori}
+                        </p>
+                        <p className="text-gray-500">
+                          {item?.users?.length > 0 ? item.users.length : 0} user
+                        </p>
+                        <p className="text-gray-500 py-1 px-2 border-border border-[1px] rounded-[4px] text-[12px]">
+                          {item?.admin ? item.admin : "no admin"}
+                        </p>
+                      </NavLink>
+                    ))}
+                </div>
+              ) : (
+                <div className="w-full h-full flex justify-center items-center flex-col">
+                  <div className="w-full h-[200px]">
+                    <img
+                      className="w-full h-full object-contain"
+                      src={dataempty}
+                      alt=""
+                    />
+                  </div>
+                  <h1 className="clam3 font-bold">Groups do not exist!</h1>
+                </div>
+              )}
+            </section>
+          )}
+          {role?.tasks_edit && role?.tasks_delete && (
             <section className="flex flex-col gap-3">
               {taskDones
                 .slice()
                 .reverse()
                 .map((item, idx) => {
                   const usersInfo = usersInfoMap[item.id] || [];
+                  if (!item.group_id) {
+                    return null;
+                  }
                   return (
                     <div key={idx} className="relative">
                       <NavLink
@@ -174,14 +250,16 @@ const Checklist = () => {
                         <div className="col-span-1 flex justify-start items-center ">
                           <div
                             className={`
-                ${
-                  item?.status == "Done"
-                    ? "bg-green-500"
-                    : item?.status === "Expected"
-                    ? "bg-blue-500"
-                    : "bg-green-500"
-                } 
-                text-[12px] px-2 py-1 rounded-[14px]  text-white`}
+                              ${
+                                item?.status === "Asked"
+                                  ? "bg-asked"
+                                  : item?.status === "Expected"
+                                  ? "bg-expected"
+                                  : item?.status === "Finished"
+                                  ? "bg-finished"
+                                  : "bg-done"
+                              } 
+                              text-[12px] px-2 py-1 rounded-[14px]  text-white`}
                           >
                             {item?.status}
                           </div>
@@ -191,17 +269,6 @@ const Checklist = () => {
                   );
                 })}
             </section>
-          ) : (
-            <div className="w-full h-full flex justify-center items-center flex-col mt-4">
-              <div className="w-full h-[200px]">
-                <img
-                  className="w-full h-full object-contain"
-                  src={dataempty}
-                  alt=""
-                />
-              </div>
-              <h1 className="clam3 font-bold">Tasks do not exist!</h1>
-            </div>
           )}
         </main>
       )}

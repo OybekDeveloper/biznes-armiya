@@ -57,7 +57,6 @@ export default function AddUser({ groupId, isOpen, handleClose }) {
             });
             setNewUsers([]);
           }
-          console.log(addUser);
         }
       } catch (error) {
         console.log(error);
@@ -65,14 +64,12 @@ export default function AddUser({ groupId, isOpen, handleClose }) {
         setLoading(false);
       }
     };
-    console.log(formData);
     if (formData.users.length === 0) {
       toast.error("Please select at least one user!");
       return;
     }
 
     Object.keys(formData.users).forEach((key) => {
-      console.log(formData.users, "ddddd");
       if (!formData.users[key]) {
         newError["name"] = `Please select a another user!`;
       }

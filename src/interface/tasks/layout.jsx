@@ -34,7 +34,6 @@ const HomeWork = () => {
     const taskFetch = async () => {
       try {
         const tasks = await ApiService.getData("/tasks", register?.access);
-        console.log(tasks, "tasks");
         setTasks(tasks);
         setLoading(false);
       } catch (error) {

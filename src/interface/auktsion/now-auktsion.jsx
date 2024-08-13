@@ -8,18 +8,19 @@ import Loader1 from "../../components/loader/loader1";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import Countdown, { getLocalISOString } from "../../components/count-down";
-import { eventSliceAction } from "../../reducer/event";
 import SimpleLoading from "../../components/loader/simple-loading";
+import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { eventSliceAction } from "../../reducer/event";
+import Winner from "./winner";
 
 const NowAuction = () => {
-  const { id } = useParams();
+  const { id, aukt_id } = useParams();
   const dispatch = useDispatch();
-  const { userData } = useSelector((state) => state.event);
+  const { userData, eventSliceBool } = useSelector((state) => state.event);
   const register = JSON.parse(localStorage.getItem("register"));
   const [loading, setLoading] = useState(true);
   const [item, setItem] = useState({});
   const [addVabLoading, setAddVabLoading] = useState(false);
-  const [bids, setBids] = useState([]);
   const [addVab, setAddVab] = useState({
     vab: null,
     buyum_id: id,
@@ -28,6 +29,23 @@ const NowAuction = () => {
   const [applicants, setApplicants] = useState([]);
   const [topBidder, setTopBidder] = useState(null);
   const [maxVab, setMaxVab] = useState(0);
+  const [addVabModal, setAddVabModal] = useState(false);
+
+  const handleAddVabModal = () => {
+    if (addVab.vab <= 0) {
+      toast.error("Vab must be a positive number!");
+      return;
+    }
+    if (item?.boshlangich_narx > addVab.vab) {
+      toast.error(`Minimum vab ${item?.boshlangich_narx}!`);
+      return;
+    }
+    if (userData?.vab < addVab.vab) {
+      toast.error(`Not enough vab!Your vab is ${userData?.vab}`);
+      return;
+    }
+    setAddVabModal(!addVabModal);
+  };
 
   useEffect(() => {
     const fetchItem = async () => {
@@ -59,7 +77,7 @@ const NowAuction = () => {
 
             // Set the highest bidder's name and VAB
             if (sortedApplicants.length > 0) {
-              setTopBidder(sortedApplicants[0].user?.email);
+              setTopBidder(sortedApplicants[0].user);
               setMaxVab(sortedApplicants[0].vab);
             }
 
@@ -74,27 +92,14 @@ const NowAuction = () => {
       }
     };
     fetchItem();
-  }, [id, register?.access]);
+  }, [id, register?.access, eventSliceBool]);
 
   const handleAddVab = async () => {
-    if (addVab.vab <= 0) {
-      toast.error("Vab must be a positive number!");
-      return;
-    }
-    if (item?.boshlangich_narx > addVab.vab) {
-      toast.error(`Minimum vab ${item?.boshlangich_narx}!`);
-      return;
-    }
-    if (userData?.vab < addVab.vab) {
-      toast.error("Not enough vab!");
-      return;
-    }
-
     try {
       setAddVabLoading(true);
       const filterVab = applicants.find((c) => +c.user.id === addVab.user_id);
       if (filterVab?.user) {
-        //update vab
+        // Update vab
         const update = await ApiService.patchData(
           `/buyumusers/${filterVab?.buyumuser_id}`,
           {
@@ -103,39 +108,108 @@ const NowAuction = () => {
           register?.access
         );
         if (update) {
-          console.log(update, "update vab");
           toast.success("VAB updated successfully!");
           dispatch(eventSliceAction());
         }
-        return null;
-      }
-      //add vab
-      const res = await ApiService.postData(
-        `/buyumusers`,
-        addVab,
-        register?.access
-      );
-      console.log(res, "res");
-      if (res.id) {
-        const update = await ApiService.patchData(
-          `/buyum/${id}`,
-          { buyumusers: [...item.buyumusers, res.id] },
+      } else {
+        // Add vab
+        const res = await ApiService.postData(
+          `/buyumusers`,
+          addVab,
           register?.access
         );
-        console.log(update, "update vab");
-        if (update) {
-          toast.success("Successfully added vab!");
-          dispatch(eventSliceAction());
+        if (res.id) {
+          const update = await ApiService.patchData(
+            `/buyum/${id}`,
+            { buyumusers: [...item.buyumusers, res.id] },
+            register?.access
+          );
+          if (update) {
+            toast.success("Successfully added vab!");
+            dispatch(eventSliceAction());
+          }
         }
       }
     } catch (error) {
       toast.error("Failed to add vab!");
       console.log(error);
     } finally {
+      // Reset the input field
+      setAddVab({
+        vab: null,
+        buyum_id: id,
+        user_id: register?.user_id,
+      });
       setAddVabLoading(false);
     }
   };
-  console.log(applicants);
+
+  useEffect(() => {
+    const updateAuction = async () => {
+      try {
+        if (item?.end_time && getLocalISOString() > item.end_time) {
+          const auktsion = await ApiService.getData(
+            `/auktsion/${aukt_id}`,
+            register?.access
+          );
+          if (
+            auktsion.yutganlar
+              ? auktsion.yutganlar
+              : [].find((c) => +c.buyum_id === id)
+          ) {
+            return null;
+          }
+          console.log(auktsion);
+
+          if (auktsion) {
+            const winnerUser = {
+              user: topBidder,
+              narxi: maxVab,
+              buyum_id: id,
+            };
+            console.log(winnerUser);
+            const winner = applicants[0];
+            console.log(winner, "winner");
+
+            const res = await ApiService.patchData(
+              `/auktsion/${aukt_id}`,
+              {
+                yutganlar: [
+                  ...(auktsion.yutganlar ? auktsion.yutganlar : []),
+                  winnerUser
+                ],
+              },
+              register?.access
+            );
+
+            if (res) {
+              const updatedUser = await ApiService.patchData(
+                `/users/${winner.user.id}`,
+                { vab: winner.user.vab - winner.vab },
+                register?.access
+              );
+              toast.success("Auction updated with the winner!");
+              console.log(updatedUser);
+            }
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    console.log("Running updateAuction check...");
+    updateAuction();
+  }, [
+    item?.end_time,
+    topBidder,
+    maxVab,
+    id,
+    aukt_id,
+    register?.access,
+    applicants,
+  ]);
+
   return (
     <>
       {loading ? (
@@ -179,12 +253,18 @@ const NowAuction = () => {
                   </div>
 
                   <div className="text-red-400 bg-background p-2 rounded-md flex justify-start items-center gap-1">
-                    <h1 className="text-text-primary font-bold">Almost finished :</h1>
+                    <h1 className="text-text-primary font-bold">
+                      Almost finished :
+                    </h1>
                     {getLocalISOString() > item?.start_time && (
-                      <Countdown status={"for_finish"} eventTime={item.end_time} />
+                      <Countdown
+                        status={"for_finish"}
+                        eventTime={item.end_time}
+                      />
                     )}
                   </div>
                 </div>
+
                 <div className="overflow-x-auto col-span-2 max-sm:col-span-3 sm:col-span-3 lg:col-span-2 mb-2">
                   <table className="min-w-full bg-card shadow-sm overflow-hidden">
                     <thead>
@@ -214,15 +294,25 @@ const NowAuction = () => {
                           <div className="flex items-center">${maxVab}</div>
                         </td>
                         <td className="px-4 py-2 border-b border-hr-color text-green-600 font-bold">
-                          {topBidder}
+                          {topBidder?.email}
                         </td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
               </div>
+              {getLocalISOString() > item?.end_time && (
+                <section className="col-span-6 py-4">
+                  <Winner
+                    maxVab={maxVab}
+                    topBidder={topBidder?.email}
+                    winnerImg={item?.img || emptygrouplogo}
+                  />
+                </section>
+              )}
             </section>
-            <section className="overflow-x-auto p-4 max-sm:mb-10">
+
+            <section className="overflow-x-auto p-4 max-sm:mb-10 sm:pb-14">
               <h1 className="font-bold clamp3">Applicants</h1>
               <table className="min-w-full bg-card rounded-xl shadow-sm">
                 <thead>
@@ -270,17 +360,24 @@ const NowAuction = () => {
                     setAddVab({ ...addVab, vab: Number(e.target.value) || "" })
                   }
                   type="number"
-                  value={addVab?.vab || ""}
+                  value={addVab.vab}
                   className="shadow-btn_shadow bg-card w-full p-2 border rounded-md focus:outline-none border-border focus:border-primary"
                   placeholder="Enter your vab"
+                  disabled={getLocalISOString() > item?.end_time}
                 />
                 <div className="flex justify-end items-center">
                   <button
-                    disabled={addVabLoading || addVab?.vab <= 0}
-                    onClick={handleAddVab}
+                    disabled={
+                      addVabLoading ||
+                      addVab?.vab <= 0 ||
+                      getLocalISOString() > item?.end_time
+                    }
+                    onClick={handleAddVabModal}
                     className={`${
                       addVabLoading ||
-                      (addVab?.vab <= 0 ? "opacity-[0.7]" : "hover:bg-blue-700")
+                      (addVab?.vab <= 0 || getLocalISOString() > item?.end_time
+                        ? "opacity-[0.7]"
+                        : "hover:bg-blue-700")
                     } whitespace-nowrap w-full shadow-btn_shadow p-2 bg-blue-600 text-white rounded-md `}
                   >
                     {addVabLoading ? <SimpleLoading /> : "Add Vab"}
@@ -289,6 +386,11 @@ const NowAuction = () => {
               </div>
             </section>
           </main>
+          <ExitModal
+            isOpen={addVabModal}
+            handleClose={handleAddVabModal}
+            handleAddVab={handleAddVab}
+          />
         </div>
       )}
     </>
@@ -296,3 +398,51 @@ const NowAuction = () => {
 };
 
 export default NowAuction;
+
+function ExitModal({ isOpen, handleClose, handleAddVab }) {
+  const handleLogOut = () => {
+    handleAddVab();
+    handleClose();
+  };
+
+  return (
+    <>
+      <Dialog
+        open={isOpen}
+        as="div"
+        className="relative z-[998] focus:outline-none"
+        onClose={handleClose}
+      >
+        <div className="fixed inset-0 z-[999] w-screen overflow-y-auto bg-black/50">
+          <div className="flex min-h-full items-center justify-center p-4">
+            <DialogPanel className="w-full max-w-md rounded-xl bg-card p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0">
+              <DialogTitle
+                as="h3"
+                className="text-clamp2 font-medium text-text-primary"
+              >
+                Add VAB
+              </DialogTitle>
+              <p className="mt-2 text-sm/6 text-thin-color">
+                Are you sure you want to add this VAB?
+              </p>
+              <div className="mt-4 flex justify-between items-center gap-3">
+                <Button
+                  className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700"
+                  onClick={handleClose}
+                >
+                  No
+                </Button>
+                <Button
+                  className="inline-flex items-center gap-2 rounded-md bg-red-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-red-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700"
+                  onClick={handleLogOut}
+                >
+                  Yes
+                </Button>
+              </div>
+            </DialogPanel>
+          </div>
+        </div>
+      </Dialog>
+    </>
+  );
+}

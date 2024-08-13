@@ -10,9 +10,25 @@ module.exports = {
       fontFamily: "Arial , san-serif",
       fontSize: "",
       // colors: {
-      //
+      //asked:"#3498DB",
       // },
       colors: {
+        asked: {
+          DEFAULT: "#3498DB",
+          hover: "#2980B9",
+        },
+        expected: {
+          DEFAULT: "#E67E22",
+          hover: "#D35400",
+        },
+        finished: {
+          DEFAULT: "#2ECC71",
+          hover: "#27AE60",
+        },
+        done: {
+          DEFAULT: "#9B59B6",
+          hover: "#8E44AD",
+        },
         primary: "rgba(var(--primary))",
         "hover-card": "rgba(var(--hover-card))",
         "active-card": "rgba(var(--active-card))",
@@ -28,8 +44,8 @@ module.exports = {
         "cta-active": "rgba(var(--cta-active))",
         "cta-text": "rgba(var(--cta-text))",
 
-        "button-color":"rgba(var(--button-color))",
-        "hr-color":"rgba(var(--hr-color))",
+        "button-color": "rgba(var(--button-color))",
+        "hr-color": "rgba(var(--hr-color))",
         grape: "rgba(var(--grape))",
       },
     },

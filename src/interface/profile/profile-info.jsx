@@ -1,15 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BiEdit } from "react-icons/bi";
 import { useSelector } from "react-redux";
 import { coinimg, photoUrl } from "../../images";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import { FaPhoneAlt } from "react-icons/fa";
+import { ApiService } from "../../components/api.server";
 
 const ProfileInfo = ({ handleUpdateUser }) => {
+  const [tasks, setTasks] = useState([]);
+  const [tasksDone, setTasksDone] = useState([]);
   const { userData } = useSelector((state) => state.event);
-  console.log(userData);
+  const register = JSON.parse(localStorage.getItem("register"));
+  async function fetchData() {
+    try {
+      const res = await ApiService.getData("/tasks", register?.access);
+      console.log(res);
+      const filterTasks = res.filter((c) =>
+        c.user.find((u) => +u.user === userData?.id)
+      );
+      const doneTasks = filterTasks.filter((c) => c.status === "Done");
+
+      setTasksDone(doneTasks);
+      setTasks(filterTasks);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
-    <main className="bg-card rounded-[14px] w-full px-[24px] py-[18px] shadow-btn_shadow">
+    <main className="bg-card rounded-[14px] w-full px-[24px] py-[18px] shadow-btn_shadow sticky top-[88px] ">
       <section className=" flex flex-col gap-3">
         <div className="flex justify-between items-start">
           <img
@@ -41,23 +64,20 @@ const ProfileInfo = ({ handleUpdateUser }) => {
             <h1>{userData?.phone_number}</h1>
           </div>
           <div className="py-1.5 flex justify-between items-center gap-3 ">
-            <div className="w-32 cursor-pointer flex justify-between items-center gap-3 py-1.5 px-3 border-border border-[2px] rounded-[14px]">
-              <h1>{userData?.vab ? userData?.vab : 0}</h1>
-              <img src={coinimg} alt="" />
+            <div className="cursor-pointer flex justify-between items-center gap-3">
+              <strong>VAB:</strong>
+              <div className="flex justify-start items-center gap-2">
+                <h1>{userData?.vab ? userData?.vab : 0}</h1>
+                <img src={coinimg} alt="" className="w-5 h-5 object-contain" />
+              </div>
             </div>
-            <div className="cursor-pointer w-10 h-10 relative flex justify-center items-center">
-              <h1 className="absolute ">
-                {userData?.reyting ? userData?.reyting : 0}
-              </h1>
-              <CircularProgressbar
-                maxValue={10}
-                value={userData?.reyting ? userData?.reyting : 0}
-                styles={buildStyles({
-                  textColor: "#3F8CFF",
-                  pathColor: "#3F8CFF",
-                  trailColor: "rgba(0, 0, 0, 0.1)", // Ensure a valid color is provided
-                })}
-              />
+          </div>
+          <div className="py-1.5 flex justify-between items-center gap-3 ">
+            <div className="cursor-pointer flex justify-between items-center gap-3">
+              <strong>Reyting:</strong>
+              <div className="flex justify-start items-center gap-2">
+                <h1>{userData?.reyting ? userData.reyting : 0}</h1>
+              </div>
             </div>
           </div>
           <div className="flex justify-start items-center gap-2">

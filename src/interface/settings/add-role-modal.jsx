@@ -136,7 +136,6 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
   const filteredCategories = categories.filter(category =>
     category.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-console.log(role)
   return (
     <Transition appear show={isOpen}>
       <Dialog

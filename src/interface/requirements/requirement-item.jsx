@@ -57,7 +57,6 @@ const RequirementItem = () => {
         const usersInfo = await fetchUsers(res.user);
 
         setTasks({ ...res, users: usersInfo });
-        console.log(res);
       } catch (error) {
         console.log(error);
       } finally {
@@ -72,7 +71,6 @@ const RequirementItem = () => {
       try {
         const message = await ApiService.getData("/chat/", register.access);
         setChatMessageData(message);
-        console.log(message);
       } catch (error) {
         console.log(error);
       } finally {

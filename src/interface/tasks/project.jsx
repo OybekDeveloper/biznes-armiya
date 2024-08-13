@@ -60,7 +60,6 @@ const Project = () => {
         const usersInfo = await fetchUsers(res.user);
 
         setTasks({ ...res, users: usersInfo });
-        console.log(res);
       } catch (error) {
         console.log(error);
       } finally {
@@ -75,7 +74,6 @@ const Project = () => {
       try {
         const message = await ApiService.getData("/chat/", register.access);
         setChatMessageData(message);
-        console.log(message);
       } catch (error) {
         console.log(error);
       } finally {
@@ -87,7 +85,6 @@ const Project = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
   return (
     <>
       {loading ? (
@@ -107,12 +104,28 @@ const Project = () => {
               <section className="w-full flex justify-between items-center">
                 <h1 className="font-bold text-text-primary clamp2">Tasks</h1>
                 <div className="flex justify-start items-center gap-2">
-                  <button
-                    onClick={handleTakeOverModal}
-                    className="bg-green-500 hover:bg-green-600 transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
-                  >
-                    <h1>Complete the task</h1>
-                  </button>
+                  {tasks.status === "Asked" ? (
+                    <button
+                      onClick={handleTakeOverModal}
+                      className="bg-expected hover:bg-expected-hover transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
+                    >
+                      <h1>Take It</h1>
+                    </button>
+                  ) : tasks.status === "Expected" ? (
+                    <button
+                      onClick={handleTakeOverModal}
+                      className="bg-finished hover:bg-finished-hover transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
+                    >
+                      <h1>Complete the task</h1>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleTakeOverModal}
+                      className="bg-done hover:bg-done-hover transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
+                    >
+                      <h1>Done task</h1>
+                    </button>
+                  )}
                 </div>
               </section>
               <section className="relative grid max-lg:grid-cols-2 lg:grid-cols-8 gap-3 mt-2">
@@ -161,10 +174,12 @@ const Project = () => {
                         className={`
                  ${
                    tasks?.status === "Asked"
-                     ? "bg-yellow-500"
+                     ? "bg-asked"
                      : tasks?.status === "Expected"
-                     ? "bg-blue-500"
-                     : "bg-green-500"
+                     ? "bg-expected"
+                     : tasks?.status === "Finished"
+                     ? "bg-finished"
+                     : "bg-done"
                  } 
                  text-[12px] px-2 py-1 rounded-[14px]  text-white`}
                       >
@@ -182,14 +197,18 @@ const Project = () => {
                   </div>
                 </div>
                 {/* Project CHat */}
-                <div className="max-lg:col-span-2 lg:col-span-5 bg-card rounded-[24px] p-3 sm:p-[24px] flex flex-col gap-4">
+                <div className="relative max-lg:col-span-2 lg:col-span-5 bg-card rounded-[24px] p-3 sm:p-[24px] flex flex-col gap-4">
+                  {tasks?.status === "Asked" && (
+                    <div className="w-full h-full z-20 absolute top-0 left-0 backdrop-blur-sm"></div>
+                  )}
                   {/* Chat section */}
                   <div className="chat-back relative flex justify-between flex-col h-full w-full gap-2">
                     <ChatMessage
+                      status={tasks.status}
                       chatMessageData={chatMessageData}
                       task_id={id}
                     />
-                    <SendMessage task_id={id} />
+                    <SendMessage status={tasks.status} task_id={id} />
                   </div>
                 </div>
               </section>
@@ -209,7 +228,7 @@ const Project = () => {
         </>
       )}
       <TakeOverUser
-        status="done_task"
+        status={tasks?.status}
         item={tasks}
         isOpen={takeOverModal}
         handleClose={handleTakeOverModal}

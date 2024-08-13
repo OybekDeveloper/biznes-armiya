@@ -33,7 +33,6 @@ const AddRole = () => {
     const fetchData = async () => {
       try {
         const res = await ApiService.getData("/role", register?.access);
-        console.log(res);
         setRoles(res);
       } catch (error) {
         console.log(error);

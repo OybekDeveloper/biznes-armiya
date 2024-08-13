@@ -17,7 +17,7 @@ const filterData = [
   {
     id: 3,
     title: "Finished",
-    status: "Done",
+    status: "Finished",
   },
 ];
 

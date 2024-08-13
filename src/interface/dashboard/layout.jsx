@@ -32,7 +32,6 @@ const Dashboard = () => {
           `/users/${register?.user_id}`,
           register?.access
         );
-        console.log(user, "user");
         setNewsList(res);
         setGroupData(group);
         setLoading(false);

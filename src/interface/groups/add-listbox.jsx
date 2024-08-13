@@ -33,9 +33,7 @@ export default function AddListbox({ data, handleChange, index, newUsers }) {
       handleChange(event);
     }
   }, [selected]);
-  if (newUsers) {
-    console.log(newUsers);
-  }
+
   const filteredPeople =
     query === ""
       ? data

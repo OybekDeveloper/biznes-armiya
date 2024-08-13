@@ -25,7 +25,6 @@ import {
     const handleSubmit = (e) => {
       e.preventDefault();
       const newError = {};
-      console.log(formData);
       const register = JSON.parse(localStorage.getItem("register"));
   
       const groupFetch = async () => {
@@ -38,7 +37,6 @@ import {
           );
   
           toast.success("Attachment added successfully");
-          console.log(res);
           handleClose();
           setFormData({
             name: "",

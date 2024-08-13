@@ -50,7 +50,6 @@ const News = () => {
     };
     fetchNews();
   }, [isModalOpen, delModal, eventSliceBool]);
-  console.log(newsList);
   return (
     <>
       {loading ? (

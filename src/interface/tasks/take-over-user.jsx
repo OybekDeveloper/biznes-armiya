@@ -14,11 +14,53 @@ import { useDispatch } from "react-redux";
 import { eventSliceAction } from "../../reducer/event";
 
 export default function TakeOverUser({ isOpen, handleClose, item, status }) {
-  console.log(item);
   const register = JSON.parse(localStorage.getItem("register"));
 
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+
+  const handleAddVabUsers = async (item) => {
+    try {
+      await Promise.all(
+        item.users.map(async (c) => {
+          const vabPlus = item.user.find((d) => +d.user === c.id);
+          if (vabPlus) {
+            await ApiService.patchData(
+              `/users/${c.id}`,
+              {
+                vab: +c.vab + +vabPlus.vab,
+              },
+              register?.access
+            );
+          }
+        })
+      );
+
+      dispatch(eventSliceAction());
+      toast.success(
+        status === "take_over"
+          ? "Task mastered successfully!"
+          : "Task successfully finished!!!",
+        {
+          style: {
+            backgroundColor: "green",
+            border: "1px solid green",
+            padding: "16px",
+            color: "#fff",
+          },
+          position: "right-top",
+          iconTheme: {
+            primary: "#fff",
+            secondary: "green",
+          },
+        }
+      );
+      handleClose();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleDelete = () => {
     const deleteFetch = async () => {
       setLoading(true);
@@ -32,8 +74,15 @@ export default function TakeOverUser({ isOpen, handleClose, item, status }) {
             vab: item.vab,
           },
         ],
+        group_id: 1,
       };
-      const doneTask = {
+      const finishedTask = {
+        definition: item.definition,
+        name: item.name,
+        status: "Finished",
+        user: item.user,
+      };
+      const DoneTasks = {
         definition: item.definition,
         name: item.name,
         status: "Done",
@@ -42,9 +91,17 @@ export default function TakeOverUser({ isOpen, handleClose, item, status }) {
       try {
         await ApiService.putData(
           `/tasks/${item.id}`,
-          status === "take_over" ? takeOver : doneTask,
+          status === "Asked"
+            ? takeOver
+            : status === "Expected"
+            ? finishedTask
+            : DoneTasks,
           register?.access
         );
+        if (status === "Finished") {
+          await handleAddVabUsers(item);
+          return;
+        }
         dispatch(eventSliceAction());
         toast.success(
           status === "take_over"
@@ -96,13 +153,18 @@ export default function TakeOverUser({ isOpen, handleClose, item, status }) {
                   as="h3"
                   className="text-clamp2 font-medium text-text-primary"
                 >
-                  {status === "take_over"
-                    ? "Accepting the task"
-                    : "Finished task!!!"}
+                  {status === "Asked"
+                    ? "Mastering the task"
+                    : status === "Expected"
+                    ? "Complete the task"
+                    : "Confirmation of completion"}
                 </DialogTitle>
                 <p className="mt-2 text-sm/6 text-thin-color">
-                {status === "take_over"?"Do you really want to accept this task?":"Do you really want to finishing this task?"}
-                  
+                  {status === "Asked"
+                    ? "Do you really want to take this task all to yourself?"
+                    : status === "Expected"
+                    ? "Do you sure you want to complete the task?"
+                    : "Are you sure you have completed the task?"}
                 </p>
                 <div className="mt-4 flex justify-between items-center gap-3">
                   <Button

@@ -25,6 +25,12 @@ const AuktionHistory = React.lazy(() =>
 );
 //checklist
 const CheckList = React.lazy(() => import("./interface/checklist/layout"));
+const CheckListItem = React.lazy(() =>
+  import("./interface/checklist/check-list")
+);
+const CheckListHistory= React.lazy(() =>
+  import("./interface/checklist/check-list-history")
+);
 //home work
 const Homework = React.lazy(() => import("./interface/tasks/layout"));
 const Project = React.lazy(() => import("./interface/tasks/project"));
@@ -81,11 +87,8 @@ const App = () => {
     }
   }, [register, pathname]);
 
-
   useEffect(() => {
-    const socket = new WebSocket(
-      "wss://biznes-armiya-api.uz/ws/chat/"
-    );
+    const socket = new WebSocket("wss://biznes-armiya-api.uz/ws/chat/");
 
     socket.onopen = () => {
       console.log("WebSocket connection established");
@@ -187,7 +190,7 @@ const App = () => {
               }
             />
             <Route
-              path="/auktsion-item/:id"
+              path="/auktsion-item/:id/:aukt_id"
               element={
                 <Suspense fallback={<Loader1 />}>
                   <AuktionSelect />
@@ -225,6 +228,22 @@ const App = () => {
               element={
                 <Suspense fallback={<Loader1 />}>
                   <CheckList />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/checklist/:id"
+              element={
+                <Suspense fallback={<Loader1 />}>
+                  <CheckListItem />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/checklist-history"
+              element={
+                <Suspense fallback={<Loader1 />}>
+                  <CheckListHistory />
                 </Suspense>
               }
             />

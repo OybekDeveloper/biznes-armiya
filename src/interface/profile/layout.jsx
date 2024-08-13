@@ -16,7 +16,7 @@ import MyGroup from "./my-group";
 
 const filterProject = [
   {
-    id: 3,
+    id: 1,
     title: "Tasks",
   },
   {
@@ -39,7 +39,7 @@ const Profile = () => {
       //   return <Projects />;
       case 2:
         return <MyGroup />;
-      case 3:
+      case 1:
         return <MyTasks />;
       default:
         return;
@@ -58,7 +58,7 @@ const Profile = () => {
           register?.access
         );
         const role = await ApiService.getData(
-          `/role/${register?.role_id ? register?.role_id : register?.role}`,
+          `/role/${res?.role}`,
           register?.access
         );
         dispatch(userDetailSlice({ ...res, role: role }));
@@ -111,7 +111,6 @@ const Profile = () => {
                   </button>
                 ))}
               </div>
-              <div className="">filters</div>
             </div>
             <div className="grid grid-cols-1 gap-[15px]">
               {activeProfileDetails(activeTab)}

@@ -84,7 +84,6 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
         newError[key] = `${key} field is required`;
       }
     });
-    console.log(newUsers);
     newUsers.forEach((userObj) => {
       if (
         userObj.user === undefined ||
@@ -92,7 +91,6 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
         userObj.vab === undefined ||
         userObj.vab === ""
       ) {
-        console.log("error blaaa");
         newError["users"] = "Users field is required";
       }
     });
@@ -191,7 +189,6 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
     }
   }, [updateItem]);
 
-  console.log(formData);
 
   return (
     <Transition appear show={isOpen}>

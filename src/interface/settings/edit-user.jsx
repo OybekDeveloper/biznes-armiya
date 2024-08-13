@@ -69,7 +69,6 @@ export default function AddUser({ isOpen, handleClose }) {
     setLoading(true);
     const fetchData = async () => {
       const register = JSON.parse(localStorage.getItem("register"));
-      console.log(formData);
       try {
         const formD = new FormData();
         formD.append("email", formData.email);
@@ -142,7 +141,6 @@ export default function AddUser({ isOpen, handleClose }) {
     });
   }, [userData]);
 
-  console.log(formData, "edit profile");
   return (
     <>
       <Transition appear show={isOpen}>

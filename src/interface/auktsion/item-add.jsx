@@ -79,7 +79,6 @@ export default function AddItemModal({ isOpen, handleClose, pendingAuction }) {
         );
         if (res.id) {
           const updatedBuyumlar = [...(pendingAuction?.buyumlar || []), res.id];
-          console.log(updatedBuyumlar, "Updated auction data");
           const newFormData = new FormData();
 
           const res1 = await ApiService.putData(
@@ -107,7 +106,6 @@ export default function AddItemModal({ isOpen, handleClose, pendingAuction }) {
     };
     AddAuktsion();
   };
-  console.log(pendingAuction);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -129,7 +127,6 @@ export default function AddItemModal({ isOpen, handleClose, pendingAuction }) {
       img: file,
     });
   };
-  console.log(formData);
 
   return (
     <Transition appear show={isOpen}>

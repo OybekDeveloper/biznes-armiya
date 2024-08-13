@@ -13,13 +13,13 @@ import { FiSearch } from "react-icons/fi";
 import NotificationModal from "./notification-modal";
 import { ApiService } from "../api.server";
 import { useDispatch, useSelector } from "react-redux";
-import { userDetailSlice } from "../../reducer/event";
+import { searchSlice, userDetailSlice } from "../../reducer/event";
 import ExitModal from "../exit-modal";
 import "./index.css";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { eventSliceBool ,userData} = useSelector((state) => state.event);
+  const { eventSliceBool, userData } = useSelector((state) => state.event);
   const register = JSON.parse(localStorage.getItem("register"));
   const selectedTheme = localStorage.getItem("theme");
   const { pathname } = useLocation();
@@ -30,7 +30,6 @@ const Navbar = () => {
   const [isSearchActive, setIsSearchActive] = useState(false); // New state for search expansion
   const mobileNavRef = useRef(null);
   const dispatch = useDispatch();
-  console.log(userData)
   const handleOpenNotification = () => {
     setIsNotif(!isNotif);
   };
@@ -92,12 +91,11 @@ const Navbar = () => {
     }
 
     return () => {
-      document.removeEventListener("mousedown",  handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
 
   useEffect(() => {
-    console.log(register);
     if (!register && pathname !== "/register") navigate("/login");
     const fetchUserData = async () => {
       try {
@@ -106,10 +104,30 @@ const Navbar = () => {
           register?.access
         );
         const role = await ApiService.getData(
-          `/role/${register?.role_id ? register?.role_id : register?.role}`,
+          `/role/${res?.role}`,
           register?.access
         );
-        dispatch(userDetailSlice({ ...res, role: role }));
+        const ress = await ApiService.getData("/tasks", register?.access);
+        console.log(ress);
+        const filterTasks = ress.filter((c) =>
+          c.user.find((u) => +u.user === userData?.id)
+        );
+        const doneTasks = filterTasks.filter((c) => c.status === "Done");
+        const reyting = (doneTasks.length / ress.length) * 10;
+        await ApiService.patchData(
+          `/users/${register?.user_id}`,
+          {
+            reyting: reyting.toFixed(1),
+          },
+          register?.access
+        );
+        console.log(reyting, reyting.toFixed(1));
+        dispatch(
+          userDetailSlice({
+            ...res,
+            role: role,
+          })
+        );
       } catch (error) {
         if (error?.response?.status === 401) {
           localStorage.removeItem("register");
@@ -135,6 +153,7 @@ const Navbar = () => {
         <div className="w-full relative col-span-1 flex justify-start items-center">
           <FiSearch className="text-xl absolute left-[15px]" />
           <input
+            onChange={(e) => dispatch(searchSlice(e.target.value))}
             type="text"
             className="w-full py-[13px] pl-[50px] outline-none rounded-[14px] shadow-btn_shadow bg-card"
           />
@@ -171,7 +190,7 @@ const Navbar = () => {
       {/* mobile */}
       <div
         className={`${
-          (pathname === "/login" || pathname === "/register") &&"hidden"
+          (pathname === "/login" || pathname === "/register") && "hidden"
         } md:hidden w-full h-[88px] sticky top-0 left-0 flex items-center py-[10px] z-[700]`}
       >
         <nav className="bg-card w-full h-full rounded-[24px] px-[12px] py-[8px] flex justify-between">
@@ -179,6 +198,7 @@ const Navbar = () => {
             <div className="flex w-full items-center">
               <FiSearch className="text-xl text-text-primary ml-2" />
               <input
+                onChange={(e) => dispatch(searchSlice(e.target.value))}
                 type="text"
                 className="w-full py-[13px] px-[10px] outline-none rounded-[14px] shadow-btn_shadow bg-card"
                 placeholder="Search..."

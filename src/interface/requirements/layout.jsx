@@ -51,7 +51,6 @@ const Requirements = () => {
     try {
       const register = JSON.parse(localStorage.getItem("register"));
       const res = await ApiService.getData("/talablar", register?.access);
-      console.log(res);
       const roles = await ApiService.getData("/role", register?.access);
 
       const filterReq = await Promise.all(
@@ -68,7 +67,6 @@ const Requirements = () => {
         })
       );
 
-      console.log(filterReq, "req");
       setRoles(roles);
       setRequirement(filterReq);
     } catch (error) {
@@ -87,8 +85,6 @@ const Requirements = () => {
       setUpdateReq();
     }
   }, [isActive]);
-  console.log(requirement, "filter data");
-  console.log(roles, "roles");
   return (
     <>
       {loading ? (

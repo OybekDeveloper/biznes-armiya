@@ -58,7 +58,6 @@ const Auktsion = () => {
   };
 
   const navigate = useNavigate();
-  console.log(filteredAuktsion)
   return (
     <>
       {loading ? (

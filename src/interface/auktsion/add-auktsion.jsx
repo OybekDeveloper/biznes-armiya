@@ -87,7 +87,6 @@ export default function AddAuktsion({ isOpen, handleClose }) {
       try {
         const res = await ApiService.getData("/buyum", register?.access);
         setItems(res);
-        console.log(res);
       } catch (error) {
         console.log(error);
       }
@@ -95,7 +94,6 @@ export default function AddAuktsion({ isOpen, handleClose }) {
     fetchItems();
   }, []);
 
-  console.log(formData);
 
   return (
     <Transition appear show={isOpen}>

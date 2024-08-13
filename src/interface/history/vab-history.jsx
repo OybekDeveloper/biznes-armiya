@@ -99,8 +99,6 @@ export default function VabHistory({ isOpen, handleClose }) {
         }
 
         // Check for NaN values and log the data for debugging
-        console.log("Series Data:", seriesData);
-        console.log("Categories Data:", categoriesData);
 
         // Filter out any NaN values from the data
         seriesData = seriesData.filter((value) => !isNaN(value));
@@ -118,7 +116,6 @@ export default function VabHistory({ isOpen, handleClose }) {
     };
     fetchData();
   }, [filter, addVab]);
-  console.log(role);
   return (
     <>
       <Transition appear show={isOpen}>

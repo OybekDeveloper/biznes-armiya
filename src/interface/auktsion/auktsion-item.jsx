@@ -29,6 +29,7 @@ const Auktsion = () => {
           `/auktsion/${id}`,
           register?.access
         );
+        console.log(auktsion);
         if (!items && !auktsion) {
           return;
         }
@@ -92,7 +93,7 @@ const Auktsion = () => {
           </section>
           <section className="">
             <div className="col-span-2">
-              <PandingAuction allItems={allItems} id={id} />
+              <PandingAuction auktsionId={id} allItems={allItems} id={id} />
             </div>
           </section>
           <AddItemModal

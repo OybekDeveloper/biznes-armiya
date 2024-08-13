@@ -17,6 +17,7 @@ export const initialState = {
   registerSuccessData: {},
   groupEvent: false,
   eventSliceBool: false,
+  searchMessage:""
 };
 
 export const eventSlice = createSlice({
@@ -92,6 +93,12 @@ export const eventSlice = createSlice({
         eventSliceBool: !state.eventSliceBool,
       };
     },
+    searchSlice:(state,action)=>{
+      return{
+        ...state,
+        searchMessage:action.payload
+      }
+    }
   },
 });
 
@@ -108,6 +115,7 @@ export const {
   resetRegisterData,
   groupEventSlice,
   eventSliceAction,
+  searchSlice
 } = eventSlice.actions;
 
 export default eventSlice.reducer;

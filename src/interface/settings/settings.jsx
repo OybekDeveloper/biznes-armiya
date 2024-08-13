@@ -41,7 +41,7 @@ const Settings = () => {
           register?.access
         );
         const role = await ApiService.getData(
-          `/role/${register?.role_id ? register?.role_id : register?.role}`,
+          `/role/${res?.role}`,
           register?.access
         );
         dispatch(userDetailSlice({ ...res, role: role }));

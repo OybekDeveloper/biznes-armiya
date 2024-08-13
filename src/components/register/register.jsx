@@ -73,13 +73,15 @@ const Register = () => {
   };
 
   const fetchVerifyEmail = async (code) => {
-    console.log(registerData);
     dispatch(Action.registerLoadingSlice(true));
     try {
-      await ApiService.postRegisterData("/verify-email", {
+      const res =await ApiService.postRegisterData("/verify-email", {
         code: code,
         email: registerData?.email,
       });
+      // await ApiService.patchData(`/users/${registerData?.id}`,{
+      //   group_id:
+      // })
       setCurrentStep(3);
       localStorage.setItem("register", JSON.stringify(registerSuccessData));
     } catch (error) {

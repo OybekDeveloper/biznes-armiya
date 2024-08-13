@@ -29,7 +29,6 @@ export default function EditGroup({ isOpen, handleClose, group }) {
     shiori: group?.shiori || "",
     group_photo: group?.group_photo || "",
   });
-  console.log(formData)
   const fileInputRef = useRef(null);
 
   const handleFileInputClick = () => {

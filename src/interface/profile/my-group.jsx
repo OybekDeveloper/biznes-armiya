@@ -11,7 +11,6 @@ const [groups,setGroups]=useState([])
   async function getGroup(){
     try {
       const res =await ApiService.getData("/group",register?.access)
-      console.log(res)
       setGroups(res)
     } catch (error) {
       console.error("Error fetching data:", error);

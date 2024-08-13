@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { eventSliceAction } from "../../reducer/event";
 import SimpleLoading from "../../components/loader/simple-loading";
 
-const SendMessage = ({ task_id }) => {
+const SendMessage = ({ task_id, status }) => {
   const dispatch = useDispatch();
   const register = JSON.parse(localStorage.getItem("register"));
   const [isOpenEmoji, setIsOpenEmoji] = useState(false);
@@ -32,10 +32,16 @@ const SendMessage = ({ task_id }) => {
   };
 
   const handleSendMessage = () => {
+    if (status === "Asked") {
+      return null;
+    }
     if (formData.message === "" && !formData.file) {
       return;
     }
     const sendMessage = async () => {
+      if (status === "Asked") {
+        return null;
+      }
       try {
         const newFormData = new FormData();
         if (formData.file) newFormData.append("file", formData.file);
@@ -113,6 +119,7 @@ const SendMessage = ({ task_id }) => {
           onKeyDown={handleKeyDown} // Add this line
           className="w-full h-full bg-background-secondary outline-none rounded-l-[12px] pl-[40px] pr-[40px]"
           type="text"
+          disabled={status === "Asked" && true}
         />
         <div
           className="absolute top-0 left-0 cursor-pointer p-3 rounded-[14px]"

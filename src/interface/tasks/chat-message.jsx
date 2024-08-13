@@ -5,7 +5,7 @@ import { chatback, photoUrl } from "../../images";
 import OpenFile from "../../components/open-file";
 import Lottie from "react-lottie";
 
-const ChatMessage = ({ chatMessageData, task_id }) => {
+const ChatMessage = ({ chatMessageData, task_id ,status}) => {
   const register = JSON.parse(localStorage.getItem("register"));
   const lastMessageRef = useRef();
   const { userData } = useSelector((state) => state.event);

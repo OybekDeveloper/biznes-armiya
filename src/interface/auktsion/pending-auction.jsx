@@ -5,8 +5,7 @@ import Countdown from "../../components/count-down";
 import { ApiService } from "../../components/api.server";
 import { NavLink } from "react-router-dom";
 
-const PandingAuction = ({ allItems, loading, id }) => {
-  console.log(allItems);
+const PandingAuction = ({ allItems, loading, id ,auktsionId}) => {
   return (
     <>
       {allItems.length > 0 ? (
@@ -14,7 +13,7 @@ const PandingAuction = ({ allItems, loading, id }) => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 xl:grid-cols-3 2xl:grid-cols-4">
             {allItems.map((item, idx) => (
               <NavLink
-                to={`/auktsion-item/${item?.id}`}
+                to={`/auktsion-item/${item?.id}/${auktsionId}`}
                 key={idx}
                 className="cursor-pointer border-border border grid grid-cols-2 gap-3 items-start hover:bg-background-secondary rounded-md p-4"
               >

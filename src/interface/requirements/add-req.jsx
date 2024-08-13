@@ -38,7 +38,6 @@ export default function AddTasks({ isOpen, handleClose, roles }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const newError = {};
-    console.log(formData);
     const register = JSON.parse(localStorage.getItem("register"));
 
     const groupFetch = async () => {
@@ -61,7 +60,6 @@ export default function AddTasks({ isOpen, handleClose, roles }) {
           );
           if (req) {
             toast.success("Group added successfully");
-            console.log(res);
             handleClose();
             setFormData({
               name: "",
@@ -126,7 +124,6 @@ export default function AddTasks({ isOpen, handleClose, roles }) {
       },
     ]);
   };
-  console.log(roles);
 
   const handleDeleteUser = (index) => {
     const updatedUsers = newUsers.filter((_, i) => i !== index);
@@ -162,9 +159,7 @@ export default function AddTasks({ isOpen, handleClose, roles }) {
   useEffect(() => {
     setFormData({ ...formData, users: newUsers });
   }, [newUsers]);
-  console.log(formData);
 
-  console.log(errorMessage);
   return (
     <Transition appear show={isOpen}>
       <Dialog
