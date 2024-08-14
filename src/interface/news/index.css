@@ -1,0 +1,33 @@
+/* From Uiverse.io by andrew-demchenk0 */
+.container1 input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.container1 {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+.svg-like {
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 50px;
+  width: 50px;
+  transition: all 0.3s;
+  fill: #666;
+}
+
+.svg-like:hover {
+  transform: scale(1.1) rotate(-10deg);
+}
+
+.container1 input:checked ~ .svg-like {
+  fill: #2196f3;
+}

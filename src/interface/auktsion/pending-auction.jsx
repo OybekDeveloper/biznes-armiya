@@ -10,7 +10,7 @@ const PandingAuction = ({ allItems, loading, id ,auktsionId}) => {
     <>
       {allItems.length > 0 ? (
         <main className="w-full bg-card rounded-xl h-full shadow-btn_shadow p-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 xl:grid-cols-3 2xl:grid-cols-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 xl:grid-cols-2 3xl:grid-cols-3">
             {allItems.map((item, idx) => (
               <NavLink
                 to={`/auktsion-item/${item?.id}/${auktsionId}`}

@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { eventSliceAction } from "../../reducer/event";
 import SimpleLoading from "../../components/loader/simple-loading";
 
-const SendMessage = ({ task_id, status }) => {
+const SendMessage = ({ task_id, req_task_id, status }) => {
   const dispatch = useDispatch();
   const register = JSON.parse(localStorage.getItem("register"));
   const [isOpenEmoji, setIsOpenEmoji] = useState(false);
@@ -17,6 +17,7 @@ const SendMessage = ({ task_id, status }) => {
     file: "",
     message: "",
     task_id: task_id,
+    req_task_id: req_task_id,
     user_id: register.user_id,
   });
   const [loading, setLoading] = useState(false);
@@ -57,7 +58,12 @@ const SendMessage = ({ task_id, status }) => {
         } else {
           newFormData.append("message", formData.message);
         }
-        newFormData.append("task_id", formData.task_id);
+        if (formData.task_id) {
+          newFormData.append("task_id", formData.task_id);
+        }
+        if (formData.req_task_id) {
+          newFormData.append("req_task_id", formData.req_task_id);
+        }
         newFormData.append("user_id", formData.user_id);
 
         setLoading(true);

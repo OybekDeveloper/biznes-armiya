@@ -20,7 +20,7 @@ export default function AddAuktsion({ isOpen, handleClose }) {
     name: "",
     kuni: "",
     vab_id: 1,
-    yutganlar: "1",
+    yutganlar: null,
     buyumlar: [],
   });
   const [errorMessage, setErrorMessage] = useState({});
@@ -39,11 +39,11 @@ export default function AddAuktsion({ isOpen, handleClose }) {
     e.preventDefault();
     const newErrors = {};
     Object.keys(formData).forEach((key) => {
-      if (!formData[key]) {
-        newErrors[key] = `This field is required`;
+      if (!formData["name"]) {
+        newErrors["name"] = `This field is required`;
       }
-      if (!formData["buyumlar"].length > 0) {
-        newErrors[key] = `This field is required`;
+      if (!formData["kuni"]) {
+        newErrors["kuni"] = `This field is required`;
       }
     });
     if (Object.keys(newErrors).length > 0) {
@@ -93,7 +93,6 @@ export default function AddAuktsion({ isOpen, handleClose }) {
     };
     fetchItems();
   }, []);
-
 
   return (
     <Transition appear show={isOpen}>

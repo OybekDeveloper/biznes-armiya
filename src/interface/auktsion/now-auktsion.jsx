@@ -12,6 +12,7 @@ import SimpleLoading from "../../components/loader/simple-loading";
 import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { eventSliceAction } from "../../reducer/event";
 import Winner from "./winner";
+import { IoTime } from "react-icons/io5";
 
 const NowAuction = () => {
   const { id, aukt_id } = useParams();
@@ -235,26 +236,39 @@ const NowAuction = () => {
                 <div className="col-span-1 max-sm:col-span-3 sm:col-span-2 lg:col-span-1 flex justify-between flex-col w-full h-full gap-2">
                   <h1 className="text-xl font-bold">{item?.name}</h1>
                   <div className="w-full h-full">
-                    <div className="w-[200px] max-sm:w-1/2 inline-flex justify-between gap-2 p-2 bg-green-400 rounded-md m-1">
+                    <div className="w-full inline-flex justify-between gap-2 p-2 bg-green-400 rounded-md m-1">
                       <p className="font-bold text-white">Start</p>
-                      <div className="text-white text-[12px] flex justify-start gap-2 items-center">
+                      <div className="text-white text-[12px] flex justify-start gap-1 items-center">
                         <FaCalendar />
                         {item?.start_time?.split("T")[0]}
+                        <IoTime />
+                        {item?.start_time?.split("T")[1].slice(0, 5)}
                       </div>
                     </div>
-                    <div className="w-[200px] max-sm:w-1/2 inline-flex justify-between gap-2 p-2 bg-red-400 rounded-md m-1">
+                    <div className="w-full inline-flex justify-between gap-2 p-2 bg-red-400 rounded-md m-1">
                       <p className="font-bold text-white">End</p>
-                      <div className="text-white text-[12px] flex justify-start gap-2 items-center">
+                      <div className="text-white text-[12px] flex justify-start gap-1 items-center">
                         <FaCalendar />
                         {item?.end_time?.split("T")[0]}
+                        <IoTime />
+                        {item?.end_time?.split("T")[1].slice(0, 5)}
                       </div>
                     </div>
                   </div>
 
                   <div className="text-red-400 bg-background p-2 rounded-md flex justify-start items-center gap-1">
-                    <h1 className="text-text-primary font-bold">
-                      Almost finished :
-                    </h1>
+                    {getLocalISOString() < item.start_time ? (
+                      <div>
+                        <h1 className="text-text-primary font-bold">
+                          It hasn't started yet{" "}
+                        </h1>
+                        <Countdown eventTime={item.start_time} />
+                      </div>
+                    ) : (
+                      <h1 className="text-text-primary font-bold">
+                        Almost finished :
+                      </h1>
+                    )}
                     {getLocalISOString() > item?.start_time && (
                       <Countdown
                         status={"for_finish"}
@@ -362,14 +376,18 @@ const NowAuction = () => {
                   value={addVab.vab}
                   className="shadow-btn_shadow bg-card w-full p-2 border rounded-md focus:outline-none border-border focus:border-primary"
                   placeholder="Enter your vab"
-                  disabled={getLocalISOString() > item?.end_time}
+                  disabled={
+                    getLocalISOString() > item?.end_time ||
+                    getLocalISOString() < item.start_time
+                  }
                 />
                 <div className="flex justify-end items-center">
                   <button
                     disabled={
                       addVabLoading ||
                       addVab?.vab <= 0 ||
-                      getLocalISOString() > item?.end_time
+                      getLocalISOString() > item?.end_time ||
+                      getLocalISOString() < item.start_time
                     }
                     onClick={handleAddVabModal}
                     className={`${

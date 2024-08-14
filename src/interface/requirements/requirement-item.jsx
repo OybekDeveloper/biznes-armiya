@@ -231,9 +231,9 @@ const RequirementItem = () => {
                     <ChatMessage
                       status={tasks?.status}
                       chatMessageData={chatMessageData}
-                      task_id={id}
+                      req_task_id={id}
                     />
-                    <SendMessage status={tasks.status} task_id={id} />
+                    <SendMessage status={tasks.status} req_task_id={id} />
                   </div>
                 </div>
               </section>

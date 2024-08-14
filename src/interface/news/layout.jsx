@@ -4,7 +4,7 @@ import AddNews from "./add-news";
 import { ApiService } from "../../components/api.server";
 import { NavLink } from "react-router-dom";
 import Loader1 from "../../components/loader/loader1";
-import { dataempty } from "../../images";
+import { dataempty, photoUrl } from "../../images";
 import { useSelector } from "react-redux";
 import {
   Menu,
@@ -17,6 +17,7 @@ import { CiMenuKebab } from "react-icons/ci";
 import { MdModeEdit } from "react-icons/md";
 import { FaRegTrashAlt } from "react-icons/fa";
 import DeleteModal from "./delete-news";
+import { AiOutlineLike } from "react-icons/ai";
 
 const News = () => {
   const { userData, eventSliceBool } = useSelector((state) => state.event);
@@ -38,18 +39,52 @@ const News = () => {
 
   useEffect(() => {
     const register = JSON.parse(localStorage.getItem("register"));
+
+    const fetchUsers = async (userList) => {
+      try {
+        const dataPromises = userList.map(async (user) => {
+          try {
+            const res = await ApiService.getData(
+              `/users/${user}`,
+              register?.access
+            );
+            return res;
+          } catch (error) {
+            console.error(`Error fetching data for user ${user?.user}:`, error);
+            return null;
+          }
+        });
+
+        const data = await Promise.all(dataPromises);
+        return data.filter((info) => info !== null);
+      } catch (error) {
+        console.error("Error in fetchUsers:", error);
+        return [];
+      }
+    };
+
     const fetchNews = async () => {
       try {
         const res = await ApiService.getData("/yangiliklar", register?.access);
-        setNewsList(res);
+        console.log(res);
+        const newsWithUsers = await Promise.all(
+          res.map(async (newsItem) => {
+            console.log(newsItem, "news");
+            const usersInfo = await fetchUsers(newsItem?.user_id);
+            return { ...newsItem, user_id: usersInfo };
+          })
+        );
+        setNewsList(newsWithUsers);
       } catch (error) {
         console.error("Error fetching news:", error);
       } finally {
         setLoading(false);
       }
     };
+
     fetchNews();
   }, [isModalOpen, delModal, eventSliceBool]);
+  console.log(newsList);
   return (
     <>
       {loading ? (
@@ -94,9 +129,34 @@ const News = () => {
                   >
                     <NavLink
                       to={`/news/${item?.id}`}
-                      className="p-4 mb-2 cursor-pointer w-full h-full rounded-md whitespace-normal break-words"
+                      className="px-4 py-2 mb-2 cursor-pointer w-full h-full rounded-md whitespace-normal break-words"
                     >
                       {item?.title}
+                      <div className="flex justify-end items-center gap-3 mt-2">
+                        <div className="flex justify-start items-center gap-1">
+                          <h1 className="font-[500]">{item.like}</h1>
+                          <AiOutlineLike className="text-xl" />
+                        </div>
+                        <div>
+                          {item?.user_id?.slice(0, 3)?.map((user, idx) => (
+                            <img
+                              key={idx}
+                              className="inline-flex object-cover  h-6 w-6 rounded-full ring-2 ring-white"
+                              src={
+                                user?.profile_photo
+                                  ? user?.profile_photo
+                                  : photoUrl
+                              }
+                              alt=""
+                            />
+                          ))}
+                          {newsList?.user_id?.length > 3 && (
+                            <div className="inline-flex h-6 w-6 rounded-full ring-2 ring-white bg-blue-300 text-white text-sm text-center font-bold justify-center items-center">
+                              <h1>{newsList?.user_id?.length - 3}+</h1>
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </NavLink>
                     {userData?.role?.yang_edit &&
                       userData?.role?.yang_delete && (

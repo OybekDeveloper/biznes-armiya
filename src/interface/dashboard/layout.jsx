@@ -5,6 +5,7 @@ import {
   dataempty,
   emptygrouplogo,
   newsempty,
+  photoUrl,
   time,
   yellowarrow,
 } from "../../images";
@@ -15,6 +16,7 @@ import { FaArrowDown } from "react-icons/fa";
 import { ApiService } from "../../components/api.server";
 import Loader1 from "../../components/loader/loader1";
 import { useSelector } from "react-redux";
+import { AiOutlineLike } from "react-icons/ai";
 
 const Dashboard = () => {
   const register = JSON.parse(localStorage.getItem("register"));
@@ -24,15 +26,41 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchUsers = async (userList) => {
+      try {
+        const dataPromises = userList.map(async (user) => {
+          try {
+            const res = await ApiService.getData(
+              `/users/${user}`,
+              register?.access
+            );
+            return res;
+          } catch (error) {
+            console.error(`Error fetching data for user ${user?.user}:`, error);
+            return null;
+          }
+        });
+
+        const data = await Promise.all(dataPromises);
+        return data.filter((info) => info !== null);
+      } catch (error) {
+        console.error("Error in fetchUsers:", error);
+        return [];
+      }
+    };
     const groupFetch = async () => {
       try {
         const group = await ApiService.getData(`/group`, register?.access);
         const res = await ApiService.getData("/yangiliklar", register?.access);
-        const user = await ApiService.getData(
-          `/users/${register?.user_id}`,
-          register?.access
+        console.log(res);
+        const newsWithUsers = await Promise.all(
+          res.map(async (newsItem) => {
+            console.log(newsItem, "news");
+            const usersInfo = await fetchUsers(newsItem?.user_id);
+            return { ...newsItem, user_id: usersInfo };
+          })
         );
-        setNewsList(res);
+        setNewsList(newsWithUsers);
         setGroupData(group);
         setLoading(false);
       } catch (error) {
@@ -151,7 +179,7 @@ const Dashboard = () => {
                       <NavLink
                         to={`/news/${item?.id}`}
                         key={idx}
-                        className="hover:bg-hover-card cursor-pointer p-2 rounded-md flex w-full justify-between items-center gap-1 border-l-[2px] border-hr-color pl-2"
+                        className="hover:bg-hover-card cursor-pointer p-2 rounded-md flex flex-col w-full justify-between items-start gap-1 border-l-[2px] border-hr-color pl-2"
                       >
                         <div className="h-full flex flex-col justify-between">
                           <h1 className="w-full clamp3 text-text-primary font-bold">
@@ -163,34 +191,31 @@ const Dashboard = () => {
                             Today | 5:00 PM
                           </p> */}
                         </div>
-                        {/* <div className="w-full h-full flex flex-col justify-between items-end gap-3">
-                          <div className="text-yellow-500 flex justify-between items-center">
-                            <h1>Midium</h1>
-                            <img src={yellowarrow} alt="" />
+                        <div className="w-full flex justify-end items-center gap-3 mt-2">
+                          <div className="flex justify-start items-center gap-1">
+                            <h1 className="font-[500]">{item.like}</h1>
+                            <AiOutlineLike className="text-xl" />
                           </div>
-                          <div className="flex -space-x-1">
-                            <img
-                              className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                              src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                              alt=""
-                            />
-                            <img
-                              className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                              src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                              alt=""
-                            />
-                            <img
-                              className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                              alt=""
-                            />
-                            <img
-                              className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                              src="https://images.unsplash.com/photo-1468258409286-4c6bfc97c229?ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                              alt=""
-                            />
+                          <div>
+                            {item?.user_id?.slice(0, 3)?.map((user, idx) => (
+                              <img
+                                key={idx}
+                                className="inline-flex object-cover  h-6 w-6 rounded-full ring-2 ring-white"
+                                src={
+                                  user?.profile_photo
+                                    ? user?.profile_photo
+                                    : photoUrl
+                                }
+                                alt=""
+                              />
+                            ))}
+                            {newsList?.user_id?.length > 3 && (
+                              <div className="inline-flex h-6 w-6 rounded-full ring-2 ring-white bg-blue-300 text-white text-sm text-center font-bold justify-center items-center">
+                                <h1>{newsList?.user_id?.length - 3}+</h1>
+                              </div>
+                            )}
                           </div>
-                        </div> */}
+                        </div>
                       </NavLink>
                     ))}
                   </div>

@@ -108,7 +108,6 @@ const Navbar = () => {
           register?.access
         );
         const ress = await ApiService.getData("/tasks", register?.access);
-        console.log(ress);
         const filterTasks = ress.filter((c) =>
           c.user.find((u) => +u.user === userData?.id)
         );

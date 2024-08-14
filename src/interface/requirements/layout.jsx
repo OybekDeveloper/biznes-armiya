@@ -106,7 +106,6 @@ const Requirements = () => {
     }
   }, [isActive, eventSliceBool]);
 
-
   return (
     <>
       {loading ? (
@@ -196,7 +195,6 @@ const Requirements = () => {
                           )}
                           <NavLink
                             to={`/requirements/${item?.id}`}
-
                             className="cursor-pointer hover:bg-hover-card bg-card shadow-btn_shadow rounded-[14px] w-full grid grid-cols-6 max-lg:grid-cols-3 max-xl:grid-cols-4 px-[24px] py-[16px] gap-3"
                           >
                             <div className="col-span-1">
@@ -287,8 +285,7 @@ const Requirements = () => {
             handleClose={handleAttachment}
             checkedRequirements={checkedRequirements}
           />
-
-{checkedRequirements.length > 0 && (
+          {checkedRequirements.length > 0 && (
             <div className="flex justify-end">
               <button
                 onClick={handleAttachment}

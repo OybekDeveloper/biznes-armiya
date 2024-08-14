@@ -22,7 +22,7 @@ const Auktsion = () => {
   const handleFilterAuktsion = () => {
     setFilterAuktsion(!filterAuktsion);
   };
-
+  console.log(auktsion);
   const handleAddAuktsion = () => {
     setAddAuktsion(!addAuktsion);
   };
