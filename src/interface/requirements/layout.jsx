@@ -22,12 +22,12 @@ const Requirements = () => {
   const [delReqId, setReqId] = useState();
   const [updateReq, setUpdateReq] = useState();
   const [roles, setRoles] = useState([]);
-  const [taskId, setTaskId] = useState();
   const [activeTab, setActiveTab] = useState(1);
   const [attachment, setAttachment] = useState(false);
+  const [checkedRequirements, setCheckedRequirements] = useState([]);
+
   const handleAttachment = (item) => {
     setAttachment(!attachment);
-    setTaskId(item);
   };
 
   const handleActiveTab = (active) => {
@@ -42,6 +42,16 @@ const Requirements = () => {
     setReqId(id);
   };
 
+  const handleCheckData = (e, item) => {
+    const isChecked = e.target.checked;
+    if (isChecked) {
+      setCheckedRequirements((prev) => [...prev, item]);
+    } else {
+      setCheckedRequirements((prev) =>
+        prev.filter((req) => req.id !== item.id)
+      );
+    }
+  };
   const handleEditReq = (item) => {
     setUpdateReq(item);
     handleActive();
@@ -68,7 +78,6 @@ const Requirements = () => {
         })
       );
       if (userData?.role?.talab_edit && userData?.role?.talab_delete) {
-        console.log(requirement);
         setActiveTab(roles[0]?.id);
         setRoles(roles);
         setRequirement(filterReq);
@@ -76,7 +85,7 @@ const Requirements = () => {
         const filterData = filterReq.filter(
           (c) => c.start_time !== null && c.endt_time !== null
         );
-        console.log(filterData);
+        console.log(userData);
         setActiveTab(userData?.role?.id);
         setRequirement(filterData);
       }
@@ -89,13 +98,14 @@ const Requirements = () => {
 
   useEffect(() => {
     fetchReq();
-  }, [isActive, delReq, attachment]);
+  }, [isActive, delReq, attachment, userData?.role?.id]);
 
   useEffect(() => {
     if (!isActive) {
       setUpdateReq();
     }
   }, [isActive, eventSliceBool]);
+
 
   return (
     <>
@@ -155,7 +165,13 @@ const Requirements = () => {
                 </main>
               </div>
             )}
-            <div className="max-md:col-span-1 col-span-3 max-lg:mt-2">
+            <div
+              className={`${
+                role?.talab_delete && role?.talab_delete
+                  ? "max-md:col-span-1 col-span-3 max-lg:mt-2"
+                  : "col-span-5"
+              }`}
+            >
               {requirement?.length > 0 ? (
                 <div className="flex flex-col gap-3">
                   {requirement
@@ -166,9 +182,21 @@ const Requirements = () => {
                         return null;
                       }
                       return (
-                        <div key={idx} className="flex flex-col gap-1">
+                        <div
+                          key={idx}
+                          className="flex item-center justify-start gap-1"
+                        >
+                          {role?.talab_delete && role?.talab_delete && (
+                            <input
+                              onChange={(e) => handleCheckData(e, item)}
+                              type="checkbox"
+                              className="w-4"
+                              disabled={item?.start_time && item?.stop_time}
+                            />
+                          )}
                           <NavLink
                             to={`/requirements/${item?.id}`}
+
                             className="cursor-pointer hover:bg-hover-card bg-card shadow-btn_shadow rounded-[14px] w-full grid grid-cols-6 max-lg:grid-cols-3 max-xl:grid-cols-4 px-[24px] py-[16px] gap-3"
                           >
                             <div className="col-span-1">
@@ -223,16 +251,6 @@ const Requirements = () => {
                               </div>
                             </div>
                           </NavLink>
-                          {!(item.start_time && item?.stop_time) && (
-                            <div className="w-full flex justify-end items-center ">
-                              <button
-                                onClick={() => handleAttachment(item)}
-                                className="px-3 py-2 rounded-md bg-green-500 text-white font-[500]"
-                              >
-                                Attachment
-                              </button>
-                            </div>
-                          )}
                         </div>
                       );
                     })}
@@ -265,10 +283,21 @@ const Requirements = () => {
             handleClose={handleDeleteReq}
           />
           <AddTime
-            taskId={taskId}
             isOpen={attachment}
             handleClose={handleAttachment}
+            checkedRequirements={checkedRequirements}
           />
+
+{checkedRequirements.length > 0 && (
+            <div className="flex justify-end">
+              <button
+                onClick={handleAttachment}
+                className="px-3 py-2 rounded-md bg-green-600 font-bold text-white"
+              >
+                Achivement
+              </button>
+            </div>
+          )}
         </main>
       )}
     </>

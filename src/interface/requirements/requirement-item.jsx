@@ -222,11 +222,14 @@ const RequirementItem = () => {
                   </div>
                 </div>
                 {/* Project details */}
-                <div className="max-lg:col-span-2 lg:col-span-5 bg-card rounded-[24px] p-3 sm:p-[24px] flex flex-col gap-4">
+                <div className="relative max-lg:col-span-2 lg:col-span-5 bg-card rounded-[24px] p-3 sm:p-[24px] flex flex-col gap-4">
                   {/* Chat section */}
+                  {tasks?.status === "Asked" && (
+                    <div className="w-full h-full z-20 absolute top-0 left-0 backdrop-blur-sm"></div>
+                  )}
                   <div className="chat-back relative flex justify-between flex-col h-full w-full gap-2">
                     <ChatMessage
-                      status={tasks.status}
+                      status={tasks?.status}
                       chatMessageData={chatMessageData}
                       task_id={id}
                     />
