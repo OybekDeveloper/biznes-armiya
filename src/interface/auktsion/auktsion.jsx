@@ -133,7 +133,7 @@ const Auktsion = () => {
                           {item?.kuni?.split("T")[0]}
                         </td>
                         <td className="clamp4 px-4 py-2 border-b border-hr-color">
-                          {item?.winners?.length || 0}
+                          {item?.yutganlar?.length || 0}
                         </td>
                         <td className="clamp4 px-4 py-2 border-b border-hr-color">
                           {item?.buyumlar?.length || 0}
