@@ -111,7 +111,7 @@ const Project = () => {
                 className="flex justify-start items-center gap-2 text-blue-500"
               >
                 <IoArrowBack />
-                <h1>Back Tasks</h1>
+                <h1>Back Tasks </h1>
               </NavLink>
               <section className="w-full flex justify-between items-center">
                 <h1 className="font-bold text-text-primary clamp2">Tasks</h1>
