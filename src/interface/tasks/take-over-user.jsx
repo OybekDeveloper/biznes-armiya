@@ -13,9 +13,15 @@ import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { eventSliceAction } from "../../reducer/event";
 
-export default function TakeOverUser({ isOpen, handleClose, item, status }) {
+export default function TakeOverUser({
+  isOpen,
+  handleClose,
+  item,
+  status,
+  reject,
+}) {
   const register = JSON.parse(localStorage.getItem("register"));
-
+  console.log(reject);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
@@ -89,6 +95,35 @@ export default function TakeOverUser({ isOpen, handleClose, item, status }) {
         user: item.user,
       };
       try {
+        if (reject) {
+          await ApiService.putData(
+            `/tasks/${item.id}`,
+            {
+              definition: item.definition,
+              name: item.name,
+              status: "Expected",
+              user: item.user,
+            },
+            register?.access
+          );
+          dispatch(eventSliceAction());
+          toast.success("Task successfully rejected!!!", {
+            style: {
+              backgroundColor: "red",
+              border: "1px solid red",
+              padding: "16px",
+              color: "#fff",
+            },
+            position: "right-top",
+            iconTheme: {
+              primary: "#fff",
+              secondary: "red",
+            },
+          });
+          handleClose();
+          return null;
+        }
+
         await ApiService.putData(
           `/tasks/${item.id}`,
           status === "Asked"

@@ -1,24 +1,59 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { ApiService } from "../../components/api.server";
+import { useParams } from "react-router-dom";
+import Loader1 from "../../components/loader/loader1";
 
 const AuktionHistory = () => {
+  const { id } = useParams();
+  const [loading, setLoading] = useState(false);
+  const [winnerAuktion, setWinnerAuktion] = useState([]);
+  const register = JSON.parse(localStorage.getItem("register"));
+
+  useEffect(() => {
+    const fetchItem = async () => {
+      try {
+        const auktsion = await ApiService.getData(
+          `/auktsion/${id}`,
+          register?.access
+        );
+        setWinnerAuktion(auktsion?.yutganlar ? auktsion.yutganlar : []);
+        console.log(auktsion);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchItem();
+  }, []);
+
+  if (loading) {
+    return <Loader1 />;
+  }
+
   return (
     <main>
+      <h1 className="font-[500] clamp3">Winner auktion</h1>
       <div className="grid xl:grid-cols-5 lg:grid-cols-3 max-sm:grid-cols-1 sm:grid-cols-2 flex-1 gap-2">
-        {[1, 2, 3, 4, 5, 6, 7, 8].map((item, idx) => (
+        {winnerAuktion?.map((item, idx) => (
           <div
             className="w-full h-full bg-card rounded-[24px] p-[16px] flex flex-col justify-start items-center gap-1"
             key={idx}
           >
             <img
-              src="https://s3-alpha-sig.figma.com/img/e699/08ec/4d1a06f005fea30771b61b3a4f903dd3?Expires=1721606400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=hDp9zObNSJ2BfAdlkuLzg3man5qr~dTPNzqqOEBgQKt-Gf0LJYrAIOCbSbKTzk3A-9AVBGxQ4LA4KMGBYqlQqys~BNHwqOtsOi7sC1YCBs-h5yUnaLm0UfMntV2bRvWlSGN5WnsaHeQBXJdOWJGmIGTk0eamelE0XPrUh7isz7vo5kZykeVjj0uAGt8azfItg0A6jGT-tkr~I0ygXneGM3B8u8ik3tXhQeryDSmp7JJlI-VM-aZVeupxpIPERxAadw4gnAYiyKb2Dei0Hf2YETiHgetO1WoD9VeL17r2fEvbrOqzXLbnHq4hHBm8bKqglrLX8RUx0y32kNZalXYFLA__"
+              src={item?.buyum?.img}
               alt="logo"
-              className="mb-[10px] w-16 h-16 rounded-full"
+              className="mb-[10px] w-full h-[100px] object-cover rounded-md"
             />
-            <h1 className="text-text-primary font-medium">Shawn Stone</h1>
-            <p className="text-gray-500 font-bold">UI/UX Designer</p>
-            <p className="text-gray-500">9/10</p>
+            <h1 className="text-text-primary font-medium">
+              {item?.buyum?.name}
+            </h1>
+            <p className="text-gray-500 font-bold">
+              {item?.user?.first_name + " " + item?.user?.last_name}
+            </p>
+            <p className="text-gray-500">{item?.narxi}</p>
             <p className="text-gray-500 py-1 px-2 border-border border-[1px] rounded-[4px] text-[12px]">
-              9 Soldiers
+              {item?.narxi} vab
             </p>
           </div>
         ))}

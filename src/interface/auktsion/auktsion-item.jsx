@@ -71,7 +71,7 @@ const Auktsion = () => {
 
             <div className="flex justify-start items-center gap-2">
               <NavLink
-                to={"/auktsion-history"}
+                to={`/auktsion-history/${id}`}
                 className="max-md:hidden bg-button-color  flex justify-start items-center gap-2 rounded-[14px] p-3 text-xl text-white shadow-btn_shadow"
               >
                 <MdOutlineWorkHistory />

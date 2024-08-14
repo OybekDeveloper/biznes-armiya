@@ -114,16 +114,14 @@ const History = () => {
           </div>
         </div>
 
-        {role?.vab_views && (
-          <button
-            onClick={handleHistoryVab}
-            aria-label="Toggle VAB History"
-            className="flex bg-button-color items-center gap-2 rounded-md py-2 px-4 text-white shadow-btn_shadow"
-          >
-            <MdOutlineHistory className="text-xl" />
-            <span>VAB</span>
-          </button>
-        )}
+        <button
+          onClick={handleHistoryVab}
+          aria-label="Toggle VAB History"
+          className="flex bg-button-color items-center gap-2 rounded-md py-2 px-4 text-white shadow-btn_shadow"
+        >
+          <MdOutlineHistory className="text-xl" />
+          <span>VAB</span>
+        </button>
       </section>
 
       <div className="gap-2 sm:hidden flex justify-end">

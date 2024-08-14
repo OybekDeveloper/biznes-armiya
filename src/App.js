@@ -198,7 +198,7 @@ const App = () => {
               }
             />
             <Route
-              path="/auktsion-history"
+              path="/auktsion-history/:id"
               element={
                 <Suspense fallback={<Loader1 />}>
                   <AuktionHistory />

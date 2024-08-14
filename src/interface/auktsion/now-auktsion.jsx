@@ -145,6 +145,7 @@ const NowAuction = () => {
   };
 
   useEffect(() => {
+    console.log(item?.end_time && getLocalISOString() > item.end_time);
     const updateAuction = async () => {
       try {
         if (item?.end_time && getLocalISOString() > item.end_time) {
@@ -152,20 +153,18 @@ const NowAuction = () => {
             `/auktsion/${aukt_id}`,
             register?.access
           );
-          if (
-            auktsion.yutganlar
-              ? auktsion.yutganlar
-              : [].find((c) => +c.buyum_id === id)
-          ) {
+          console.log(auktsion);
+          if (auktsion.yutganlar?.find((c) => +c.buyum.id === +id)) {
+            console.log("blaa");
             return null;
           }
-          console.log(auktsion);
+          console.log(auktsion.yutganlar);
 
           if (auktsion) {
             const winnerUser = {
               user: topBidder,
               narxi: maxVab,
-              buyum_id: id,
+              buyum: item,
             };
             console.log(winnerUser);
             const winner = applicants[0];
@@ -176,7 +175,7 @@ const NowAuction = () => {
               {
                 yutganlar: [
                   ...(auktsion.yutganlar ? auktsion.yutganlar : []),
-                  winnerUser
+                  winnerUser,
                 ],
               },
               register?.access
