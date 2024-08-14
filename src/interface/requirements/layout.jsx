@@ -13,8 +13,8 @@ import { TimeFormatFunction } from "../../components/time-format";
 import AddTime from "./add-time";
 
 const Requirements = () => {
-  const { userData } = useSelector((state) => state.event);
-
+  const { userData, eventSliceBool } = useSelector((state) => state.event);
+  const { role } = userData;
   const [isActive, setIsActive] = useState(false);
   const [loading, setLoading] = useState(true);
   const [requirement, setRequirement] = useState([]);
@@ -63,12 +63,23 @@ const Requirements = () => {
             `/role/${item?.role_id}`,
             register?.access
           );
+
           return { ...tasksreq, role: role?.role, role_id: role?.id };
         })
       );
-
-      setRoles(roles);
-      setRequirement(filterReq);
+      if (userData?.role?.talab_edit && userData?.role?.talab_delete) {
+        console.log(requirement);
+        setActiveTab(roles[0]?.id);
+        setRoles(roles);
+        setRequirement(filterReq);
+      } else {
+        const filterData = filterReq.filter(
+          (c) => c.start_time !== null && c.endt_time !== null
+        );
+        console.log(filterData);
+        setActiveTab(userData?.role?.id);
+        setRequirement(filterData);
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -84,7 +95,8 @@ const Requirements = () => {
     if (!isActive) {
       setUpdateReq();
     }
-  }, [isActive]);
+  }, [isActive, eventSliceBool]);
+
   return (
     <>
       {loading ? (
@@ -111,36 +123,38 @@ const Requirements = () => {
             )}
           </section>
           <section className="grid max-md:grid-cols-1 max-xl:grid-cols-5 xl:grid-cols-4  max-lg:grid-cols-1 lg:gap-3">
-            <div className="max-xl:col-span-2 col-span-1">
-              <main className="sticky top-[88px] bg-card shadow-btn_shadow rounded-[14px] flex flex-col gap-3">
-                <section className="w-full p-[8px] flex flex-col gap-[16px]">
-                  {roles?.map((item, idx) => (
-                    <button
-                      onClick={() => handleActiveTab(item)}
-                      key={idx}
-                      className="flex justify-between items-center gap-2 cursor-pointer"
-                    >
-                      <div
-                        className={`
+            {role?.talab_delete && role?.talab_delete && (
+              <div className="max-xl:col-span-2 col-span-1">
+                <main className="sticky top-[88px] bg-card shadow-btn_shadow rounded-[14px] flex flex-col gap-3">
+                  <section className="w-full p-[8px] flex flex-col gap-[16px]">
+                    {roles?.map((item, idx) => (
+                      <button
+                        onClick={() => handleActiveTab(item)}
+                        key={idx}
+                        className="flex justify-between items-center gap-2 cursor-pointer"
+                      >
+                        <div
+                          className={`
                        ${
                          item.id === activeTab
                            ? "bg-active-card text-primary"
                            : "hover:bg-hover-card text-thin-color"
                        } 
                          flex justify-start items-start flex-col px-[16px] py-[8px] rounded-[14px] w-full`}
-                      >
-                        <h1 className="font-bold clamp3 text-text-primary">
-                          {item?.role}
-                        </h1>
-                      </div>
-                      {item.id === activeTab && (
-                        <div className="w-[4px] bg-primary rounded-[2px] h-[45px]"></div>
-                      )}
-                    </button>
-                  ))}
-                </section>
-              </main>
-            </div>
+                        >
+                          <h1 className="font-bold clamp3 text-text-primary">
+                            {item?.role}
+                          </h1>
+                        </div>
+                        {item.id === activeTab && (
+                          <div className="w-[4px] bg-primary rounded-[2px] h-[45px]"></div>
+                        )}
+                      </button>
+                    ))}
+                  </section>
+                </main>
+              </div>
+            )}
             <div className="max-md:col-span-1 col-span-3 max-lg:mt-2">
               {requirement?.length > 0 ? (
                 <div className="flex flex-col gap-3">
@@ -152,10 +166,9 @@ const Requirements = () => {
                         return null;
                       }
                       return (
-                        <div className="flex flex-col gap-1">
+                        <div key={idx} className="flex flex-col gap-1">
                           <NavLink
                             to={`/requirements/${item?.id}`}
-                            key={idx}
                             className="cursor-pointer hover:bg-hover-card bg-card shadow-btn_shadow rounded-[14px] w-full grid grid-cols-6 max-lg:grid-cols-3 max-xl:grid-cols-4 px-[24px] py-[16px] gap-3"
                           >
                             <div className="col-span-1">
@@ -197,10 +210,12 @@ const Requirements = () => {
                                 className={`
                           ${
                             item?.status === "Asked"
-                              ? "bg-yellow-500"
+                              ? "bg-asked"
                               : item?.status === "Expected"
-                              ? "bg-blue-500"
-                              : "bg-green-500"
+                              ? "bg-expected"
+                              : item?.status === "Finished"
+                              ? "bg-finished"
+                              : "bg-done"
                           } 
                           text-[12px] px-2 py-1 rounded-[14px]  text-white`}
                               >

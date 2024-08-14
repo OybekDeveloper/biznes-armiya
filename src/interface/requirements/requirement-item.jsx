@@ -9,7 +9,18 @@ import { dataempty, photoUrl } from "../../images";
 import { useSelector } from "react-redux";
 import ChatMessage from "../tasks/chat-message";
 import SendMessage from "../tasks/send-message";
-import TakeOverUser from "../tasks/take-over-user";
+import {
+  Button,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  Transition,
+  TransitionChild,
+} from "@headlessui/react";
+import SimpleLoading from "../../components/loader/simple-loading";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { eventSliceAction } from "../../reducer/event";
 
 const RequirementItem = () => {
   const register = JSON.parse(localStorage.getItem("register"));
@@ -20,9 +31,15 @@ const RequirementItem = () => {
   const [tasks, setTasks] = useState();
   const [loading, setLoading] = useState(true);
   const [takeOverModal, setTakeOverModal] = useState(false);
-
-  const handleTakeOverModal = () => {
+  const [reject, setReject] = useState(false);
+  const handleTakeOverModal = (reject) => {
     setTakeOverModal(!takeOverModal);
+    console.log(reject, "reject");
+    if (reject.type === "click") {
+      setReject(false);
+    } else {
+      setReject(true);
+    }
   };
 
   useEffect(() => {
@@ -101,12 +118,40 @@ const RequirementItem = () => {
               <section className="w-full flex justify-between items-center">
                 <h1 className="font-bold text-text-primary clamp2">Tasks</h1>
                 <div className="flex justify-start items-center gap-2">
-                  <button
-                    onClick={handleTakeOverModal}
-                    className="bg-green-500 hover:bg-green-600 transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
-                  >
-                    <h1>Complete the task</h1>
-                  </button>
+                  {tasks.status === "Asked" ? (
+                    <button
+                      onClick={handleTakeOverModal}
+                      className="bg-expected hover:bg-expected-hover transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
+                    >
+                      <h1>Take It</h1>
+                    </button>
+                  ) : tasks.status === "Expected" ? (
+                    <button
+                      onClick={handleTakeOverModal}
+                      className="bg-finished hover:bg-finished-hover transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
+                    >
+                      <h1>Complete the task</h1>
+                    </button>
+                  ) : (
+                    role?.tasks_edit && (
+                      <>
+                        {tasks.status !== "Done" && (
+                          <button
+                            onClick={handleTakeOverModal}
+                            className="bg-done hover:bg-done-hover transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
+                          >
+                            <h1>Done task</h1>
+                          </button>
+                        )}
+                        <button
+                          onClick={() => handleTakeOverModal(true)}
+                          className="bg-red-500 hover:bg-red-600 transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
+                        >
+                          <h1>Reject task</h1>
+                        </button>
+                      </>
+                    )
+                  )}
                 </div>
               </section>
               <section className="relative grid max-lg:grid-cols-2 lg:grid-cols-8 gap-3 mt-2">
@@ -152,13 +197,15 @@ const RequirementItem = () => {
                       <h1 className="text-thin-color">Priority</h1>
                       <div
                         className={`
-                 ${
-                   tasks?.status === "Asked"
-                     ? "bg-yellow-500"
-                     : tasks?.status === "Expected"
-                     ? "bg-blue-500"
-                     : "bg-green-500"
-                 } 
+                  ${
+                    tasks?.status === "Asked"
+                      ? "bg-asked"
+                      : tasks?.status === "Expected"
+                      ? "bg-expected"
+                      : tasks?.status === "Finished"
+                      ? "bg-finished"
+                      : "bg-done"
+                  } 
                  text-[12px] px-2 py-1 rounded-[14px]  text-white`}
                       >
                         {tasks?.status}
@@ -176,71 +223,14 @@ const RequirementItem = () => {
                 </div>
                 {/* Project details */}
                 <div className="max-lg:col-span-2 lg:col-span-5 bg-card rounded-[24px] p-3 sm:p-[24px] flex flex-col gap-4">
-                  <div className="flex justify-between items-center gap-3">
-                    <div className="flex flex-col justify-start items-start">
-                      <p className="text-thin-color">PN0001245</p>
-                      <h1 className="text-text-primary-color">
-                        UX Login + Registration
-                      </h1>
-                    </div>
-                  </div>
-                  <p className="text-thin-color">
-                    Think over UX for Login and Registration, create a flow
-                    using wireframes. Upon completion, show the team and
-                    discuss. Attach the source to the task.
-                  </p>
-                  <div className="flex justify-start items-start gap-3">
-                    <div className="cursor-pointer p-3 rounded-[14px] bg-[#F1effb]">
-                      <GrAttachment className="text-[#6D5DD3]" />
-                    </div>
-                    <div className="cursor-pointer p-3 rounded-[14px] bg-[#e8f9fc]">
-                      <GoLink className="text-[#15C0E6]" />
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-3">
-                    <h1 className="text-text-primary font-bold">
-                      Task Attachments (3)
-                    </h1>
-                    <div className="whitespace-nowrap overflow-x-scroll w-full scrollScrolbar">
-                      {[1, 2, 3, 4].map((item, idx) => (
-                        <div
-                          key={idx}
-                          className="inline-flex w-[100px] object-cover relative rounded-t-[12px] overflow-hidden mr-[10px]"
-                        >
-                          <img
-                            src="https://media.istockphoto.com/id/1303877287/vector/paper-checklist-and-pencil-flat-pictogram.jpg?s=612x612&w=0&k=20&c=NoqPzn94VH2Pm7epxF8P5rCcScMEAiGQ8Hv_b2ZwRjY="
-                            alt="img"
-                            className="object-cover w-full h-full"
-                          />
-                          <div className="absolute top-0 left-0 w-full h-full backdrop-brightness-50 flex justify-end items-end">
-                            <div className="w-full h-[60px] rounded-t-[14px] p-2 bg-background">
-                              <h1 className="text-text-primary font-bold text-[12px]">
-                                site screens.png
-                              </h1>
-                              <p className="text-thin-color text-[12px]">
-                                Sep 19, 2020 | 10:52 AM
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
                   {/* Chat section */}
-                  <div className="w-full h-[1px] bg-slate-500" />
-                  <div className="relative flex justify-between flex-col h-full w-full gap-2">
-                    {chatMessageData.length > 0 ? (
-                      <ChatMessage
-                        status="taskreq"
-                        chatMessageData={chatMessageData}
-                        task_id={id}
-                      />
-                    ) : (
-                      <div className="w-full h-[40px] flex justify-center items-center text-thin-color">
-                        Start chatting with the team to discuss the task.
-                      </div>
-                    )}
-                    <SendMessage status="taskreq" task_id={id} />
+                  <div className="chat-back relative flex justify-between flex-col h-full w-full gap-2">
+                    <ChatMessage
+                      status={tasks.status}
+                      chatMessageData={chatMessageData}
+                      task_id={id}
+                    />
+                    <SendMessage status={tasks.status} task_id={id} />
                   </div>
                 </div>
               </section>
@@ -260,7 +250,8 @@ const RequirementItem = () => {
         </>
       )}
       <TakeOverUser
-        status="done_task"
+        status={tasks?.status}
+        reject={reject}
         item={tasks}
         isOpen={takeOverModal}
         handleClose={handleTakeOverModal}
@@ -270,3 +261,215 @@ const RequirementItem = () => {
 };
 
 export default RequirementItem;
+
+function TakeOverUser({ isOpen, handleClose, item, status, reject }) {
+  const register = JSON.parse(localStorage.getItem("register"));
+  console.log(reject);
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+
+  const handleAddVabUsers = async (item) => {
+    try {
+      await Promise.all(
+        item.users.map(async (c) => {
+          const vabPlus = item.user.find((d) => +d.user === c.id);
+          if (vabPlus) {
+            await ApiService.patchData(
+              `/users/${c.id}`,
+              {
+                vab: +c.vab + +vabPlus.vab,
+              },
+              register?.access
+            );
+          }
+        })
+      );
+
+      dispatch(eventSliceAction());
+      toast.success(
+        status === "take_over"
+          ? "Task mastered successfully!"
+          : "Task successfully finished!!!",
+        {
+          style: {
+            backgroundColor: "green",
+            border: "1px solid green",
+            padding: "16px",
+            color: "#fff",
+          },
+          position: "right-top",
+          iconTheme: {
+            primary: "#fff",
+            secondary: "green",
+          },
+        }
+      );
+      handleClose();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDelete = () => {
+    const deleteFetch = async () => {
+      setLoading(true);
+      const takeOver = {
+        definition: item.definition,
+        name: item.name,
+        status: "Expected",
+        user: [
+          {
+            user: register.user_id,
+            vab: item.vab,
+          },
+        ],
+        group_id: 1,
+      };
+      const finishedTask = {
+        definition: item.definition,
+        name: item.name,
+        status: "Finished",
+        user: item.user,
+      };
+      const DoneTasks = {
+        definition: item.definition,
+        name: item.name,
+        status: "Done",
+        user: item.user,
+      };
+      try {
+        if (reject) {
+          await ApiService.putData(
+            `/tasksreq/${item.id}`,
+            {
+              definition: item.definition,
+              name: item.name,
+              status: "Expected",
+              user: item.user,
+            },
+            register?.access
+          );
+          dispatch(eventSliceAction());
+          toast.success("Task successfully rejected!!!", {
+            style: {
+              backgroundColor: "red",
+              border: "1px solid red",
+              padding: "16px",
+              color: "#fff",
+            },
+            position: "right-top",
+            iconTheme: {
+              primary: "#fff",
+              secondary: "red",
+            },
+          });
+          handleClose();
+          return null;
+        }
+
+        await ApiService.putData(
+          `/tasksreq/${item.id}`,
+          status === "Asked"
+            ? takeOver
+            : status === "Expected"
+            ? finishedTask
+            : DoneTasks,
+          register?.access
+        );
+        if (status === "Finished") {
+          await handleAddVabUsers(item);
+          return;
+        }
+        dispatch(eventSliceAction());
+        toast.success(
+          status === "take_over"
+            ? "Task mastered successfully!"
+            : "Task successfully finished!!!",
+          {
+            style: {
+              backgroundColor: "green",
+              border: "1px solid green",
+              padding: "16px",
+              color: "#fff",
+            },
+            position: "right-top",
+            iconTheme: {
+              primary: "#fff",
+              secondary: "green",
+            },
+          }
+        );
+        handleClose();
+      } catch (error) {
+        console.error("Error deleting tasks:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    deleteFetch();
+  };
+
+  return (
+    <Transition appear show={isOpen}>
+      <Dialog
+        as="div"
+        className="relative z-[998] focus:outline-none"
+        onClose={handleClose}
+      >
+        <div className="fixed inset-0 z-[999] w-screen overflow-y-auto bg-black/50">
+          <div className="flex min-h-full items-center justify-center p-4">
+            <TransitionChild
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 transform-[scale(95%)]"
+              enterTo="opacity-100 transform-[scale(100%)]"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 transform-[scale(100%)]"
+              leaveTo="opacity-0 transform-[scale(95%)]"
+            >
+              <DialogPanel className="w-full max-w-md rounded-xl bg-card p-6 backdrop-blur-2xl">
+                <DialogTitle
+                  as="h3"
+                  className="text-clamp2 font-medium text-text-primary"
+                >
+                  {status === "Asked"
+                    ? "Mastering the task"
+                    : status === "Expected"
+                    ? "Complete the task"
+                    : "Confirmation of completion"}
+                </DialogTitle>
+                <p className="mt-2 text-sm/6 text-thin-color">
+                  {status === "Asked"
+                    ? "Do you really want to take this task all to yourself?"
+                    : status === "Expected"
+                    ? "Do you sure you want to complete the task?"
+                    : "Are you sure you have completed the task?"}
+                </p>
+                <div className="mt-4 flex justify-between items-center gap-3">
+                  <Button
+                    className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700"
+                    onClick={handleClose}
+                  >
+                    No
+                  </Button>
+                  <Button
+                    className="inline-flex items-center gap-2 rounded-md bg-red-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-red-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700"
+                    onClick={handleDelete}
+                  >
+                    {loading ? (
+                      <div className="flex justify-start items-center gap-2 opacity-[0.8]">
+                        <SimpleLoading />
+                        <h1>Loading...</h1>
+                      </div>
+                    ) : (
+                      <h1>Yes</h1>
+                    )}
+                  </Button>
+                </div>
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </Transition>
+  );
+}

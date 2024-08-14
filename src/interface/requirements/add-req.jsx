@@ -21,7 +21,6 @@ export default function AddTasks({ isOpen, handleClose, roles }) {
   const [status, setStatus] = useState([
     { id: 1, name: "Asked" },
     { id: 2, name: "Expected" },
-    { id: 3, name: "Done" },
   ]);
   const [users, setUsers] = useState([]);
   const [formData, setFormData] = useState({
