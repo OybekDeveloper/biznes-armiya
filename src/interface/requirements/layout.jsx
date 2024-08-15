@@ -202,6 +202,12 @@ const Requirements = () => {
                     ?.slice()
                     ?.reverse()
                     ?.map((item, idx) => {
+                      if (
+                        item.status === "Done" &&
+                        !(role?.talab_delete && role?.talab_delete)
+                      ) {
+                        return null;
+                      }
                       if (!(item?.role_id === activeTab)) {
                         return null;
                       }
