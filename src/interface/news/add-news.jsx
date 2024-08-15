@@ -17,7 +17,7 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
   const register = JSON.parse(localStorage.getItem("register"));
   const [news, setNews] = useState({
     content: "",
-    user_id: register?.user_id,
+    user_id: [register?.user_id],
     title: "",
   });
   const [loading, setLoading] = useState(false);
@@ -36,7 +36,7 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
     handleClose();
     setNews({
       content: "",
-      user_id: register?.user_id,
+      user_id: [register?.user_id],
       title: "",
     });
   };

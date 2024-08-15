@@ -50,7 +50,7 @@ const NearestOvents = () => {
                 <h1 className="w-[90%] lg:clamp3 max-lg:clamp4 text-text-primary font-bold">
                   Presentation of the new department
                 </h1>
-                <p className="text-thin text-[14px]">Today | 5:00 PM</p>
+                <p className="text-thin text-[14px]">19-07-2024 14:02</p>
               </div>
               <div className="w-full h-full flex flex-col justify-between items-end">
                 <img src={yellowarrow} alt="" />

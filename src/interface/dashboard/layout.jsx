@@ -179,7 +179,7 @@ const Dashboard = () => {
                       <NavLink
                         to={`/news/${item?.id}`}
                         key={idx}
-                        className="hover:bg-hover-card cursor-pointer p-2 rounded-md flex flex-col w-full justify-between items-start gap-1 border-l-[2px] border-hr-color pl-2"
+                        className="hover:bg-hover-card cursor-pointer p-2 flex flex-col w-full justify-between items-start gap-1 border-l-[4px] border-hr-color pl-2"
                       >
                         <div className="h-full flex flex-col justify-between">
                           <h1 className="w-full clamp3 text-text-primary font-bold">
@@ -187,34 +187,36 @@ const Dashboard = () => {
                               ? item?.title.slice(0, 30) + "..."
                               : item?.title}
                           </h1>
-                          {/* <p className="text-thin text-[14px]">
-                            Today | 5:00 PM
-                          </p> */}
                         </div>
-                        <div className="w-full flex justify-end items-center gap-3 mt-2">
-                          <div className="flex justify-start items-center gap-1">
-                            <h1 className="font-[500]">{item.like}</h1>
-                            <AiOutlineLike className="text-xl" />
-                          </div>
-                          <div>
-                            {item?.user_id?.slice(0, 3)?.map((user, idx) => (
-                              <img
-                                key={idx}
-                                className="inline-flex object-cover  h-6 w-6 rounded-full ring-2 ring-white"
-                                src={
-                                  user?.profile_photo
-                                    ? user?.profile_photo
-                                    : photoUrl
-                                }
-                                alt=""
-                              />
-                            ))}
-                            {newsList?.user_id?.length > 3 && (
-                              <div className="inline-flex h-6 w-6 rounded-full ring-2 ring-white bg-blue-300 text-white text-sm text-center font-bold justify-center items-center">
-                                <h1>{newsList?.user_id?.length - 3}+</h1>
-                              </div>
-                            )}
-                          </div>
+                        <div className="w-full flex justify-between items-center gap-3 mt-2">
+                          <p className="text-thin text-[14px]">
+                          19-07-2024 14:02
+                          </p>
+                          {/* <div className="flex justify-end items-center gap-2">
+                            <div className="flex justify-start items-center gap-1">
+                              <h1 className="font-[500]">{item.like}</h1>
+                              <AiOutlineLike className="text-xl" />
+                            </div>
+                            <div>
+                              {item?.user_id?.slice(0, 3)?.map((user, idx) => (
+                                <img
+                                  key={idx}
+                                  className="inline-flex object-cover  h-6 w-6 rounded-full ring-2 ring-white"
+                                  src={
+                                    user?.profile_photo
+                                      ? user?.profile_photo
+                                      : photoUrl
+                                  }
+                                  alt=""
+                                />
+                              ))}
+                              {newsList?.user_id?.length > 3 && (
+                                <div className="inline-flex h-6 w-6 rounded-full ring-2 ring-white bg-blue-300 text-white text-sm text-center font-bold justify-center items-center">
+                                  <h1>{newsList?.user_id?.length - 3}+</h1>
+                                </div>
+                              )}
+                            </div>
+                          </div> */}
                         </div>
                       </NavLink>
                     ))}
