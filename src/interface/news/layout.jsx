@@ -17,13 +17,12 @@ import { CiMenuKebab } from "react-icons/ci";
 import { MdModeEdit } from "react-icons/md";
 import { FaRegTrashAlt } from "react-icons/fa";
 import DeleteModal from "./delete-news";
-import { AiOutlineLike } from "react-icons/ai";
-import { FaCalendar } from "react-icons/fa";
 
 const News = () => {
-  const { userData, eventSliceBool } = useSelector((state) => state.event);
+  const { userData, eventSliceBool, searchMessage } = useSelector((state) => state.event);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newsList, setNewsList] = useState([]);
+  const [filteredNews, setFilteredNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [delModal, setDelModal] = useState(false);
   const [selectId, setSelectId] = useState(null);
@@ -32,6 +31,7 @@ const News = () => {
   const handleDeleteModal = () => {
     setDelModal(!delModal);
   };
+
   const handleDelete = () => {
     setDelModal(!delModal);
   };
@@ -69,10 +69,8 @@ const News = () => {
     const fetchNews = async () => {
       try {
         const res = await ApiService.getData("/yangiliklar", register?.access);
-        console.log(res);
         const newsWithUsers = await Promise.all(
           res.map(async (newsItem) => {
-            console.log(newsItem, "news");
             const usersInfo = await fetchUsers(newsItem?.user_id);
             return { ...newsItem, user_id: usersInfo };
           })
@@ -87,7 +85,18 @@ const News = () => {
 
     fetchNews();
   }, [isModalOpen, delModal, eventSliceBool]);
-  console.log(newsList);
+
+  useEffect(() => {
+    if (searchMessage) {
+      const filtered = newsList.filter((news) =>
+        news.title.toLowerCase().includes(searchMessage.toLowerCase())
+      );
+      setFilteredNews(filtered);
+    } else {
+      setFilteredNews(newsList);
+    }
+  }, [searchMessage, newsList]);
+
   return (
     <>
       {loading ? (
@@ -120,9 +129,9 @@ const News = () => {
               </>
             )}
           </section>
-          {newsList.length > 0 ? (
+          {filteredNews.length > 0 ? (
             <section className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {newsList
+              {filteredNews
                 .slice()
                 .reverse()
                 .map((item) => (
@@ -132,25 +141,6 @@ const News = () => {
                         <h1 className="font-[500]">{item.title}</h1>
                         <div className="flex justify-between w-full items-end gap-3 mt-4">
                           <div className="flex flex-col ">
-                            {/* <div>
-                              {item?.user_id?.slice(0, 3)?.map((user, idx) => (
-                                <img
-                                  key={idx}
-                                  className="inline-flex object-cover  h-6 w-6 rounded-full ring-2 ring-white"
-                                  src={
-                                    user?.profile_photo
-                                      ? user?.profile_photo
-                                      : photoUrl
-                                  }
-                                  alt=""
-                                />
-                              ))}
-                              {newsList?.user_id?.length > 3 && (
-                                <div className="inline-flex h-6 w-6 rounded-full ring-2 ring-white bg-blue-300 text-white text-sm text-center font-bold justify-center items-center">
-                                  <h1>{newsList?.user_id?.length - 3}+</h1>
-                                </div>
-                              )}
-                            </div> */}
                             <div className="flex justify-start items-center gap-2">
                               <div className="flex gap-1 items-center justify-start">
                                 <h1>19-07-2024 14:02</h1>
@@ -229,7 +219,7 @@ const News = () => {
                   alt="No data available"
                 />
               </div>
-              <h1 className="clam3 font-bold">Auktsion do not exist!</h1>
+              <h1 className="clam3 font-bold">No news available!</h1>
             </div>
           )}
           <AddNews

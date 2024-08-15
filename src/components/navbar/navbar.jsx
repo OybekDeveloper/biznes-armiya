@@ -19,7 +19,9 @@ import "./index.css";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { eventSliceBool, userData } = useSelector((state) => state.event);
+  const { eventSliceBool, userData, searchMessage } = useSelector(
+    (state) => state.event
+  );
   const register = JSON.parse(localStorage.getItem("register"));
   const selectedTheme = localStorage.getItem("theme");
   const { pathname } = useLocation();
@@ -141,6 +143,9 @@ const Navbar = () => {
     }
   }, [register?.user_id, pathname, eventSliceBool]);
 
+  useEffect(() => {
+    dispatch(searchSlice(""));
+  }, [pathname]);
   return (
     <>
       {/* desktop */}
@@ -154,6 +159,7 @@ const Navbar = () => {
           <input
             onChange={(e) => dispatch(searchSlice(e.target.value))}
             type="text"
+            value={searchMessage}
             className="w-full py-[13px] pl-[50px] outline-none rounded-[14px] shadow-btn_shadow bg-card"
           />
         </div>
@@ -199,6 +205,7 @@ const Navbar = () => {
               <input
                 onChange={(e) => dispatch(searchSlice(e.target.value))}
                 type="text"
+                value={searchMessage}
                 className="w-full py-[13px] px-[10px] outline-none rounded-[14px] shadow-btn_shadow bg-card"
                 placeholder="Search..."
               />

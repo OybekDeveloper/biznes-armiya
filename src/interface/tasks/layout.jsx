@@ -7,10 +7,9 @@ import { ApiService } from "../../components/api.server";
 import AddTasks from "./add-task";
 import Loader1 from "../../components/loader/loader1";
 import { useSelector } from "react-redux";
-import { ToolbarLineBreakView } from "ckeditor5";
 
 const HomeWork = () => {
-  const { eventSliceBool, userData } = useSelector((state) => state.event);
+  const { eventSliceBool, userData, searchMessage } = useSelector((state) => state.event);
   const { role } = userData;
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [tasks, setTasks] = useState([]);
@@ -18,9 +17,11 @@ const HomeWork = () => {
   const [addTask, setAddTask] = useState(false);
   const [loading, setLoading] = useState(true);
   const { groupEvent } = useSelector((state) => state.event);
+
   const toggleFilter = () => {
     setIsFilterOpen(!isFilterOpen);
   };
+
   const handleAddTask = () => {
     setAddTask(!addTask);
   };
@@ -33,8 +34,8 @@ const HomeWork = () => {
     const register = JSON.parse(localStorage.getItem("register"));
     const taskFetch = async () => {
       try {
-        const tasks = await ApiService.getData("/tasks", register?.access);
-        setTasks(tasks);
+        const fetchedTasks = await ApiService.getData("/tasks", register?.access);
+        setTasks(fetchedTasks);
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -43,6 +44,12 @@ const HomeWork = () => {
     };
     taskFetch();
   }, [addTask, groupEvent, eventSliceBool]);
+
+  // Filter tasks based on searchMessage
+  const filteredTasks = tasks.filter(task =>
+    task.name.toLowerCase().includes(searchMessage.toLowerCase())
+  );
+
   return (
     <>
       {loading ? (
@@ -79,7 +86,7 @@ const HomeWork = () => {
               <div className="max-md:col-span-1 col-span-3 max-lg:mt-2">
                 <Tasks
                   toggleFilter={toggleFilter}
-                  tasks={tasks}
+                  tasks={filteredTasks} // Pass filtered tasks here
                   status={filterStatus}
                 />
               </div>

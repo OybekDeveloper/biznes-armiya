@@ -7,14 +7,17 @@ import { dataempty, photoUrl } from "../../images";
 import { TimeFormatFunction } from "../../components/time-format";
 import { useSelector } from "react-redux";
 import Loader1 from "../../components/loader/loader1";
+
 const CheckListHistory = () => {
   const { id } = useParams();
-  const { userData } = useSelector((state) => state.event);
+  const { userData, searchMessage } = useSelector((state) => state.event);
   const { role } = userData;
   const [loading, setLoading] = useState(true);
   const register = JSON.parse(localStorage.getItem("register"));
-  const [usersInfoMap, setUsersInfoMap] = useState({}); // State to store users info by task ID
+  const [usersInfoMap, setUsersInfoMap] = useState({});
   const [taskDones, setTasksDones] = useState([]);
+  const [filteredTasks, setFilteredTasks] = useState([]);
+
   async function fetchData() {
     try {
       const res = await ApiService.getData("/task-dones", register?.access);
@@ -75,15 +78,22 @@ const CheckListHistory = () => {
     fetchAllUsersInfo();
   }, [taskDones]);
 
+  useEffect(() => {
+    const filtered = taskDones.filter((task) =>
+      task.name.toLowerCase().includes(searchMessage.toLowerCase())
+    );
+    setFilteredTasks(filtered);
+  }, [searchMessage, taskDones]);
+
   if (loading) {
     return <Loader1 />;
   }
 
   return (
     <div>
-      {taskDones.length > 0 ? (
+      {filteredTasks.length > 0 ? (
         <section className="flex flex-col gap-3">
-          {taskDones
+          {filteredTasks
             .slice()
             .reverse()
             .map((item, idx) => {

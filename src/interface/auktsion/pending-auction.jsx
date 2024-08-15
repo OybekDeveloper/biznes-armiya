@@ -1,17 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { dataempty, emptygrouplogo, emptyimg } from "../../images";
+import React from "react";
 import { FaCalendar } from "react-icons/fa";
 import Countdown from "../../components/count-down";
 import { ApiService } from "../../components/api.server";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { dataempty, emptyimg } from "../../images";
 
-const PandingAuction = ({ allItems, loading, id ,auktsionId}) => {
+const PandingAuction = ({ allItems, loading, id, auktsionId }) => {
+  const { searchMessage } = useSelector((state) => state.event);
+
+  // Filter items based on searchMessage
+  const filteredItems = allItems.filter((item) =>
+    item?.name.toLowerCase().includes(searchMessage.toLowerCase())
+  );
+
   return (
     <>
-      {allItems.length > 0 ? (
+      {filteredItems.length > 0 ? (
         <main className="w-full bg-card rounded-xl h-full shadow-btn_shadow p-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 xl:grid-cols-2 3xl:grid-cols-3">
-            {allItems.map((item, idx) => (
+            {filteredItems.map((item, idx) => (
               <NavLink
                 to={`/auktsion-item/${item?.id}/${auktsionId}`}
                 key={idx}
@@ -55,7 +63,7 @@ const PandingAuction = ({ allItems, loading, id ,auktsionId}) => {
               alt=""
             />
           </div>
-          <h1 className="clam3 font-bold">Item do not exist!</h1>
+          <h1 className="clam3 font-bold">Items do not exist!</h1>
         </div>
       )}
     </>

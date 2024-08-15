@@ -16,13 +16,13 @@ const Auktsion = () => {
   const [filteredAuktsion, setFilteredAuktsion] = useState([]);
   const [loading, setLoading] = useState(true);
   const [addAuktsion, setAddAuktsion] = useState(false);
-  const { userData } = useSelector((state) => state.event);
+  const { userData, searchMessage } = useSelector((state) => state.event);
   const [filterAuktsion, setFilterAuktsion] = useState(false);
 
   const handleFilterAuktsion = () => {
     setFilterAuktsion(!filterAuktsion);
   };
-  console.log(auktsion);
+
   const handleAddAuktsion = () => {
     setAddAuktsion(!addAuktsion);
   };
@@ -42,6 +42,16 @@ const Auktsion = () => {
     };
     auktionFetch();
   }, [addAuktsion]);
+
+  useEffect(() => {
+    let filteredData = auktsion;
+    if (searchMessage) {
+      filteredData = auktsion.filter((item) =>
+        item.name.toLowerCase().includes(searchMessage.toLowerCase())
+      );
+    }
+    setFilteredAuktsion(filteredData);
+  }, [searchMessage, auktsion]);
 
   const applyFilters = ({ startDate, endDate }) => {
     let filteredData = auktsion;

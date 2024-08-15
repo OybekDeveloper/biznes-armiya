@@ -1,30 +1,55 @@
 import React, { useEffect, useState } from "react";
 import { FaPlus, FaRegTrashAlt } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-import { motion } from "framer-motion";
 import AddReq from "./add-req";
 import { ApiService } from "../../components/api.server";
 import Loader1 from "../../components/loader/loader1";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { dataempty } from "../../images";
-import { MdModeEdit } from "react-icons/md";
-import DeleteModal from "./delete-req";
 import { TimeFormatFunction } from "../../components/time-format";
 import AddTime from "./add-time";
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Transition,
+} from "@headlessui/react";
+import { CiMenuKebab } from "react-icons/ci";
+import { groupEventSlice } from "../../reducer/event";
+import DeleteModal from "./delete-task";
 
 const Requirements = () => {
-  const { userData, eventSliceBool } = useSelector((state) => state.event);
+  const { userData, eventSliceBool, searchMessage } = useSelector(
+    (state) => state.event
+  );
   const { role } = userData;
   const [isActive, setIsActive] = useState(false);
   const [loading, setLoading] = useState(true);
   const [requirement, setRequirement] = useState([]);
-  const [delReq, setDelReq] = useState(false);
-  const [delReqId, setReqId] = useState();
+  const [filteredRequirement, setFilteredRequirement] = useState([]);
   const [updateReq, setUpdateReq] = useState();
   const [roles, setRoles] = useState([]);
   const [activeTab, setActiveTab] = useState(1);
   const [attachment, setAttachment] = useState(false);
   const [checkedRequirements, setCheckedRequirements] = useState([]);
+  const [delModal, setDelModal] = useState(false);
+  const [selectId, setSelectId] = useState(null);
+  const dispatch = useDispatch();
+  const handleDeleteModal = () => {
+    setDelModal(!delModal);
+    dispatch(groupEventSlice());
+  };
+  const handleDelete = () => {
+    setDelModal(!delModal);
+    dispatch(groupEventSlice());
+  };
+
+  // const handleEdit = (item) => {
+  //   setEditModalData(item);
+  //   setEditModal(!editModal);
+  //   dispatch(groupEventSlice());
+  // };
 
   const handleAttachment = (item) => {
     setAttachment(!attachment);
@@ -33,13 +58,9 @@ const Requirements = () => {
   const handleActiveTab = (active) => {
     setActiveTab(active.id);
   };
+
   const handleActive = () => {
     setIsActive(!isActive);
-  };
-
-  const handleDeleteReq = (id) => {
-    setDelReq(!delReq);
-    setReqId(id);
   };
 
   const handleCheckData = (e, item) => {
@@ -52,10 +73,6 @@ const Requirements = () => {
       );
     }
   };
-  const handleEditReq = (item) => {
-    setUpdateReq(item);
-    handleActive();
-  };
 
   const fetchReq = async () => {
     try {
@@ -63,7 +80,7 @@ const Requirements = () => {
       const res = await ApiService.getData("/talablar", register?.access);
       const roles = await ApiService.getData("/role", register?.access);
 
-      const filterReq = await Promise.all(
+      const fetchedRequirements = await Promise.all(
         res.map(async (item) => {
           const tasksreq = await ApiService.getData(
             `/tasksreq/${item?.task_id}`,
@@ -77,20 +94,20 @@ const Requirements = () => {
           return { ...tasksreq, role: role?.role, role_id: role?.id };
         })
       );
+
       if (userData?.role?.talab_edit && userData?.role?.talab_delete) {
         setActiveTab(roles[0]?.id);
         setRoles(roles);
-        setRequirement(filterReq);
+        setRequirement(fetchedRequirements);
       } else {
-        const filterData = filterReq.filter(
+        const filteredData = fetchedRequirements.filter(
           (c) => c.start_time !== null && c.endt_time !== null
         );
-        console.log(userData);
         setActiveTab(userData?.role?.id);
-        setRequirement(filterData);
+        setRequirement(filteredData);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching requirements:", error);
     } finally {
       setLoading(false);
     }
@@ -98,7 +115,15 @@ const Requirements = () => {
 
   useEffect(() => {
     fetchReq();
-  }, [isActive, delReq, attachment, userData?.role?.id]);
+  }, [isActive, attachment, userData?.role?.id, eventSliceBool]);
+
+  useEffect(() => {
+    // Filter requirements based on searchMessage
+    const filtered = requirement.filter((item) =>
+      item.name.toLowerCase().includes(searchMessage.toLowerCase())
+    );
+    setFilteredRequirement(filtered);
+  }, [requirement, searchMessage]);
 
   useEffect(() => {
     if (!isActive) {
@@ -171,9 +196,9 @@ const Requirements = () => {
                   : "col-span-5"
               }`}
             >
-              {requirement?.length > 0 ? (
+              {filteredRequirement?.length > 0 ? (
                 <div className="flex flex-col gap-3">
-                  {requirement
+                  {filteredRequirement
                     ?.slice()
                     ?.reverse()
                     ?.map((item, idx) => {
@@ -183,7 +208,7 @@ const Requirements = () => {
                       return (
                         <div
                           key={idx}
-                          className="flex item-center justify-start gap-1"
+                          className="relative flex item-center justify-start gap-1"
                         >
                           {role?.talab_delete && role?.talab_delete && (
                             <input
@@ -249,6 +274,54 @@ const Requirements = () => {
                               </div>
                             </div>
                           </NavLink>
+                          {role?.tasks_delete && role?.tasks_edit && (
+                            <div
+                              onClick={() => setSelectId(item)}
+                              className="absolute right-1 top-1"
+                            >
+                              <Menu>
+                                <MenuButton className="inline-flex items-center gap-2 bg-background-secondary p-1 rounded-md z-10">
+                                  <CiMenuKebab className="text-text-primary" />
+                                </MenuButton>
+                                <Transition
+                                  enter="transition ease-out duration-75"
+                                  enterFrom="opacity-0 scale-95"
+                                  enterTo="opacity-100 scale-100"
+                                  leave="transition ease-in duration-100"
+                                  leaveFrom="opacity-100 scale-100"
+                                  leaveTo="opacity-0 scale-95"
+                                >
+                                  <MenuItems
+                                    anchor="bottom end"
+                                    className="w-52 origin-top-right rounded-xl bg-card mt-[5px] z-[999] shadow-btn_shadow outline-none"
+                                  >
+                                    {userData?.role?.yang_delete && (
+                                      <MenuItem onClick={handleDelete}>
+                                        <button className="group text-red-400 flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+                                          <FaRegTrashAlt className="size-4 fill-thin " />
+                                          Delete
+                                          <kbd className="ml-auto hidden font-sans text-xs text-thin group-data-[focus]:inline">
+                                            ⌘D
+                                          </kbd>
+                                        </button>
+                                      </MenuItem>
+                                    )}
+                                    {/* {userData?.role?.yang_edit && (
+                              <MenuItem onClick={() => handleEdit(item)}>
+                                <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+                                  <MdModeEdit className="size-4 fill-thin" />
+                                  Edit
+                                  <kbd className="ml-auto hidden font-sans text-xs text-thin group-data-[focus]:inline">
+                                    ⌘E
+                                  </kbd>
+                                </button>
+                              </MenuItem>
+                            )} */}
+                                  </MenuItems>
+                                </Transition>
+                              </Menu>
+                            </div>
+                          )}
                         </div>
                       );
                     })}
@@ -276,9 +349,9 @@ const Requirements = () => {
             roles={roles}
           />
           <DeleteModal
-            isOpen={delReq}
-            id={delReqId}
-            handleClose={handleDeleteReq}
+            id={selectId?.id}
+            isOpen={delModal}
+            handleClose={handleDeleteModal}
           />
           <AddTime
             isOpen={attachment}

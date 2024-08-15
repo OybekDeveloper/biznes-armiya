@@ -6,15 +6,14 @@ import { MdOutlineHistory } from "react-icons/md";
 import { ApiService } from "../../components/api.server";
 import { FaSortAmountDownAlt, FaSortAmountUp } from "react-icons/fa";
 import { LuFilter } from "react-icons/lu";
-import { dataempty, photoUrl } from "../../images";
+import { dataempty } from "../../images";
 import { BiTransfer } from "react-icons/bi";
 import Loader1 from "../../components/loader/loader1";
 import { useSelector } from "react-redux";
 import FilterHistory from "./filter-history";
 
 const History = () => {
-  const { eventSliceBool, userData } = useSelector((state) => state.event);
-  const { role } = userData;
+  const { eventSliceBool, userData, searchMessage } = useSelector((state) => state.event);
   const register = JSON.parse(localStorage.getItem("register"));
   const [transaction, setTransaction] = useState(false);
   const [historyVab, setHistoryVab] = useState(false);
@@ -66,6 +65,24 @@ const History = () => {
     [transactionPay, register?.user_id]
   );
 
+  const filterBySearchMessage = useCallback(() => {
+    if (searchMessage) {
+      const filtered = filteredTransactions.filter(
+        (item) =>
+          (item.from_user.first_name + " " + item.from_user.last_name)
+            .toLowerCase()
+            .includes(searchMessage.toLowerCase()) ||
+          (item.to_user.first_name + " " + item.to_user.last_name)
+            .toLowerCase()
+            .includes(searchMessage.toLowerCase())
+      );
+      setFilteredTransactions(filtered);
+    } else {
+      // If no search message, reset to all transactions after filtering
+      applyFilters({}); // Ensure all filters are reapplied
+    }
+  }, [searchMessage, filteredTransactions, applyFilters]);
+
   useEffect(() => {
     const transactionFetch = async () => {
       try {
@@ -88,6 +105,10 @@ const History = () => {
     };
     transactionFetch();
   }, [register.access, register.user_id, eventSliceBool]);
+
+  useEffect(() => {
+    filterBySearchMessage();
+  }, [searchMessage, filterBySearchMessage]);
 
   if (loading) {
     return <Loader1 />;
@@ -183,7 +204,6 @@ const History = () => {
                       <div className="flex justify-start items-center gap-2 text-green-600">
                         <FaSortAmountUp />
                         <h1 className="text-xl font-bold">+{item.vab}</h1>{" "}
-                        {/* Assuming 'amount' is the field for VAB amount */}
                       </div>
                     )}
                     {item.from_user.id === register?.user_id && (
@@ -192,7 +212,6 @@ const History = () => {
                         <h1 className="text-xl font-bold">-{item.vab}</h1>
                       </div>
                     )}
-                    {/* Uncomment if needed */}
                   </div>
                 </div>
                 <div className="col-span-1">
@@ -203,7 +222,6 @@ const History = () => {
                       {item.date_created.split("T")[1].slice(0, 8)}
                     </span>
                   </h1>{" "}
-                  {/* Assuming 'date' is the field */}
                 </div>
               </div>
             ))}

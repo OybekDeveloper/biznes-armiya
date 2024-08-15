@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { FaPlus } from "react-icons/fa";
-import { LuFilter } from "react-icons/lu";
 import { NavLink, useParams } from "react-router-dom";
 import { ApiService } from "../../components/api.server";
 import { dataempty, photoUrl } from "../../images";
 import { TimeFormatFunction } from "../../components/time-format";
 import { useSelector } from "react-redux";
+
 const CheckListItem = () => {
   const { id } = useParams();
-  const { userData } = useSelector((state) => state.event);
+  const { userData, searchMessage } = useSelector((state) => state.event);
   const { role } = userData;
   const [loading, setLoading] = useState(true);
   const register = JSON.parse(localStorage.getItem("register"));
-  const [usersInfoMap, setUsersInfoMap] = useState({}); // State to store users info by task ID
+  const [usersInfoMap, setUsersInfoMap] = useState({});
   const [taskDones, setTasksDones] = useState([]);
+  const [filteredTasks, setFilteredTasks] = useState([]);
+
   async function fetchData() {
     try {
       const res = await ApiService.getData("/task-dones", register?.access);
@@ -21,6 +22,7 @@ const CheckListItem = () => {
         (tasks) => +tasks.group_id === +id && tasks.status === "Finished"
       );
       setTasksDones(filterTasks);
+      setFilteredTasks(filterTasks); // Initialize filtered tasks
     } catch (error) {
       console.log(error);
     }
@@ -76,11 +78,21 @@ const CheckListItem = () => {
     fetchAllUsersInfo();
   }, [taskDones]);
 
+  useEffect(() => {
+    console.log("Search Message:", searchMessage);
+    console.log("Task Dones:", taskDones);
+  
+    const filterTasks = taskDones.filter(task =>
+      task.name.toLowerCase().includes(searchMessage.toLowerCase())
+    );
+    setFilteredTasks(filterTasks);
+  }, [searchMessage, taskDones]);
+  
   return (
     <div>
-      {taskDones.length > 0 ? (
+      {filteredTasks.length > 0 ? (
         <section className="flex flex-col gap-3">
-          {taskDones
+          {filteredTasks
             .slice()
             .reverse()
             .map((item, idx) => {

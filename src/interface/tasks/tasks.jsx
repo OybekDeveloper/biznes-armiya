@@ -233,7 +233,7 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
                                 </button>
                               </MenuItem>
                             )}
-                            {userData?.role?.yang_edit && (
+                            {/* {userData?.role?.yang_edit && (
                               <MenuItem onClick={() => handleEdit(item)}>
                                 <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
                                   <MdModeEdit className="size-4 fill-thin" />
@@ -243,7 +243,7 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
                                   </kbd>
                                 </button>
                               </MenuItem>
-                            )}
+                            )} */}
                           </MenuItems>
                         </Transition>
                       </Menu>

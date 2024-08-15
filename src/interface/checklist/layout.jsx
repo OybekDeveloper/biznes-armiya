@@ -8,14 +8,16 @@ import { TimeFormatFunction } from "../../components/time-format";
 import { MdOutlineHistory } from "react-icons/md";
 
 const Checklist = () => {
-  const { userData, groupEvent } = useSelector((state) => state.event);
+  const { userData, groupEvent, searchMessage } = useSelector((state) => state.event);
   const { role } = userData;
   const register = JSON.parse(localStorage.getItem("register"));
   const [isAddGroup] = useState(false);
   const [groupData, setGroupData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [taskDones, setTasksDones] = useState([]);
-  const [usersInfoMap, setUsersInfoMap] = useState({}); // State to store users info by task ID
+  const [usersInfoMap, setUsersInfoMap] = useState({});
+  const [filteredGroupData, setFilteredGroupData] = useState([]);
+  const [filteredTaskDones, setFilteredTaskDones] = useState([]);
 
   useEffect(() => {
     const groupFetch = async () => {
@@ -33,17 +35,14 @@ const Checklist = () => {
       }
     };
     groupFetch();
-  }, [isAddGroup, isAddGroup, groupEvent]);
+  }, [isAddGroup, groupEvent]);
 
   useEffect(() => {
     const fetchData = async (userList) => {
       try {
         const dataPromises = userList.map(async (user) => {
           try {
-            const res = await ApiService.getData(
-              `/users/${user?.user}`,
-              register?.access
-            );
+            const res = await ApiService.getData(`/users/${user?.user}`, register?.access);
             return res;
           } catch (error) {
             console.error(`Error fetching data for user ${user?.user}:`, error);
@@ -81,6 +80,26 @@ const Checklist = () => {
     fetchAllUsersInfo();
   }, [taskDones]);
 
+  useEffect(() => {
+    const filterData = () => {
+      const lowercasedSearchMessage = searchMessage.toLowerCase();
+      
+      const filteredGroups = groupData.filter((item) =>
+        item.name.toLowerCase().includes(lowercasedSearchMessage)
+      );
+
+      setFilteredGroupData(filteredGroups);
+
+      const filteredTasks = taskDones.filter((item) =>
+        item.name.toLowerCase().includes(lowercasedSearchMessage)
+      );
+
+      setFilteredTaskDones(filteredTasks);
+    };
+
+    filterData();
+  }, [searchMessage, groupData, taskDones]);
+
   return (
     <>
       {loading ? (
@@ -102,9 +121,9 @@ const Checklist = () => {
             <Loader1 />
           ) : (
             <section className="min-h-[300px] lg:flex-1 bg-card shadow-btn_shadow rounded-[24px] p-[18px] flex flex-col">
-              {groupData.length > 0 ? (
+              {filteredGroupData.length > 0 ? (
                 <div className="grid xl:grid-cols-4 lg:grid-cols-2 max-sm:grid-cols-1 sm:grid-cols-2 flex-1 gap-2">
-                  {groupData
+                  {filteredGroupData
                     .slice()
                     .reverse()
                     .map((item, idx) => (
@@ -168,7 +187,7 @@ const Checklist = () => {
           )}
           {role?.tasks_edit && role?.tasks_delete && (
             <section className="flex flex-col gap-3">
-              {taskDones
+              {filteredTaskDones
                 .slice()
                 .reverse()
                 .map((item, idx) => {
