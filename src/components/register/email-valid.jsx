@@ -3,8 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import * as Action from "../../reducer/event";
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const EmailValid = () => {
+  const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(true);
   const register = JSON.parse(localStorage.getItem("register"));
   const { registerData, regsiterDataError } = useSelector(
@@ -25,7 +27,7 @@ const EmailValid = () => {
   return (
     <main className="flex flex-col gap-4">
       <h1 className="text-black clamp2 font-bold text-center">
-        E-mailni tasqilash
+        {t("register_step2_title")}
       </h1>
       <form className="w-full flex flex-col gap-[20px]">
         {!register && (
@@ -35,7 +37,7 @@ const EmailValid = () => {
                 className="text-[14px] font-[700] text-thin"
                 htmlFor="email"
               >
-                E-mail pochta
+                {t("rstep2_input1_label")}
               </label>
               <input
                 onChange={handleChange}
@@ -44,10 +46,10 @@ const EmailValid = () => {
                 id="email"
                 value={registerData?.email}
                 name="email"
-                placeholder="youremail@gmail.com"
+                placeholder={t("rstep2_input1_placeholder")}
               />
               {regsiterDataError?.email && (
-                <p className="text-red-500">{regsiterDataError?.email}</p>
+                <p className="text-red-500">{t("rstep2_input1_error")}</p>
               )}
             </div>
             <div>
@@ -55,7 +57,7 @@ const EmailValid = () => {
                 className="text-[14px] font-[700] text-thin"
                 htmlFor="password"
               >
-                Parol
+                {t("rstep2_input2_label")}
               </label>
               <div className="w-full relative flex items-center">
                 <input
@@ -85,7 +87,7 @@ const EmailValid = () => {
                   ))}
               </div>
               {regsiterDataError?.password && (
-                <p className="text-red-500">{regsiterDataError?.password}</p>
+                <p className="text-red-500">{t("rstep2_input2_error")}</p>
               )}
             </div>
           </>

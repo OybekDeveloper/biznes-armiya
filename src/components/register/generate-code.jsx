@@ -3,7 +3,9 @@ import { ApiService } from "../api.server";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyGemerateCode } from "../../reducer/event";
 import Loader1 from "../loader/loader1";
+import { useTranslation } from "react-i18next";
 const GenerateCode = () => {
+  const { t } = useTranslation();
   const { regsiterDataError, registerLoading } = useSelector(
     (state) => state.event
   );
@@ -22,14 +24,16 @@ const GenerateCode = () => {
         </div>
       )}
       <main className="flex flex-col gap-4">
-        <h1 className="text-black clamp2 font-bold text-center">Guruh kodi</h1>
+        <h1 className="text-black clamp2 font-bold text-center">
+          {t("register_step3_title")}
+        </h1>
         <form action="" className="w-full flex flex-col gap-[20px]">
           <div>
             <label
               className="text-[14px] font-[700] text-thin"
               htmlFor="generate"
             >
-              Maxsus kod
+              {t("rstep3_input1_label")}
             </label>
             <input
               onChange={handleCheckGenerateCode}
@@ -39,7 +43,7 @@ const GenerateCode = () => {
               id="generate"
             />
             {regsiterDataError?.generate_code && (
-              <p className="text-red-500">{regsiterDataError?.generate_code}</p>
+              <p className="text-red-500">{t("rstep3_input1_error")}</p>
             )}
           </div>
         </form>

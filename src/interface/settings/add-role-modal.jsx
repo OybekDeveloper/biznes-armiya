@@ -54,6 +54,14 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
     role_views: false,
     role_edit: false,
     role_delete: false,
+    // side_dash_views: false,
+    // side_task_views: false,
+    // side_history_views: false,
+    // side_auction_views: false,
+    // side_requirements_views: false,
+    // side_check_list_views: false,
+    // side_news_views: false,
+    // side_setting_views: false,
   };
 
   const [role, setRole] = useState(initialRoleState);
@@ -108,7 +116,9 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
   const handleCategoryClick = (category) => {
     const prefix = `${category}_`;
     const allChecked =
-      role[`${prefix}views`] && role[`${prefix}edit`] && role[`${prefix}delete`];
+      role[`${prefix}views`] &&
+      role[`${prefix}edit`] &&
+      role[`${prefix}delete`];
 
     setRole((prevRole) => ({
       ...prevRole,
@@ -117,6 +127,7 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
       [`${prefix}delete`]: !allChecked,
     }));
   };
+
   const categories = [
     { name: "News", key: "yang" },
     { name: "Request", key: "request" },
@@ -133,9 +144,20 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
     { name: "Role", key: "role" },
   ];
 
-  const filteredCategories = categories.filter(category =>
+  // const simpleViewCategories = [
+  //   { name: "Dashboard", key: "side_dash" },
+  //   { name: "Task", key: "side_task" },
+  //   { name: "History", key: "side_history" },
+  //   { name: "Auction", key: "side_auction" },
+  //   { name: "Requirements", key: "side_requirements" },
+  //   { name: "Checklist", key: "side_check_list" },
+  //   { name: "News", key: "side_news" },
+  // ];
+
+  const filteredCategories = categories.filter((category) =>
     category.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  console.log(role);
   return (
     <Transition appear show={isOpen}>
       <Dialog
@@ -178,7 +200,6 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
                       Role
                     </label>
                     <input
-                    
                       id="role"
                       name="role"
                       type="text"
@@ -188,7 +209,7 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
                       }
                       required
                       className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
-                      />
+                    />
                   </div>
 
                   <div className="mb-4">
@@ -204,7 +225,7 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
-                      />
+                    />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -213,8 +234,8 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
                         <button
                           className="flex items-center mb-2 cursor-pointer"
                           onClick={(e) => {
-                            e.preventDefault()
-                            handleCategoryClick(key)
+                            e.preventDefault();
+                            handleCategoryClick(key);
                           }}
                         >
                           <span className="font-semibold">{name}</span>
@@ -227,10 +248,7 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
                               checked={role[`${key}_views`]}
                               onChange={handleCheckboxChange(key, "views")}
                             />
-                            <label
-                              className="ml-2"
-                              htmlFor={`${key}_views`}
-                            >
+                            <label className="ml-2" htmlFor={`${key}_views`}>
                               View
                             </label>
                           </div>
@@ -242,10 +260,7 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
                               disabled={!role[`${key}_views`]}
                               onChange={handleCheckboxChange(key, "edit")}
                             />
-                            <label
-                              className="ml-2"
-                              htmlFor={`${key}_edit`}
-                            >
+                            <label className="ml-2" htmlFor={`${key}_edit`}>
                               Edit
                             </label>
                           </div>
@@ -257,26 +272,43 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
                               disabled={!role[`${key}_views`]}
                               onChange={handleCheckboxChange(key, "delete")}
                             />
-                            <label
-                              className="ml-2"
-                              htmlFor={`${key}_delete`}
-                            >
+                            <label className="ml-2" htmlFor={`${key}_delete`}>
                               Delete
                             </label>
                           </div>
                         </div>
                       </div>
                     ))}
+
+                    {/* {simpleViewCategories.map(({ name, key }) => (
+                      <div key={key} className="category-group">
+                        <div className="flex items-center mb-2">
+                          <span className="font-semibold">{name}</span>
+                        </div>
+                        <div className="flex flex-col pl-4">
+                          <div className="flex items-center">
+                            <input
+                              type="checkbox"
+                              id={`${key}_views`}
+                              checked={role[`${key}_views`]}
+                              onChange={handleCheckboxChange(key, "views")}
+                            />
+                            <label className="ml-2" htmlFor={`${key}_views`}>
+                              View
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    ))} */}
                   </div>
 
                   <div className="mt-6">
                     <button
                       type="submit"
-                      className="px-[20px] py-[13px] rounded-[14px] bg-button-color text-white clamp4 font-bold"
-                      // className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                       disabled={loading}
+                      className="px-[18px] py-[12px] bg-primary text-white font-semibold rounded-[14px] w-full"
                     >
-                      {loading ? <SimpleLoading /> : updateItem ? "Update" : "Add"}
+                      {loading ? <SimpleLoading /> : "Save"}
                     </button>
                   </div>
                 </form>

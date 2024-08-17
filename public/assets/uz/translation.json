@@ -1,0 +1,45 @@
+{
+  "login_title": "Sizning ish joyingiz rejasi. Yaratish. Boshqarish.",
+  "login_title1": "Tizimga kirish",
+  "login_input1": "E-mail",
+  "login_input2": "Parol",
+  "login_btn": "Kirish",
+  "login_info": "Sizda hisob mavjud emasmi?",
+  "login_error_toast": "Kirishda xatolik, iltimos qayta urunib ko'ring!",
+  "login_success_toast": "Siz muvoffaqiyatli kirdingiz!",
+  "login_email_error": "E-mail maydonida nimadir xato!",
+  "login_password_error": "Password maydonida nimadir xato!",
+  "login_all_error": "E-mail yoki parol noto'g'ri!",
+
+  "register_title": "Boshlash",
+  "register_step1_title": "F.I.SH & Telefonni tasdiqlash",
+  "register_step2_title": "E-mailni tasdiqlash",
+  "register_step3_title": "Guruh kodi",
+  "register_step4_title": "Tasdiqlash kodi",
+  "step_name": "Qadam",
+  "register_next_btn": "Keyingisi",
+  "register_info": "Sizda hisob mavjudmi?",
+
+  "rstep1_input1_label": "Ism",
+  "rstep1_input1_placeholder": "Ismingizni kiriting",
+  "rstep1_input1_error": "Ismingizni kiritish majburiy!",
+  "rstep1_input2_label": "Familya",
+  "rstep1_input2_placeholder": "Familyangizni kiriting",
+  "rstep1_input2_error": "Familyangizni kiritish majburiy!",
+  "rstep1_input3_label": "Telefon raqam",
+  "rstep1_input3_error": "Telefon raqamingizni kiritish majburiy!",
+
+  "rstep2_input1_label": "E-mail pochta",
+  "rstep2_input1_placeholder": "sizningemail@gmail.com",
+  "rstep2_input1_error": "E-mailni kiritish majburiy!",
+  "rstep2_input2_label": "Parol",
+  "rstep2_input2_error": "Parolni kiritish majburiy!",
+
+  "rstep3_input1_label": "Maxsus kod",
+  "rstep3_input1_error": "Kiritilgan kod eskirgan!",
+
+  "rstep4_input1_label": "Kodni kiriting",
+  "rstep4_info": "Sizning elektron pochtangizga kod yuborildi",
+  "rstep4_input2_error": "Parolni kiritish majburiy!"
+
+}

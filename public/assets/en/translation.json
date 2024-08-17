@@ -1,0 +1,44 @@
+{
+  "login_title": "Your workspace plan. Create. Manage.",
+  "login_title1": "Login",
+  "login_input1": "E-mail",
+  "login_input2": "Password",
+  "login_btn": "Login",
+  "login_info": "Don't have an account?",
+  "login_error_toast": "Error logging in, please try again!",
+  "login_success_toast": "You have successfully logged in!",
+  "login_email_error": "There is something wrong with the email field!",
+  "login_password_error": "There is something wrong with the password field!",
+  "login_all_error": "Incorrect e-mail or password!",
+
+  "register_title": "Get Started",
+  "register_step1_title": "Name & Phone Verification",
+  "register_step2_title": "Email Verification",
+  "register_step3_title": "Group Code",
+  "register_step4_title": "Confirmation Code",
+  "step_name": "Step",
+  "register_next_btn": "Next",
+  "register_info": "Already have an account?",
+
+  "rstep1_input1_label": "First Name",
+  "rstep1_input1_placeholder": "Enter your first name",
+  "rstep1_input1_error": "First name is required!",
+  "rstep1_input2_label": "Last Name",
+  "rstep1_input2_placeholder": "Enter your last name",
+  "rstep1_input2_error": "Last name is required!",
+  "rstep1_input3_label": "Phone Number",
+  "rstep1_input3_error": "Phone number is required!",
+
+  "rstep2_input1_label": "Email",
+  "rstep2_input1_placeholder": "yourname@gmail.com",
+  "rstep2_input1_error": "Email is required!",
+  "rstep2_input2_label": "Password",
+  "rstep2_input2_error": "Password is required!",
+
+  "rstep3_input1_label": "Special Code",
+  "rstep3_input1_error": "The code entered is outdated!",
+
+  "rstep4_input1_label": "Enter the Code",
+  "rstep4_info": "A code has been sent to your email",
+  "rstep4_input2_error": "Password is required!"
+}

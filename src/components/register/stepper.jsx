@@ -100,7 +100,7 @@ const Stepper = ({ steps, currentStep }) => {
   });
 
   return (
-    <div className="flex flex-col justify-between items-center gap-3">
+    <div className="flex flex-col justify-between items-center gap-3 px-3">
       {displaySteps}
     </div>
   );

@@ -2,7 +2,9 @@ import { MdInfo } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import Loader1 from "../loader/loader1";
 import * as Action from "../../reducer/event";
+import { useTranslation } from "react-i18next";
 const SmsValid = () => {
+  const { t } = useTranslation();
   const { registerLoading } = useSelector((state) => state.event);
   const dispatch = useDispatch();
 
@@ -21,7 +23,7 @@ const SmsValid = () => {
       <div className="flex bg-background-secondary py-[21px] px-[12px] rounded-[14px] justify-around items-center">
         <MdInfo className="clamp3 text-primary" />
         <h1 className="text-[14px] text-primary font-[500]">
-          Sizning elektron pochtangizga kod yuborildi
+          {t("rstep4_info")}
         </h1>
       </div>
       <div className="">
@@ -29,7 +31,7 @@ const SmsValid = () => {
           className="text-[14px] font-[700] text-thin"
           htmlFor="register_code"
         >
-          Kodni kiriting
+          {t("rstep4_input1_label")}
         </label>
         <input
           onChange={(e) => dispatch(Action.verifyEmailSlices(e.target.value))}
@@ -41,7 +43,7 @@ const SmsValid = () => {
           value={registerCode}
         />
         {regsiterDataError?.register_code && (
-          <p className="text-red-500">{regsiterDataError?.register_code}</p>
+          <p className="text-red-500">{t("rstep4_input2_error")}</p>
         )}
       </div>
     </>

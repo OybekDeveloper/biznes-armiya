@@ -1,0 +1,44 @@
+{
+  "login_title": "План вашего рабочего места. Создавайте. Управляйте.",
+  "login_title1": "Войти в систему",
+  "login_input1": "Эл. почта",
+  "login_input2": "Пароль",
+  "login_btn": "Войти",
+  "login_info": "У вас нет учетной записи?",
+  "login_error_toast": "Ошибка при входе, пожалуйста, попробуйте еще раз!",
+  "login_success_toast": "Вы успешно вошли!",
+  "login_email_error": "Ошибка в поле электронной почты!",
+  "login_password_error": "Ошибка в поле пароля!",
+  "login_all_error": "Неправильный e-mail или пароль!",
+
+  "register_title": "Начать",
+  "register_step1_title": "Ф.И.О. и подтверждение телефона",
+  "register_step2_title": "Подтверждение электронной почты",
+  "register_step3_title": "Код группы",
+  "register_step4_title": "Код подтверждения",
+  "step_name": "Шаг",
+  "register_next_btn": "Далее",
+  "register_info": "У вас уже есть аккаунт?",
+
+  "rstep1_input1_label": "Имя",
+  "rstep1_input1_placeholder": "Введите ваше имя",
+  "rstep1_input1_error": "Введите ваше имя обязательно!",
+  "rstep1_input2_label": "Фамилия",
+  "rstep1_input2_placeholder": "Введите вашу фамилию",
+  "rstep1_input2_error": "Введите вашу фамилию обязательно!",
+  "rstep1_input3_label": "Номер телефона",
+  "rstep1_input3_error": "Введите ваш номер телефона обязательно!",
+
+  "rstep2_input1_label": "Эл. почта",
+  "rstep2_input1_placeholder": "вашemail@gmail.com",
+  "rstep2_input1_error": "Введите электронную почту обязательно!",
+  "rstep2_input2_label": "Пароль",
+  "rstep2_input2_error": "Введите пароль обязательно!",
+
+  "rstep3_input1_label": "Специальный код",
+  "rstep3_input1_error": "Введенный код устарел!",
+
+  "rstep4_input1_label": "Введите код",
+  "rstep4_info": "Код был отправлен на вашу электронную почту",
+  "rstep4_input2_error": "Введите пароль обязательно!"
+}

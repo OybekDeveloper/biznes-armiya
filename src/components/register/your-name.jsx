@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Action from "../../reducer/event";
+import { useTranslation } from "react-i18next";
 
 const YourName = () => {
+  const { t } = useTranslation();
   const { registerData, regsiterDataError } = useSelector(
     (state) => state.event
   );
@@ -24,8 +26,8 @@ const YourName = () => {
 
   return (
     <>
-      <h1 className="text-black clamp2 font-bold text-center">
-        F.I.SH & Telefon raqamni tasdiqlash
+      <h1 className="text-black clamp2 font-bold text-center md:w-2/4">
+        {t("register_step1_title")}
       </h1>
       <main className="flex flex-col gap-4">
         <form className="w-full flex flex-col gap-[20px]">
@@ -34,19 +36,19 @@ const YourName = () => {
               className="text-[14px] font-[700] text-thin"
               htmlFor="first_name"
             >
-              Ism
+              {t("rstep1_input1_label")}
             </label>
             <input
               onChange={handleChange}
               id="first_name"
               className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
               type="text"
-              placeholder="Ismingizni kiriting..."
+              placeholder={t("rstep1_input1_placeholder")}
               name="first_name"
               value={registerData?.first_name}
             />
             {regsiterDataError?.first_name && (
-              <p className="text-red-500">{regsiterDataError?.first_name}</p>
+              <p className="text-red-500">{t("rstep1_input1_error")}</p>
             )}
           </div>
           <div>
@@ -54,19 +56,19 @@ const YourName = () => {
               className="text-[14px] font-[700] text-thin"
               htmlFor="last_name"
             >
-              Familya
+              {t("rstep1_input2_label")}
             </label>
             <input
               onChange={handleChange}
               className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
               type="text"
-              placeholder="Familyangizni kiriting..."
+              placeholder={t("rstep1_input2_placeholder")}
               id="last_name"
               name="last_name"
               value={registerData?.last_name}
             />
             {regsiterDataError?.last_name && (
-              <p className="text-red-500">{regsiterDataError?.last_name}</p>
+              <p className="text-red-500">{t("rstep1_input2_error")}</p>
             )}
           </div>
           <div>
@@ -74,7 +76,7 @@ const YourName = () => {
               className="text-[14px] font-[700] text-thin"
               htmlFor="phone_number"
             >
-              Telefon raqam
+              {t("rstep1_input3_label")}
             </label>
             <input
               onChange={handleChange}
@@ -86,7 +88,7 @@ const YourName = () => {
               value={registerData?.phone_number}
             />
             {regsiterDataError?.phone_number && (
-              <p className="text-red-500">{regsiterDataError?.phone_number}</p>
+              <p className="text-red-500">{t("rstep1_input3_error")}</p>
             )}
           </div>
         </form>

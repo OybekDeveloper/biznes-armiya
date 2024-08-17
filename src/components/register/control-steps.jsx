@@ -1,8 +1,10 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
-import { NavLink } from "react-router-dom";
 
 const ControlSteps = ({ handleClick, currentStep }) => {
+  const { t } = useTranslation();
+
   return (
     <div
       className={`${
@@ -15,7 +17,9 @@ const ControlSteps = ({ handleClick, currentStep }) => {
         onClick={() => handleClick("next")}
         className="py-2 px-4 bg-primary rounded-[12px] flex justify-end items-center shadow-custom"
       >
-        <h1 className="text-white font-[500] clamp3">Keyingisi</h1>
+        <h1 className="text-white font-[500] clamp3">
+          {t("register_next_btn")}
+        </h1>
         <GrFormNextLink className="text-[32px] text-white font-bold" />
       </button>
     </div>

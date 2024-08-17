@@ -4,7 +4,11 @@ import Saidbar from "./components/sidebar/sidebar";
 import Navbar from "./components/navbar/navbar";
 import { useEffect } from "react";
 import Loader1 from "./components/loader/loader1";
-import { useDispatch } from "react-redux";
+import { initReactI18next } from "react-i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+import i18n from "i18next";
+import HttpApi from "i18next-http-backend";
+import i18next from "i18next";
 //dashboard
 const Dashboard = React.lazy(() => import("./interface/dashboard/layout"));
 const NearestOvents = React.lazy(() =>
@@ -28,7 +32,7 @@ const CheckList = React.lazy(() => import("./interface/checklist/layout"));
 const CheckListItem = React.lazy(() =>
   import("./interface/checklist/check-list")
 );
-const CheckListHistory= React.lazy(() =>
+const CheckListHistory = React.lazy(() =>
   import("./interface/checklist/check-list-history")
 );
 //home work
@@ -62,6 +66,22 @@ const RoleManagement = React.lazy(() =>
 //register
 const Register = React.lazy(() => import("./components/register/register"));
 const NotFound = React.lazy(() => import("./components/not-found/not-found"));
+
+i18n
+  .use(initReactI18next)
+  .use(HttpApi)
+  .use(LanguageDetector)
+  .init({
+    supportedLngs: ["en", "uz", "ru"],
+    fallbackLng: "en",
+    detection: {
+      order: ["htmlTag", "cookie", "localStorage", "subdomain", "path"],
+      caches: ["cookie"],
+    },
+    backend: {
+      loadPath: "/assets/{{lng}}/translation.json",
+    },
+  });
 
 const App = () => {
   const { pathname } = useLocation();

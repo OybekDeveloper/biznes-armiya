@@ -5,8 +5,11 @@ import Loader1 from "../loader/loader1";
 import { ApiService } from "../api.server";
 import toast from "react-hot-toast";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import LengDropdown from "../leng-dropdown";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
+  const { t } = useTranslation();
   const { pathname } = useLocation();
   const register = JSON.parse(localStorage.getItem("register"));
   const [showPassword, setShowPassword] = useState(true);
@@ -51,19 +54,14 @@ const Login = () => {
         navigate("/");
         setLoading(false);
 
-        toast.success("Siz muvoffaqiyatli kirdingiz!", { id: toastId });
+        toast.success(t("login_success_toast"), { id: toastId });
       } catch (error) {
         setLoading(false);
         console.log(error);
         setErrorMessage(error?.response?.data);
-        toast.error(
-          <h1 className="text-center">
-            Kirishda xatolik, iltimos qayta urunib ko'ring!
-          </h1>,
-          {
-            id: toastId,
-          }
-        );
+        toast.error(<h1 className="text-center">{t("login_error_toast")}</h1>, {
+          id: toastId,
+        });
       }
     };
     fetchLogin();
@@ -101,7 +99,7 @@ const Login = () => {
             <h1 className="clamp3 text-white font-bold">Biznes Armiya</h1>
           </div>
           <h1 className="clamp3 font-[700] text-white text-center mb-6">
-            Sizning ish joyingiz rejasi. Yaratish. Boshqarish.
+            {t("login_title")}
           </h1>
           <div className="flex justify-center items-center">
             <img
@@ -117,24 +115,27 @@ const Login = () => {
         <img className="w-20 h-20" src={lightLogo} alt="logo" />
         <h1 className="text-3xl font-[700] text-primary">Biznes Armiya</h1>
       </section>
-      <section className="md:rounded-r-[24px] max-md:shadow-custom md:w-1/2 w-full md:h-full md:bg-white max-md:rounded-[24px] max-md:py-[26px] flex justify-center items-center">
+      <section className="md:rounded-r-[24px] max-md:shadow-custom md:w-1/2 w-full md:h-full md:bg-white max-md:rounded-[24px] max-md:py-[26px] flex justify-center items-center relative">
+        <div className="absolute top-4 right-4 z-[300]">
+          <LengDropdown />
+        </div>
         <div className="mx-auto w-11/12 md:w-[80%] lg:w-[60%] h-full flex flex-col justify-center items-center gap-[33px]">
           <h1 className="text-[#0A1629] text-[22px] font-[700]">
-            Tizimga kirish
+            {t("login_title1")}
           </h1>
           <form
             action=""
             className="w-full max-w-[300px] flex flex-col gap-[16px] p-1"
           >
             {errorMessage?.non_field_errors && (
-              <p className="text-red-500">E-mail yoki parol noto'g'ri!</p>
+              <p className="text-red-500">{t("login_all_error")}</p>
             )}
             <div className="p-2">
               <label
                 className="text-[14px] font-[700] text-thin"
                 htmlFor="email"
               >
-                E-mail
+                {t("login_input1")}
               </label>
               <input
                 onChange={handleChange}
@@ -146,7 +147,7 @@ const Login = () => {
                 placeholder="youremail@gmail.com"
               />
               {errorMessage?.email && (
-                <p className="text-red-500">{errorMessage?.email}</p>
+                <p className="text-red-500">{t("login_email_error")}</p>
               )}
             </div>
             <div className="p-2">
@@ -154,7 +155,7 @@ const Login = () => {
                 className="text-[14px] font-[700] text-thin"
                 htmlFor="password"
               >
-                Parol
+                {t("login_input2")}
               </label>
               <div className="w-full relative flex items-center">
                 <input
@@ -186,7 +187,7 @@ const Login = () => {
                   ))}
               </div>
               {errorMessage?.password && (
-                <p className="text-red-500">{errorMessage?.password}</p>
+                <p className="text-red-500">{t("login_password_error")}</p>
               )}
             </div>
             <button
@@ -194,7 +195,7 @@ const Login = () => {
               onClick={handleSubmit}
               className="px-[40px] py-[12px] rounded-[14px] bg-primary text-[16px] font-[600] text-white flex justify-center gap-2"
             >
-              Kirish
+              {t("login_btn")}
               <img src={whiterightarrow} alt="" />
             </button>
           </form>
@@ -202,7 +203,7 @@ const Login = () => {
             to="/register"
             className="text-primary text-[16px] font-[600]"
           >
-            Sizda hisob mavjud emasmi?
+            {t("login_info")}
           </NavLink>
         </div>
       </section>

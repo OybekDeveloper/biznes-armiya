@@ -13,8 +13,11 @@ import Finish from "./finish";
 import Loader1 from "../loader/loader1";
 import * as Action from "../../reducer/event";
 import { ApiService } from "../api.server";
+import LengDropdown from "../leng-dropdown";
+import { useTranslation } from "react-i18next";
 
 const Register = () => {
+  const { t } = useTranslation();
   const register = localStorage.getItem("register");
   const navigate = useNavigate();
   const {
@@ -27,10 +30,10 @@ const Register = () => {
   const dispatch = useDispatch();
   const [currentStep, setCurrentStep] = useState(1);
   const steps = [
-    "F.I.SH & Telefonni tasdiqlash",
-    "E-mailni tasdiqlash",
-    "Guruh kodi",
-    "Tasdiqlash kodi",
+    t("register_step1_title"),
+    t("register_step2_title"),
+    t("register_step3_title"),
+    t("register_step4_title"),
   ];
 
   const displaySteps = (step) => {
@@ -48,17 +51,50 @@ const Register = () => {
     }
   };
 
-  const fetchData = async (data) => {
+  const fetchData = async (data, group_id) => {
+    console.log(group_id);
+    // return null;
     dispatch(Action.registerLoadingSlice(true));
+    console.log(registerSuccessData);
     try {
       const res = await ApiService.postRegister("/register", data);
-      dispatch(Action.setRegisterSuccessData(res));
-      setCurrentStep(4);
+      if (res)
+        dispatch(
+          Action.setRegisterSuccessData({
+            ...registerSuccessData,
+            register: res,
+          })
+        );
+      if (res.user_id && group_id) {
+        await ApiService.patchData(
+          `/users/${res.user_id}`,
+          {
+            group_id: group_id,
+          },
+          res.access
+        );
+        const getGroup = await ApiService.getData(
+          `/group/${group_id}`,
+          res.access
+        );
+        if (getGroup) {
+          const group = await ApiService.patchData(
+            `/group/${group_id}`,
+            {
+              users: [...getGroup.users, res.user_id],
+            },
+            res.access
+          );
+          if (group) {
+            setCurrentStep(4);
+          }
+        }
+      }
     } catch (error) {
       setCurrentStep(2);
 
       console.log(error);
-      if (error.response.data.email) {
+      if (error?.response?.data?.email) {
         dispatch(
           Action.postRegisterError({
             email: error?.response?.data?.email[0]
@@ -75,15 +111,15 @@ const Register = () => {
   const fetchVerifyEmail = async (code) => {
     dispatch(Action.registerLoadingSlice(true));
     try {
-      const res =await ApiService.postRegisterData("/verify-email", {
+      const res = await ApiService.postRegisterData("/verify-email", {
         code: code,
         email: registerData?.email,
       });
-      // await ApiService.patchData(`/users/${registerData?.id}`,{
-      //   group_id:
-      // })
       setCurrentStep(3);
-      localStorage.setItem("register", JSON.stringify(registerSuccessData));
+      localStorage.setItem(
+        "register",
+        JSON.stringify(registerSuccessData.register)
+      );
     } catch (error) {
       console.log(error);
 
@@ -98,11 +134,20 @@ const Register = () => {
   const fetchGenerateCode = async () => {
     dispatch(Action.registerLoadingSlice(true));
     try {
-      await ApiService.postRegister("/check-gr/", {
+      const res = await ApiService.postRegister("/check-gr/", {
         code: generateCode,
       });
-      dispatch(Action.postRegisterError({}));
-      fetchData(registerData);
+      if (res) {
+        console.log(res);
+        dispatch(
+          Action.setRegisterSuccessData({
+            ...registerSuccessData,
+            groupDetail: res,
+          })
+        );
+        dispatch(Action.postRegisterError({}));
+        fetchData(registerData, res.group_id);
+      }
     } catch (error) {
       const newErrors = {};
       newErrors["generate_code"] = error?.response?.data?.detail;
@@ -195,26 +240,35 @@ const Register = () => {
     return <Loader1 />;
   }
   return (
-    <main className="w-screen h-screen flex justify-center items-center md:grid grid-cols-4 max-lg:grid-cols-5 max-md:grid-cols-1">
+    <main className="relative w-screen h-screen flex justify-center items-center md:grid grid-cols-4 max-lg:grid-cols-5 max-md:grid-cols-1">
       <section className="max-md:hidden w-full h-full col-span-1 max-lg:col-span-2 p-4">
         <div className="w-full h-full bg-primary rounded-[24px] pt-[150px] flex justify-center px-2">
           <div className="flex flex-col gap-3">
-            <h1 className="clamp2 font-bold text-white">Boshlash</h1>
+            <h1 className="clamp2 font-bold text-white">
+              {t("register_title")}
+            </h1>
             <Stepper steps={steps} currentStep={currentStep} />
           </div>
         </div>
       </section>
-      <section className="w-full h-full col-span-3 md:px-6 md:py-4 max-md:col-span-1">
+      <section className="relative w-full h-full col-span-3 md:px-6 md:py-4 max-md:col-span-1 z-[200]">
         <div className="relative w-full h-full md:bg-white rounded-[24px] flex flex-col p-6 items-center md:pt-[70px] gap-4">
-          <h1 className="font-bold text-primary clamp3 w-full text-center">
-            Qadam {currentStep}/4
+          <div className="absolute top-4 right-4 z-[300]">
+            <LengDropdown />
+          </div>
+          <h1 className="font-bold text-primary clamp3 w-full text-center pt-12">
+            {t("step_name")} {currentStep}/4
           </h1>
           {displaySteps(currentStep)}
           <NavLink className="font-[500]" to="/login">
-            Sizda hisob mavjudmi?{" "}
-            <span className="text-primary font-bold">Kirish</span>
+            {t("register_info")}{" "}
+            <span className="text-primary font-bold">{t("login_btn")}</span>
           </NavLink>
-          <ControlSteps handleClick={handleClick} currentStep={currentStep} />
+          <ControlSteps
+            t={t}
+            handleClick={handleClick}
+            currentStep={currentStep}
+          />
         </div>
       </section>
     </main>
