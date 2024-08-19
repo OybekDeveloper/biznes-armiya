@@ -78,7 +78,7 @@ const Project = () => {
       }
     };
     fetchData();
-  }, [eventSliceBool]);
+  }, [eventSliceBool] );
 
   useEffect(() => {
     const fetchMessage = async () => {
