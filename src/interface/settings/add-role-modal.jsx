@@ -62,7 +62,6 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
     side_requirements: false,
     side_check_list: false,
     side_news: false,
-    side_setting: false,
   };
   const [role, setRole] = useState(initialRoleState);
   const [loading, setLoading] = useState(false);

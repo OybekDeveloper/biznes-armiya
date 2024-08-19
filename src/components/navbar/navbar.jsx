@@ -99,7 +99,8 @@ const Navbar = () => {
       title: "Settings",
       icon: <IoMdSettings />,
       link: "/settings/user",
-      active: role?.side_setting ? true : false,
+      active:
+        role?.role_views || role.role_edit || role.role_delete ? true : false,
     },
   ];
 
