@@ -128,9 +128,11 @@ export default function AddVabModal({ isOpen, handleClose }) {
                   <DialogTitle as="h3" className="text-base/7 font-medium">
                     <div className="flex items-end justify-between cursor-pointer">
                       <h1 className="font-[600] clamp3">Add VAB</h1>
-                      <div className="p-[10px] bg-background-secondary rounded-[12px]">
+                      <div
+                        onClick={handleCloseModal}
+                        className="p-[10px] bg-background-secondary rounded-[12px]"
+                      >
                         <IoClose
-                          onClick={handleCloseModal}
                           className="text-text-primary text-[24px]"
                           src={close}
                           alt="close"

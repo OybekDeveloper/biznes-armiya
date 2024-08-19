@@ -30,7 +30,7 @@ const FilterHistory = ({ isOpen, handleClose, applyFilters }) => {
               leaveFrom="opacity-100 transform scale-100"
               leaveTo="opacity-0 transform scale-95"
             >
-              <Dialog.Panel className="w-full h-screen max-w-md rounded-xl p-4 sm:p-6 backdrop-blur-2xl bg-white">
+              <Dialog.Panel className="w-full h-screen max-w-md rounded-xl p-4 sm:p-6 backdrop-blur-2xl bg-card">
                 <h2 className="text-xl font-bold">Filter History</h2>
                 <form
                   onSubmit={(e) => e.preventDefault()}
@@ -41,7 +41,7 @@ const FilterHistory = ({ isOpen, handleClose, applyFilters }) => {
                     <select
                       value={type}
                       onChange={(e) => setType(e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded"
+                      className="w-full p-2 border border-border rounded bg-background"
                     >
                       <option value="">All</option>
                       <option value="income">Income</option>
@@ -54,7 +54,7 @@ const FilterHistory = ({ isOpen, handleClose, applyFilters }) => {
                       type="date"
                       value={startDate}
                       onChange={(e) => setStartDate(e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded"
+                      className="w-full p-2 border border-border rounded bg-background"
                     />
                   </div>
                   <div>
@@ -63,7 +63,7 @@ const FilterHistory = ({ isOpen, handleClose, applyFilters }) => {
                       type="date"
                       value={endDate}
                       onChange={(e) => setEndDate(e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded"
+                      className="w-full p-2 border border-border rounded bg-background"
                     />
                   </div>
                   <div className="flex justify-end gap-4">
@@ -75,7 +75,7 @@ const FilterHistory = ({ isOpen, handleClose, applyFilters }) => {
                         applyFilters({ type: "", startDate: "", endDate: "" });
                         handleClose();
                       }}
-                      className="px-4 py-2 rounded bg-gray-300 text-gray-700"
+                      className="px-4 py-2 rounded bg-backseborder-border text-gray-700"
                     >
                       Reset
                     </button>
