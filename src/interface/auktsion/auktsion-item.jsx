@@ -29,7 +29,6 @@ const Auktsion = () => {
           `/auktsion/${id}`,
           register?.access
         );
-        console.log(auktsion);
         if (!items && !auktsion) {
           return;
         }

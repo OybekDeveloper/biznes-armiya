@@ -21,7 +21,6 @@ const MyTasks = () => {
     try {
       const res = await ApiService.getData("/tasks", register?.access);
       const res2 = await ApiService.getData("/tasksreq", register?.access);
-      console.log(res2);
       const filterTasks = res.filter((c) =>
         c.user.find((u) => +u.user === userData?.id)
       );
@@ -88,7 +87,6 @@ const MyTasks = () => {
 
     fetchAllUsersInfo();
   }, [taskDones]);
-  console.log(taskDonesReq);
 
   if (loading) {
     return <Loader1 />;

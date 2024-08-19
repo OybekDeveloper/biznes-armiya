@@ -52,10 +52,8 @@ const Dashboard = () => {
       try {
         const group = await ApiService.getData(`/group`, register?.access);
         const res = await ApiService.getData("/yangiliklar", register?.access);
-        console.log(res);
         const newsWithUsers = await Promise.all(
           res.map(async (newsItem) => {
-            console.log(newsItem, "news");
             const usersInfo = await fetchUsers(newsItem?.user_id);
             return { ...newsItem, user_id: usersInfo };
           })
@@ -69,7 +67,6 @@ const Dashboard = () => {
     };
     groupFetch();
   }, []);
-  console.log(groupData);
   return (
     <div>
       {/* The rest of your component */}

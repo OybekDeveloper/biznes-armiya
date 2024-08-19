@@ -90,7 +90,6 @@ export default function AddItemModal({ isOpen, handleClose, pendingAuction }) {
             },
             register?.access
           );
-          console.log(res1);
         }
 
         handleClose();

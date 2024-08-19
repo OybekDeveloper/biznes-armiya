@@ -34,7 +34,6 @@ const RequirementItem = () => {
   const [reject, setReject] = useState(false);
   const handleTakeOverModal = (reject) => {
     setTakeOverModal(!takeOverModal);
-    console.log(reject, "reject");
     if (reject.type === "click") {
       setReject(false);
     } else {
@@ -267,7 +266,6 @@ export default RequirementItem;
 
 function TakeOverUser({ isOpen, handleClose, item, status, reject }) {
   const register = JSON.parse(localStorage.getItem("register"));
-  console.log(reject);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 

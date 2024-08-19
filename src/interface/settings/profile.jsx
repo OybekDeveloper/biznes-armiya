@@ -7,7 +7,6 @@ import { FaPhoneAlt } from "react-icons/fa";
 
 const ProfileInfo = ({ handleUpdateUser }) => {
   const { userData } = useSelector((state) => state.event);
-  console.log(userData);
   return (
     <main className="bg-card rounded-[14px] w-full px-[24px] py-[18px] shadow-btn_shadow">
       <section className=" flex flex-col gap-3">

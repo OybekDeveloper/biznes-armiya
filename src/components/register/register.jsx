@@ -52,10 +52,8 @@ const Register = () => {
   };
 
   const fetchData = async (data, group_id) => {
-    console.log(group_id);
     // return null;
     dispatch(Action.registerLoadingSlice(true));
-    console.log(registerSuccessData);
     try {
       const res = await ApiService.postRegister("/register", data);
       if (res)
@@ -138,7 +136,6 @@ const Register = () => {
         code: generateCode,
       });
       if (res) {
-        console.log(res);
         dispatch(
           Action.setRegisterSuccessData({
             ...registerSuccessData,

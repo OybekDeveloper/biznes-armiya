@@ -35,7 +35,6 @@ const Project = () => {
 
   const handleTakeOverModal = (reject) => {
     setTakeOverModal(!takeOverModal);
-    console.log(reject, "reject");
     if (reject.type === "click") {
       setReject(false);
     } else {
@@ -278,7 +277,6 @@ const Project = () => {
 export default Project;
 
 function AllUsersModal({ isOpen, handleClose, users }) {
-  console.log(users);
   return (
     <Transition appear show={isOpen}>
       <Dialog

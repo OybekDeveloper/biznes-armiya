@@ -146,7 +146,6 @@ const NowAuction = () => {
   };
 
   useEffect(() => {
-    console.log(item?.end_time && getLocalISOString() > item.end_time);
     const updateAuction = async () => {
       try {
         if (item?.end_time && getLocalISOString() > item.end_time) {
@@ -154,12 +153,9 @@ const NowAuction = () => {
             `/auktsion/${aukt_id}`,
             register?.access
           );
-          console.log(auktsion);
           if (auktsion.yutganlar?.find((c) => +c.buyum.id === +id)) {
-            console.log("blaa");
             return null;
           }
-          console.log(auktsion.yutganlar);
 
           if (auktsion) {
             const winnerUser = {
@@ -167,9 +163,7 @@ const NowAuction = () => {
               narxi: maxVab,
               buyum: item,
             };
-            console.log(winnerUser);
             const winner = applicants[0];
-            console.log(winner, "winner");
 
             const res = await ApiService.patchData(
               `/auktsion/${aukt_id}`,
@@ -189,7 +183,6 @@ const NowAuction = () => {
                 register?.access
               );
               toast.success("Auction updated with the winner!");
-              console.log(updatedUser);
             }
           }
         }
@@ -198,7 +191,6 @@ const NowAuction = () => {
       }
     };
 
-    console.log("Running updateAuction check...");
     updateAuction();
   }, [
     item?.end_time,

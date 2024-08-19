@@ -64,7 +64,6 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
     side_news: false,
     side_setting: false,
   };
-  console.log(updateItem);
   const [role, setRole] = useState(initialRoleState);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -169,7 +168,6 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
   const filteredSimpleViewCategories = simpleViewCategories.filter((category) =>
     category.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  console.log(role);
   return (
     <Transition appear show={isOpen}>
       <Dialog

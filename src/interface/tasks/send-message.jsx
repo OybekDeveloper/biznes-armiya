@@ -73,7 +73,6 @@ const SendMessage = ({ task_id, req_task_id, status }) => {
           register.access
         );
         dispatch(eventSliceAction());
-        console.log(res);
         setFormData({
           file: "",
           message: "",

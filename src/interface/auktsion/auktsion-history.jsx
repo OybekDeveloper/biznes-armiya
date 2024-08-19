@@ -19,9 +19,7 @@ const AuktionHistory = () => {
           `/auktsion/${id}`,
           register?.access
         );
-        console.log(auktsion)
         setWinnerAuktion(auktsion?.yutganlar ? auktsion.yutganlar : []);
-        console.log(auktsion);
       } catch (error) {
         console.log(error);
         setWinnerAuktion([]);  // Ensure winnerAuktion is always an array even on error

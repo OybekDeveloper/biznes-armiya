@@ -179,7 +179,6 @@ const Navbar = () => {
 
         const res1 = await ApiService.getData("/tasks", register?.access);
         const res2 = await ApiService.getData("/tasksreq", register?.access);
-        console.log(res2);
         const filterTasks = res1.filter((c) =>
           c.user.find((u) => +u.user === res?.id)
         );
@@ -188,8 +187,6 @@ const Navbar = () => {
         );
         const doneTasks = filterTasks.filter((c) => c.status === "Done");
         const doneTasks2 = filterTasks2.filter((c) => c.status === "Done");
-        console.log(doneTasks, "task");
-        console.log(doneTasks2, "req");
 
         const reyting =
           ((doneTasks.length + doneTasks2.length) /
@@ -204,7 +201,6 @@ const Navbar = () => {
             register?.access
           );
         }
-        console.log(reyting, reyting.toFixed(1));
         dispatch(
           userDetailSlice({
             ...res,
@@ -229,7 +225,6 @@ const Navbar = () => {
     dispatch(searchSlice(""));
   }, [pathname]);
 
-  console.log(userData);
   return (
     <>
       {/* desktop */}

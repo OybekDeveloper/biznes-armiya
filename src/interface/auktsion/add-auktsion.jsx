@@ -34,7 +34,6 @@ export default function AddAuktsion({ isOpen, handleClose }) {
     setSelectOption([]);
     setErrorMessage({});
   };
-  console.log(formData,"kooot");
 
   const handleSubmit = (e) => {
     e.preventDefault();

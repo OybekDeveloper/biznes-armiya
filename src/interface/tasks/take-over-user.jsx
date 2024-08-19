@@ -21,7 +21,6 @@ export default function TakeOverUser({
   reject,
 }) {
   const register = JSON.parse(localStorage.getItem("register"));
-  console.log(reject);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 

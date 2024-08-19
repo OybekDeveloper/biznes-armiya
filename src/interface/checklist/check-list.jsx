@@ -79,8 +79,6 @@ const CheckListItem = () => {
   }, [taskDones]);
 
   useEffect(() => {
-    console.log("Search Message:", searchMessage);
-    console.log("Task Dones:", taskDones);
   
     const filterTasks = taskDones.filter(task =>
       task.name.toLowerCase().includes(searchMessage.toLowerCase())
