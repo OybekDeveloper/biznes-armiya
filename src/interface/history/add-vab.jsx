@@ -58,7 +58,7 @@ export default function AddVabModal({ isOpen, handleClose }) {
     try {
       setLoading(true);
       await ApiService.putData(
-        "/vab/1",
+        "/vab/2",
         {
           ...formData,
           history: [...formData.history, ...vab],
@@ -94,7 +94,7 @@ export default function AddVabModal({ isOpen, handleClose }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await ApiService.getData("/vab/1", register?.access);
+        const res = await ApiService.getData("/vab/2", register?.access);
         setVab(res?.history || []);
       } catch (error) {
         console.error(error);

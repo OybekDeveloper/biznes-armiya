@@ -47,7 +47,7 @@ export default function VabHistory({ isOpen, handleClose }) {
       setLoading(true);
       try {
         const register = JSON.parse(localStorage.getItem("register"));
-        const res = await ApiService.getData(`/vab/1`, register?.access);
+        const res = await ApiService.getData(`/vab/2`, register?.access);
 
         const now = new Date();
         let seriesData = [];
@@ -109,7 +109,7 @@ export default function VabHistory({ isOpen, handleClose }) {
           categories: categoriesData,
         });
       } catch (error) {
-        toast.error("Error fetching data");
+        // toast.error("Error fetching data");
       } finally {
         setLoading(false);
       }

@@ -23,6 +23,7 @@ import { MdOndemandVideo } from "react-icons/md";
 import { FaCalendarCheck } from "react-icons/fa";
 import { FaNewspaper } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
+import Loader1 from "../loader/loader1";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -229,6 +230,11 @@ const Navbar = () => {
   return (
     <>
       {/* desktop */}
+      {!userData.role&& ((
+          <div className="flex bg-background justify-center items-center w-screen h-screen fixed top-0 left-0 z-[99999]">
+            <Loader1 />
+          </div>
+        ))}
       <div
         className={`${
           (pathname === "/login" || pathname === "/register") && "hidden"
