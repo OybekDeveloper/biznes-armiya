@@ -107,6 +107,7 @@ export default function AddTasks({ isOpen, handleClose, roles }) {
       role_id: "",
     });
     setNewUsers([]);
+    setErrorMessage({});
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -398,20 +399,20 @@ export default function AddTasks({ isOpen, handleClose, roles }) {
                       <h1>Add new user</h1>
                     </button>
                     <div className="w-full flex justify-end items-center">
-                    <button
-                      onClick={handleSubmit}
-                      className="px-[20px] py-[13px] rounded-[14px] bg-button-color text-white clamp4 font-bold"
-                    >
-                      {loading ? (
-                        <div className="flex justify-start items-center gap-2 opacity-[0.8]">
-                          <SimpleLoading />
-                          <h1>Loading...</h1>
-                        </div>
-                      ) : (
-                        <h1>Add Req</h1>
-                      )}
-                    </button>
-                  </div>
+                      <button
+                        onClick={handleSubmit}
+                        className="px-[20px] py-[13px] rounded-[14px] bg-button-color text-white clamp4 font-bold"
+                      >
+                        {loading ? (
+                          <div className="flex justify-start items-center gap-2 opacity-[0.8]">
+                            <SimpleLoading />
+                            <h1>Loading...</h1>
+                          </div>
+                        ) : (
+                          <h1>Add Req</h1>
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </form>
               </DialogPanel>

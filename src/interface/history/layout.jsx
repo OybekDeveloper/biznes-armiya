@@ -13,7 +13,9 @@ import { useSelector } from "react-redux";
 import FilterHistory from "./filter-history";
 
 const History = () => {
-  const { eventSliceBool, userData, searchMessage } = useSelector((state) => state.event);
+  const { eventSliceBool, userData, searchMessage } = useSelector(
+    (state) => state.event
+  );
   const register = JSON.parse(localStorage.getItem("register"));
   const [transaction, setTransaction] = useState(false);
   const [historyVab, setHistoryVab] = useState(false);
@@ -65,24 +67,6 @@ const History = () => {
     [transactionPay, register?.user_id]
   );
 
-  const filterBySearchMessage = useCallback(() => {
-    if (searchMessage) {
-      const filtered = filteredTransactions.filter(
-        (item) =>
-          (item.from_user.first_name + " " + item.from_user.last_name)
-            .toLowerCase()
-            .includes(searchMessage.toLowerCase()) ||
-          (item.to_user.first_name + " " + item.to_user.last_name)
-            .toLowerCase()
-            .includes(searchMessage.toLowerCase())
-      );
-      setFilteredTransactions(filtered);
-    } else {
-      // If no search message, reset to all transactions after filtering
-      applyFilters({}); // Ensure all filters are reapplied
-    }
-  }, [searchMessage, filteredTransactions, applyFilters]);
-
   useEffect(() => {
     const transactionFetch = async () => {
       try {
@@ -106,14 +90,9 @@ const History = () => {
     transactionFetch();
   }, [register.access, register.user_id, eventSliceBool]);
 
-  useEffect(() => {
-    filterBySearchMessage();
-  }, [searchMessage, filterBySearchMessage]);
-
   if (loading) {
     return <Loader1 />;
   }
-
   return (
     <main className="max-w-11/12 sm:px-4 flex flex-col gap-3">
       <section className="flex justify-between items-center gap-3">

@@ -10,12 +10,15 @@ import { useEffect, useState } from "react";
 import { ApiService } from "../../components/api.server";
 import toast from "react-hot-toast";
 import SimpleLoading from "../../components/loader/simple-loading";
+import { useDispatch } from "react-redux";
+import { eventSliceAction } from "../../reducer/event";
 
 export default function AddTime({
   isOpen,
   handleClose,
   taskId,
   checkedRequirements,
+  setCheckedRequirements
 }) {
   const [errorMessage, setErrorMessage] = useState({});
   const [formData, setFormData] = useState({
@@ -23,7 +26,7 @@ export default function AddTime({
     stop_time: "",
   });
   const [loading, setLoading] = useState(false);
-
+  const dispatch = useDispatch();
   // const handleSubmit = (e) => {
   //   e.preventDefault();
   //   const newError = {};
@@ -93,7 +96,7 @@ export default function AddTime({
         start_time: formData.start_time,
         stop_time: formData.stop_time,
       }));
-
+      setLoading(true);
       updatedRequirements.forEach(async (req) => {
         try {
           const res = await ApiService.patchData(
@@ -102,9 +105,12 @@ export default function AddTime({
             register?.access
           );
           toast.success("Attachment added successfully");
-          handleClose();
+          handleCloseModal();
+          dispatch(eventSliceAction());
         } catch (error) {
           console.log(error);
+        } finally {
+          setLoading(false);
         }
       });
     }
@@ -120,6 +126,7 @@ export default function AddTime({
       status: "",
     });
     setErrorMessage({});
+    setCheckedRequirements([])
   };
 
   const handleChange = (e) => {
@@ -159,7 +166,7 @@ export default function AddTime({
               <DialogPanel className="max-w-11/12 rounded-xl bg-card p-6">
                 <DialogTitle as="h3" className="text-base/7 font-medium">
                   <div className="flex items-end justify-between cursor-pointer">
-                    <h1 className="font-[600] clamp3">Add Task</h1>
+                    <h1 className="font-[600] clamp3">Add Requirement time</h1>
                     <div
                       onClick={handleCloseModal}
                       className="p-[10px] bg-background-secondary rounded-[12px]"

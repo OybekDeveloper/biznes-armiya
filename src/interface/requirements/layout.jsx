@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaPlus, FaRegTrashAlt } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import AddReq from "./add-req";
 import { ApiService } from "../../components/api.server";
 import Loader1 from "../../components/loader/loader1";
@@ -18,8 +18,15 @@ import {
 import { CiMenuKebab } from "react-icons/ci";
 import { groupEventSlice } from "../../reducer/event";
 import DeleteModal from "./delete-task";
+import { useLocation } from "react-router-dom";
+const useQuery = () => {
+  return new URLSearchParams(useLocation().search);
+};
 
 const Requirements = () => {
+  const query = useQuery();
+  const active = query.get("active");
+
   const { userData, eventSliceBool, searchMessage } = useSelector(
     (state) => state.event
   );
@@ -30,12 +37,12 @@ const Requirements = () => {
   const [filteredRequirement, setFilteredRequirement] = useState([]);
   const [updateReq, setUpdateReq] = useState();
   const [roles, setRoles] = useState([]);
-  const [activeTab, setActiveTab] = useState(1);
   const [attachment, setAttachment] = useState(false);
   const [checkedRequirements, setCheckedRequirements] = useState([]);
   const [delModal, setDelModal] = useState(false);
   const [selectId, setSelectId] = useState(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleDeleteModal = () => {
     setDelModal(!delModal);
     dispatch(groupEventSlice());
@@ -53,10 +60,6 @@ const Requirements = () => {
 
   const handleAttachment = (item) => {
     setAttachment(!attachment);
-  };
-
-  const handleActiveTab = (active) => {
-    setActiveTab(active.id);
   };
 
   const handleActive = () => {
@@ -96,14 +99,13 @@ const Requirements = () => {
       );
 
       if (userData?.role?.talab_edit && userData?.role?.talab_delete) {
-        setActiveTab(roles[0]?.id);
         setRoles(roles);
         setRequirement(fetchedRequirements);
       } else {
         const filteredData = fetchedRequirements.filter(
           (c) => c.start_time !== null && c.endt_time !== null
         );
-        setActiveTab(userData?.role?.id);
+        navigate(`?active=${userData.role.id}`);
         setRequirement(filteredData);
       }
     } catch (error) {
@@ -162,15 +164,15 @@ const Requirements = () => {
                 <main className="sticky top-[88px] bg-card shadow-btn_shadow rounded-[14px] flex flex-col gap-3">
                   <section className="w-full p-[8px] flex flex-col gap-[16px]">
                     {roles?.map((item, idx) => (
-                      <button
-                        onClick={() => handleActiveTab(item)}
+                      <NavLink
+                        to={`?active=${item.id}`}
                         key={idx}
                         className="flex justify-between items-center gap-2 cursor-pointer"
                       >
                         <div
                           className={`
                        ${
-                         item.id === activeTab
+                         item.id === parseInt(active)
                            ? "bg-active-card text-primary"
                            : "hover:bg-hover-card text-thin-color"
                        } 
@@ -180,10 +182,10 @@ const Requirements = () => {
                             {item?.role}
                           </h1>
                         </div>
-                        {item.id === activeTab && (
+                        {item.id === parseInt(active) && (
                           <div className="w-[4px] bg-primary rounded-[2px] h-[45px]"></div>
                         )}
-                      </button>
+                      </NavLink>
                     ))}
                   </section>
                 </main>
@@ -208,7 +210,7 @@ const Requirements = () => {
                       ) {
                         return null;
                       }
-                      if (!(item?.role_id === activeTab)) {
+                      if (!(item?.role_id === parseInt(active))) {
                         return null;
                       }
                       return (
@@ -361,6 +363,7 @@ const Requirements = () => {
           />
           <AddTime
             isOpen={attachment}
+            setCheckedRequirements={setCheckedRequirements}
             handleClose={handleAttachment}
             checkedRequirements={checkedRequirements}
           />

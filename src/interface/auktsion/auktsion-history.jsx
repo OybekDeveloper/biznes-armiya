@@ -19,10 +19,12 @@ const AuktionHistory = () => {
           `/auktsion/${id}`,
           register?.access
         );
+        console.log(auktsion)
         setWinnerAuktion(auktsion?.yutganlar ? auktsion.yutganlar : []);
         console.log(auktsion);
       } catch (error) {
         console.log(error);
+        setWinnerAuktion([]);  // Ensure winnerAuktion is always an array even on error
       } finally {
         setLoading(false);
       }
@@ -50,7 +52,7 @@ const AuktionHistory = () => {
     <main>
       <h1 className="font-[500] clamp3">Winner auction</h1>
       <div className="grid xl:grid-cols-5 lg:grid-cols-3 max-sm:grid-cols-1 sm:grid-cols-2 flex-1 gap-2">
-        {filteredAuktion?.map((item, idx) => (
+        {(filteredAuktion && Array.isArray(filteredAuktion) ? filteredAuktion : []).map((item, idx) => (
           <div
             className="w-full h-full bg-card rounded-[24px] p-[16px] flex flex-col justify-start items-center gap-1"
             key={idx}

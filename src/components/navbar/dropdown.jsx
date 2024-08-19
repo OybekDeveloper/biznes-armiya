@@ -79,7 +79,7 @@ export default function DropDown({ handleLogOut }) {
             </div>
             <MenuItem>
               <NavLink
-                to={userData?.role?.role_edit ? "/settings/user" : "/profile"}
+                to={"/profile"}
                 className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10"
               >
                 <PencilIcon className="size-4 fill-thin" />

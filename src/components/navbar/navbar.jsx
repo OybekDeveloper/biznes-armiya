@@ -64,7 +64,7 @@ const Navbar = () => {
       title: "VAB history",
       icon: <MdWorkHistory />,
       link: "/history",
-      active: role?.side_history ? true : false,
+      active: role?.side_history || role?.h_balls_views ? true : false,
     },
     {
       id: 4,
@@ -78,7 +78,7 @@ const Navbar = () => {
       title: "Requirements",
       icon: <MdOndemandVideo />,
       link: "/requirements",
-      active: role?.side_requirements ? true : false,
+      active: role?.side_news ? true : false,
     },
     {
       id: 6,
@@ -99,7 +99,7 @@ const Navbar = () => {
       title: "Settings",
       icon: <IoMdSettings />,
       link: "/settings/user",
-      active: role?.role_edit || role?.role_delete ? true : false,
+      active: role?.side_setting ? true : false,
     },
   ];
 
@@ -176,19 +176,34 @@ const Navbar = () => {
           `/role/${res?.role}`,
           register?.access
         );
-        const ress = await ApiService.getData("/tasks", register?.access);
-        const filterTasks = ress.filter((c) =>
-          c.user.find((u) => +u.user === userData?.id)
+
+        const res1 = await ApiService.getData("/tasks", register?.access);
+        const res2 = await ApiService.getData("/tasksreq", register?.access);
+        console.log(res2);
+        const filterTasks = res1.filter((c) =>
+          c.user.find((u) => +u.user === res?.id)
+        );
+        const filterTasks2 = res2.filter((c) =>
+          c.user.find((u) => +u.user === res?.id)
         );
         const doneTasks = filterTasks.filter((c) => c.status === "Done");
-        const reyting = (doneTasks.length / ress.length) * 10;
-        await ApiService.patchData(
-          `/users/${register?.user_id}`,
-          {
-            reyting: reyting.toFixed(1),
-          },
-          register?.access
-        );
+        const doneTasks2 = filterTasks2.filter((c) => c.status === "Done");
+        console.log(doneTasks, "task");
+        console.log(doneTasks2, "req");
+
+        const reyting =
+          ((doneTasks.length + doneTasks2.length) /
+            (filterTasks.length + filterTasks2.length)) *
+          10;
+        if (reyting) {
+          await ApiService.patchData(
+            `/users/${register?.user_id}`,
+            {
+              reyting: reyting.toFixed(1),
+            },
+            register?.access
+          );
+        }
         console.log(reyting, reyting.toFixed(1));
         dispatch(
           userDetailSlice({

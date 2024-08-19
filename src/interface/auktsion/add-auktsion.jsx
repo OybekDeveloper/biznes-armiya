@@ -20,7 +20,7 @@ export default function AddAuktsion({ isOpen, handleClose }) {
     name: "",
     kuni: "",
     vab_id: 1,
-    yutganlar: null,
+    yutganlar: [],
     buyumlar: [],
   });
   const [errorMessage, setErrorMessage] = useState({});
@@ -30,10 +30,11 @@ export default function AddAuktsion({ isOpen, handleClose }) {
 
   const handleCloseModal = () => {
     handleClose();
-    setFormData({ name: "", kuni: "", yutganlar: "1", buyumlar: [] });
+    setFormData({ name: "", kuni: "", yutganlar: [], buyumlar: [] });
     setSelectOption([]);
     setErrorMessage({});
   };
+  console.log(formData,"kooot");
 
   const handleSubmit = (e) => {
     e.preventDefault();

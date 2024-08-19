@@ -45,25 +45,26 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
     item_views: false,
     item_edit: false,
     item_delete: false,
-    auction_views: false,
-    auction_edit: false,
-    auction_delete: false,
+    auktsion_views: false,
+    auktsion_delete: false,
+    auktsion_edit: false,
+    check_list_done: false,
     chat_views: false,
     chat_edit: false,
     chat_delete: false,
     role_views: false,
     role_edit: false,
     role_delete: false,
-    // side_dash_views: false,
-    // side_task_views: false,
-    // side_history_views: false,
-    // side_auction_views: false,
-    // side_requirements_views: false,
-    // side_check_list_views: false,
-    // side_news_views: false,
-    // side_setting_views: false,
+    side_dash: false,
+    side_task: false,
+    side_history: false,
+    side_auction: false,
+    side_requirements: false,
+    side_check_list: false,
+    side_news: false,
+    side_setting: false,
   };
-
+  console.log(updateItem);
   const [role, setRole] = useState(initialRoleState);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -107,14 +108,22 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
 
   const handleCheckboxChange = (category, type) => (e) => {
     const checked = e.target.checked;
-    setRole((prevRole) => ({
-      ...prevRole,
-      [`${category}_${type}`]: checked,
-    }));
+    if (type) {
+      setRole((prevRole) => ({
+        ...prevRole,
+        [`${category}_${type}`]: checked,
+      }));
+    } else {
+      setRole((prevRole) => ({
+        ...prevRole,
+        [`${category}`]: checked,
+      }));
+    }
   };
 
   const handleCategoryClick = (category) => {
     const prefix = `${category}_`;
+
     const allChecked =
       role[`${prefix}views`] &&
       role[`${prefix}edit`] &&
@@ -129,32 +138,35 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
   };
 
   const categories = [
-    { name: "News", key: "yang" },
-    { name: "Request", key: "request" },
-    { name: "Sh Rivoj", key: "sh_rivoj" },
-    { name: "Price", key: "price" },
-    { name: "Vab", key: "vab" },
-    { name: "Tasks", key: "tasks" },
-    { name: "Tasks Users", key: "tasks_users" },
-    { name: "Balls", key: "balls" },
-    { name: "H Balls", key: "h_balls" },
-    { name: "Item", key: "item" },
-    { name: "Auction", key: "auction" },
-    { name: "Chat", key: "chat" },
-    { name: "Role", key: "role" },
+    { name: "News", key: "yang", status: "all" },
+    { name: "Request", key: "request", status: "all" },
+    { name: "Sh Rivoj", key: "sh_rivoj", status: "all" },
+    { name: "Price", key: "price", status: "all" },
+    { name: "Vab", key: "vab", status: "all" },
+    { name: "Tasks", key: "tasks", status: "all" },
+    { name: "Tasks Users", key: "tasks_users", status: "all" },
+    { name: "Balls", key: "balls", status: "all" },
+    { name: "H Balls", key: "h_balls", status: "all" },
+    { name: "Item", key: "item", status: "all" },
+    { name: "Auction", key: "auktsion", status: "all" },
+    { name: "Chat", key: "chat", status: "all" },
+    { name: "Role", key: "role", status: "all" },
   ];
 
-  // const simpleViewCategories = [
-  //   { name: "Dashboard", key: "side_dash" },
-  //   { name: "Task", key: "side_task" },
-  //   { name: "History", key: "side_history" },
-  //   { name: "Auction", key: "side_auction" },
-  //   { name: "Requirements", key: "side_requirements" },
-  //   { name: "Checklist", key: "side_check_list" },
-  //   { name: "News", key: "side_news" },
-  // ];
+  const simpleViewCategories = [
+    { name: "Dashboard Sidebar ", key: "side_dash" },
+    { name: "Check List Sidebar ", key: "side_check_list" },
+    { name: "Task Sidebar", key: "side_task" },
+    { name: "History Sidebar", key: "side_history" },
+    { name: "Auction Sidebar", key: "side_auction" },
+    { name: "Requirements Sidebar", key: "side_requirements" },
+    { name: "News Sidebar", key: "side_news" },
+  ];
 
   const filteredCategories = categories.filter((category) =>
+    category.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  const filteredSimpleViewCategories = simpleViewCategories.filter((category) =>
     category.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
   console.log(role);
@@ -229,13 +241,13 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {filteredCategories.map(({ name, key }) => (
+                    {filteredCategories.map(({ name, key, status }) => (
                       <div key={key} className="category-group">
                         <button
                           className="flex items-center mb-2 cursor-pointer"
                           onClick={(e) => {
                             e.preventDefault();
-                            handleCategoryClick(key);
+                            handleCategoryClick(key, status);
                           }}
                         >
                           <span className="font-semibold">{name}</span>
@@ -280,7 +292,7 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
                       </div>
                     ))}
 
-                    {/* {simpleViewCategories.map(({ name, key }) => (
+                    {filteredSimpleViewCategories.map(({ name, key }) => (
                       <div key={key} className="category-group">
                         <div className="flex items-center mb-2">
                           <span className="font-semibold">{name}</span>
@@ -289,17 +301,17 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
                           <div className="flex items-center">
                             <input
                               type="checkbox"
-                              id={`${key}_views`}
-                              checked={role[`${key}_views`]}
-                              onChange={handleCheckboxChange(key, "views")}
+                              id={`${key}`}
+                              checked={role[`${key}`]}
+                              onChange={handleCheckboxChange(key)}
                             />
-                            <label className="ml-2" htmlFor={`${key}_views`}>
+                            <label className="ml-2" htmlFor={`${key}`}>
                               View
                             </label>
                           </div>
                         </div>
                       </div>
-                    ))} */}
+                    ))}
                   </div>
 
                   <div className="mt-6">

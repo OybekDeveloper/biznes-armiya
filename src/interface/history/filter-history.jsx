@@ -7,7 +7,7 @@ const FilterHistory = ({ isOpen, handleClose, applyFilters }) => {
   const [endDate, setEndDate] = useState("");
 
   const handleFilterApply = () => {
-    applyFilters({ type, startDate, endDate, }); // Pass an empty string for searchMessage
+    applyFilters({ type, startDate, endDate }); // Pass an empty string for searchMessage
     handleClose();
   };
 
@@ -32,7 +32,10 @@ const FilterHistory = ({ isOpen, handleClose, applyFilters }) => {
             >
               <Dialog.Panel className="w-full h-screen max-w-md rounded-xl p-4 sm:p-6 backdrop-blur-2xl bg-white">
                 <h2 className="text-xl font-bold">Filter History</h2>
-                <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+                <form
+                  onSubmit={(e) => e.preventDefault()}
+                  className="space-y-4"
+                >
                   <div>
                     <label className="block">Type</label>
                     <select
@@ -65,10 +68,16 @@ const FilterHistory = ({ isOpen, handleClose, applyFilters }) => {
                   </div>
                   <div className="flex justify-end gap-4">
                     <button
-                      onClick={handleClose}
+                      onClick={() => {
+                        setType("");
+                        setStartDate("");
+                        setEndDate("");
+                        applyFilters({ type: "", startDate: "", endDate: "" });
+                        handleClose();
+                      }}
                       className="px-4 py-2 rounded bg-gray-300 text-gray-700"
                     >
-                      Cancel
+                      Reset
                     </button>
                     <button
                       onClick={handleFilterApply}
