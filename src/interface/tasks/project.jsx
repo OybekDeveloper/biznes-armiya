@@ -115,14 +115,14 @@ const Project = () => {
               <section className="w-full flex justify-between items-center">
                 <h1 className="font-bold text-text-primary clamp2">Tasks</h1>
                 <div className="flex justify-start items-center gap-2">
-                  {tasks.status === "Asked" ? (
+                  {tasks?.status === "Asked" ? (
                     <button
                       onClick={handleTakeOverModal}
                       className="bg-expected hover:bg-expected-hover transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
                     >
                       <h1>Take It</h1>
                     </button>
-                  ) : tasks.status === "Expected" ? (
+                  ) : tasks?.status === "Expected" ? (
                     <button
                       onClick={handleTakeOverModal}
                       className="bg-finished hover:bg-finished-hover transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
@@ -132,7 +132,7 @@ const Project = () => {
                   ) : (
                     role?.tasks_edit && (
                       <>
-                        {tasks.status !== "Done" && (
+                        {tasks?.status !== "Done" && (
                           <button
                             onClick={handleTakeOverModal}
                             className="bg-done hover:bg-done-hover transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
@@ -235,11 +235,11 @@ const Project = () => {
                   {/* Chat section */}
                   <div className="chat-back relative flex justify-between flex-col h-full w-full gap-2">
                     <ChatMessage
-                      status={tasks.status}
+                      status={tasks?.status}
                       chatMessageData={chatMessageData}
                       task_id={id}
                     />
-                    <SendMessage status={tasks.status} task_id={id} />
+                    <SendMessage status={tasks?.status} task_id={id} />
                   </div>
                 </div>
               </section>

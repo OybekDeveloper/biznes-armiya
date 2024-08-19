@@ -88,6 +88,16 @@ const MyTasks = () => {
     fetchAllUsersInfo();
   }, [taskDones]);
 
+  const expected =
+    taskDones.filter((c) => c.status == "Expected").length +
+    taskDonesReq.filter((c) => c.status == "Expected").length;
+  const finished =
+    taskDones.filter((c) => c.status == "Finished").length +
+    taskDonesReq.filter((c) => c.status == "Finished").length;
+  const done =
+    taskDones.filter((c) => c.status == "Done").length +
+    taskDonesReq.filter((c) => c.status == "Done").length;
+  const all = taskDones.length + taskDonesReq.length;
   if (loading) {
     return <Loader1 />;
   }
@@ -98,61 +108,80 @@ const MyTasks = () => {
         <div className="rounded-[14px] shadow-btn_shadow bg-card p-4 flex flex-col gap-2">
           <div className="w-24 h-24">
             <CircularProgressbar
-              maxValue={16}
-              value={12}
-              text={12}
+              maxValue={all}
+              value={expected}
+              text={`${expected}`}
               styles={buildStyles({
-                textColor: "#15C0E6",
-                pathColor: "#15C0E6",
+                textColor: "#E67E22",
+                pathColor: "#E67E22",
                 trailColor: "rgba(var(--background))",
               })}
             />
           </div>
-          <h1 className="font-bold text-text-primary clamp3">Vacation</h1>
-          <p className="text-thin-color clamp4">12/16 days availible</p>
+          <h1 className="font-bold text-text-primary clamp3">Expected</h1>
+          <p className="text-thin-color clamp4">
+            {expected}/{all} days availible
+          </p>
         </div>
         {/* statistic 2 */}
         <div className="rounded-[14px] shadow-btn_shadow bg-card p-4 flex flex-col gap-2">
           <div className="w-24 h-24">
             <CircularProgressbar
-              maxValue={12}
-              value={6}
-              text={6}
+              maxValue={all}
+              value={finished}
+              text={`${finished}`}
               styles={buildStyles({
-                textColor: "#F65160",
-                pathColor: "#F65160",
+                textColor: "#2ECC71",
+                pathColor: "#2ECC71",
                 trailColor: "rgba(var(--background))",
               })}
             />
           </div>
-          <h1 className="font-bold text-text-primary clamp3">Sick Leave</h1>
-          <p className="text-thin-color clamp4">6/12 days availible</p>
+          <h1 className="font-bold text-text-primary clamp3">Finished</h1>
+          <p className="text-thin-color clamp4">
+            {finished}/{all} days availible
+          </p>
         </div>
         {/* statistic 3 */}
         <div className="rounded-[14px] shadow-btn_shadow bg-card p-4 flex flex-col gap-2">
           <div className="w-24 h-24">
             <CircularProgressbar
-              maxValue={50}
-              value={42}
-              text={42}
+              maxValue={all}
+              value={done}
+              text={`${done}`}
               styles={buildStyles({
-                textColor: "#6D5DD3",
-                pathColor: "#6D5DD3",
+                textColor: "#9B59B6",
+                pathColor: "#9B59B6",
                 trailColor: "rgba(var(--background))",
               })}
             />
           </div>
-          <h1 className="font-bold text-text-primary clamp3">Work remotely</h1>
-          <p className="text-thin-color clamp4">42/50 days availible</p>
+          <h1 className="font-bold text-text-primary clamp3">Done</h1>
+          <p className="text-thin-color clamp4">
+            {done}/{all} days availible
+          </p>
         </div>
       </section>
       <section className="flex flex-col gap-3">
-        {taskDones.length > 0 && taskDonesReq.length > 0 ? (
+        {!taskDones.length > 0 && !taskDonesReq.length > 0 ? (
+          <div className="w-full h-full flex justify-center items-center flex-col mt-4">
+            <div className="w-full h-[200px]">
+              <img
+                className="w-full h-full object-contain"
+                src={dataempty}
+                alt=""
+              />
+            </div>
+            <h1 className="clam3 font-bold">Tasks do not exist!</h1>
+          </div>
+        ) : (
           <div>
             <section className="flex flex-col gap-3">
-              <h1 className="text-text-primary font-bold clamp3">
-                Tasks Requests
-              </h1>
+              {taskDones.length > 0 && (
+                <h1 className="text-text-primary font-bold clamp3">
+                  Tasks Requests
+                </h1>
+              )}
               {taskDones
                 .slice()
                 .reverse()
@@ -232,16 +261,16 @@ const MyTasks = () => {
                         <div className="col-span-1 flex justify-start items-center ">
                           <div
                             className={`
-                              ${
-                                item?.status === "Asked"
-                                  ? "bg-asked"
-                                  : item?.status === "Expected"
-                                  ? "bg-expected"
-                                  : item?.status === "Finished"
-                                  ? "bg-finished"
-                                  : "bg-done"
-                              } 
-                              text-[12px] px-2 py-1 rounded-[14px]  text-white`}
+                            ${
+                              item?.status === "Asked"
+                                ? "bg-asked"
+                                : item?.status === "Expected"
+                                ? "bg-expected"
+                                : item?.status === "Finished"
+                                ? "bg-finished"
+                                : "bg-done"
+                            } 
+                            text-[12px] px-2 py-1 rounded-[14px]  text-white`}
                           >
                             {item?.status}
                           </div>
@@ -252,9 +281,11 @@ const MyTasks = () => {
                 })}
             </section>
             <section className="flex flex-col gap-3">
-              <h1 className="text-text-primary font-bold clamp3">
-                Requirements Requests
-              </h1>
+              {taskDonesReq.length > 0 && (
+                <h1 className="text-text-primary font-bold clamp3">
+                  Requirements Requests
+                </h1>
+              )}
               {taskDonesReq
                 .slice()
                 .reverse()
@@ -334,16 +365,16 @@ const MyTasks = () => {
                         <div className="col-span-1 flex justify-start items-center ">
                           <div
                             className={`
-                              ${
-                                item?.status === "Asked"
-                                  ? "bg-asked"
-                                  : item?.status === "Expected"
-                                  ? "bg-expected"
-                                  : item?.status === "Finished"
-                                  ? "bg-finished"
-                                  : "bg-done"
-                              } 
-                              text-[12px] px-2 py-1 rounded-[14px]  text-white`}
+                            ${
+                              item?.status === "Asked"
+                                ? "bg-asked"
+                                : item?.status === "Expected"
+                                ? "bg-expected"
+                                : item?.status === "Finished"
+                                ? "bg-finished"
+                                : "bg-done"
+                            } 
+                            text-[12px] px-2 py-1 rounded-[14px]  text-white`}
                           >
                             {item?.status}
                           </div>
@@ -353,17 +384,6 @@ const MyTasks = () => {
                   );
                 })}
             </section>
-          </div>
-        ) : (
-          <div className="w-full h-full flex justify-center items-center flex-col mt-4">
-            <div className="w-full h-[200px]">
-              <img
-                className="w-full h-full object-contain"
-                src={dataempty}
-                alt=""
-              />
-            </div>
-            <h1 className="clam3 font-bold">Tasks do not exist!</h1>
           </div>
         )}
       </section>

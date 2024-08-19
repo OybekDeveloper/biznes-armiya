@@ -36,10 +36,21 @@ const GroupItem = () => {
         const newUsers = await Promise.all(
           group?.users?.map(async (item) => {
             try {
-              return await ApiService.getData(
+              const res = await await ApiService.getData(
                 `/users/${item}`,
                 register?.access
               );
+              if (res?.role) {
+                const role = await ApiService.getData(
+                  `/role/${res.role}`,
+                  register?.access
+                );
+                console.log(role);
+                return {
+                  user: res,
+                  role: role,
+                };
+              }
             } catch (error) {
               console.log(error);
             }
@@ -57,10 +68,12 @@ const GroupItem = () => {
     dispatch(groupEventSlice());
   }, [id, editGroup, isGenerate, addUser, delUser]);
 
+  console.log(filteredUsers);
+
   useEffect(() => {
     setFilteredUsers(
       users.filter((user) =>
-        `${user.first_name} ${user.last_name}`
+        `${user.user.first_name} ${user.user.last_name}`
           .toLowerCase()
           .includes(searchMessage.toLowerCase())
       )
@@ -140,18 +153,18 @@ const GroupItem = () => {
                     >
                       <div className="relative flex flex-col gap-1 bg-background-secondary rounded-xl w-full py-2 justify-center items-center">
                         <img
-                          src={item?.profile_photo || photoUrl}
+                          src={item.user?.profile_photo || photoUrl}
                           alt="User profile"
                           className="mb-[10px] w-16 h-16 rounded-full"
                         />
                         <h1 className="text-text-primary font-medium">
-                          {item?.first_name || "Name"}
+                          {item.user?.first_name || "Name"}
                         </h1>
                         <p className="text-gray-500 font-bold">
-                          {item.last_name || "Familya"}
+                          {item.user.last_name || "Familya"}
                         </p>
                         <p className="text-gray-500 py-1 px-2 border-border border-[1px] rounded-[4px] text-[12px]">
-                          {item.role}
+                          {item.role.role}
                         </p>
                         <button
                           onClick={() => handleDeleteUser(item?.id)}
