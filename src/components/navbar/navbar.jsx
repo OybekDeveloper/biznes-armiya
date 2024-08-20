@@ -230,11 +230,11 @@ const Navbar = () => {
   return (
     <>
       {/* desktop */}
-      {!userData.role&& ((
-          <div className="flex bg-background justify-center items-center w-screen h-screen fixed top-0 left-0 z-[99999]">
-            <Loader1 />
-          </div>
-        ))}
+      {!userData.role && pathname !== "/login" && pathname !== "/register" && (
+        <div className="flex bg-background justify-center items-center w-screen h-screen fixed top-0 left-0 z-[99999]">
+          <Loader1 />
+        </div>
+      )}
       <div
         className={`${
           (pathname === "/login" || pathname === "/register") && "hidden"
