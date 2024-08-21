@@ -1,20 +1,16 @@
 import {
-  Button,
   Dialog,
   DialogPanel,
   DialogTitle,
   Transition,
   TransitionChild,
 } from "@headlessui/react";
-import { addeventbg, addGroupBg, close } from "../../images";
-import SelectListBox from "../../components/listbox/listbox";
+import {  addGroupBg, close } from "../../images";
 import { IoAddCircleOutline, IoClose } from "react-icons/io5";
-import { useEffect, useRef, useState } from "react";
+import {  useRef, useState } from "react";
 import SimpleLoading from "../../components/loader/simple-loading";
-import { Select } from "./select-items";
 import { ApiService } from "../../components/api.server";
 import toast from "react-hot-toast";
-import PandingAuction from "./pending-auction";
 
 export default function AddItemModal({ isOpen, handleClose, pendingAuction }) {
   const [formData, setFormData] = useState({
@@ -26,7 +22,6 @@ export default function AddItemModal({ isOpen, handleClose, pendingAuction }) {
   });
   const [errorMessage, setErrorMessage] = useState({});
   const [loading, setLoading] = useState(false);
-  const [selectOption, setSelectOption] = useState([]);
   const [uploadPhoto, setUploadPhoto] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -39,7 +34,6 @@ export default function AddItemModal({ isOpen, handleClose, pendingAuction }) {
       boshlangich_narx: "",
       img: "",
     });
-    setSelectOption([]);
     setErrorMessage({});
     setUploadPhoto(null);
   };
@@ -79,9 +73,8 @@ export default function AddItemModal({ isOpen, handleClose, pendingAuction }) {
         );
         if (res.id) {
           const updatedBuyumlar = [...(pendingAuction?.buyumlar || []), res.id];
-          const newFormData = new FormData();
 
-          const res1 = await ApiService.putData(
+        await ApiService.putData(
             `/auktsion/${pendingAuction?.id}`,
             {
               name: pendingAuction?.name,

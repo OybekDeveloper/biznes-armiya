@@ -7,6 +7,7 @@ import { ApiService } from "../../components/api.server";
 import AddTasks from "./add-task";
 import Loader1 from "../../components/loader/loader1";
 import { useSelector } from "react-redux";
+import { t } from "i18next";
 
 const HomeWork = () => {
   const { eventSliceBool, userData, searchMessage } = useSelector((state) => state.event);
@@ -59,7 +60,7 @@ const HomeWork = () => {
           <main className="flex flex-col md:px-[16px] gap-2">
             <section className="w-full flex justify-between items-center">
               <h1 className="font-bold text-text-primary clamp2">
-                Assignments
+                {t("tasks")}
               </h1>
               {role?.tasks_edit && (
                 <div className="flex justify-start items-center gap-2">
@@ -68,7 +69,7 @@ const HomeWork = () => {
                     className="max-md:hidden bg-button-color  flex justify-start items-center gap-2 rounded-[14px] p-2 text-white shadow-btn_shadow"
                   >
                     <FaPlus />
-                    <h1>Add Tasks</h1>
+                    <h1>{t("tasks_add")}</h1>
                   </button>
                   <button
                     onClick={handleAddTask}

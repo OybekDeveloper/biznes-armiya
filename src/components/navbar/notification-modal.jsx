@@ -6,14 +6,10 @@ import {
   Transition,
   TransitionChild,
 } from "@headlessui/react";
-import { addeventbg, close } from "../../images";
-import SelectListBox from "../../components/listbox/listbox";
+import { close } from "../../images";
 import { IoClose } from "react-icons/io5";
 
 export default function NotificationModal({ isOpen, handleClose }) {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
   return (
     <Transition 
     appear show={isOpen}>

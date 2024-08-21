@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { LuFilter } from "react-icons/lu";
 import { NavLink } from "react-router-dom";
 import { dataempty, photoUrl } from "../../images";
 import { TimeFormatFunction } from "../../components/time-format";
@@ -14,12 +13,11 @@ import {
 } from "@headlessui/react";
 import { CiMenuKebab } from "react-icons/ci";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { MdModeEdit } from "react-icons/md";
 import DeleteModal from "./delete-task";
 import { groupEventSlice } from "../../reducer/event";
 import AddTasks from "./add-task";
-import { GoMoveToTop } from "react-icons/go";
 import TakeOverUser from "./take-over-user";
+import { t } from "i18next";
 
 const Tasks = ({ toggleFilter, tasks, status }) => {
   const [usersInfoMap, setUsersInfoMap] = useState({}); // State to store users info by task ID
@@ -95,14 +93,12 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
     };
 
     fetchAllUsersInfo();
+    //eslint-disable-next-line
   }, [tasks, status, eventSliceBool]);
   const filteredTasks = tasks.filter((task) => task.status === status);
 
   return (
     <main className="col-span-3 max-lg:grid-cols-1 flex flex-col gap-2">
-      <section className="flex justify-between items-center">
-        <h1 className="text-text-primary font-bold clamp3">Tasks</h1>
-      </section>
       {filteredTasks.length > 0 ? (
         <section className="flex flex-col gap-3">
           {filteredTasks
@@ -126,7 +122,9 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
                     className="relative cursor-pointer hover:bg-hover-card bg-card shadow-btn_shadow rounded-[14px] w-full grid grid-cols-6 max-lg:grid-cols-3 max-xl:grid-cols-4 px-[24px] py-[16px] gap-3"
                   >
                     <div className="col-span-1">
-                      <p className="text-thin-color clamp4">Task name</p>
+                      <p className="text-thin-color clamp4">
+                        {t("tasks_name")}
+                      </p>
                       <h1 className="text-text-primary font-bold whitespace-normal">
                         {item?.name.length > 10
                           ? item?.name.slice(0, 10) + "..."
@@ -140,20 +138,26 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
                       </h1>
                     </div>
                     <div className="col-span-1">
-                      <p className="text-thin-color clamp4">Estimate</p>
+                      <p className="text-thin-color clamp4">
+                        {t("tasks_start_time")}
+                      </p>
                       <h1 className="text-text-primary font-[500]">
                         {TimeFormatFunction(item?.start_time)}
                       </h1>
                     </div>
                     <div className="col-span-1">
-                      <p className="text-thin-color clamp4">Deadline</p>
+                      <p className="text-thin-color clamp4">
+                        {t("tasks_end_time")}
+                      </p>
                       <h1 className="text-text-primary font-[500]">
                         {TimeFormatFunction(item?.stop_time)}
                       </h1>
                     </div>
                     {usersInfo.length > 0 && (
                       <div className="col-span-1 flex flex-col w-full">
-                        <p className="text-thin-color clamp4">Assignee</p>
+                        <p className="text-thin-color clamp4">
+                          {t("tasks_assignee")}
+                        </p>
                         <div>
                           {usersInfo?.slice(0, 3)?.map((user, idx) => (
                             <img
@@ -176,7 +180,7 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
                       </div>
                     )}
                     <div className="col-span-1">
-                      <p className="text-thin-color clamp4">Definition</p>
+                      <p className="text-thin-color clamp4">{t("tasks_desc")}</p>
                       <h1 className="text-text-primary font-[500]">
                         {item?.definition.length > 20
                           ? item?.definition.slice(0, 20) + "..."
@@ -262,7 +266,7 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
               alt=""
             />
           </div>
-          <h1 className="clam3 font-bold">Tasks do not exist!</h1>
+          <h1 className="clam3 font-bold">{t("no_tasks_data")}</h1>
         </div>
       )}
       <AddTasks

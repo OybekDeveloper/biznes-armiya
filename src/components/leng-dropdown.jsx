@@ -59,7 +59,7 @@ import {
             anchor="bottom"
             transition
             className={clsx(
-              "shadow-btn_shadow w-[var(--button-width)] rounded-md mt-1 border border-white bg-white p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none z-[400]",
+              "z-[999] shadow-btn_shadow w-[var(--button-width)] rounded-md mt-1 border border-white bg-white p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none",
               "transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0"
             )}
           >

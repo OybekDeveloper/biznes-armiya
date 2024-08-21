@@ -16,6 +16,7 @@ import {
   TransitionChild,
 } from "@headlessui/react";
 import { IoClose } from "react-icons/io5";
+import { t } from "i18next";
 
 const Project = () => {
   const register = JSON.parse(localStorage.getItem("register"));
@@ -110,24 +111,24 @@ const Project = () => {
                 className="flex justify-start items-center gap-2 text-blue-500"
               >
                 <IoArrowBack />
-                <h1>Back Tasks </h1>
+                <h1>{t("back")} </h1>
               </NavLink>
               <section className="w-full flex justify-between items-center">
-                <h1 className="font-bold text-text-primary clamp2">Tasks</h1>
+                <h1 className="font-bold text-text-primary clamp2">{t("tasks")}</h1>
                 <div className="flex justify-start items-center gap-2">
                   {tasks?.status === "Asked" ? (
                     <button
                       onClick={handleTakeOverModal}
                       className="bg-expected hover:bg-expected-hover transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
                     >
-                      <h1>Take It</h1>
+                      <h1>{t("take_btn")}</h1>
                     </button>
                   ) : tasks?.status === "Expected" ? (
                     <button
                       onClick={handleTakeOverModal}
                       className="bg-finished hover:bg-finished-hover transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
                     >
-                      <h1>Complete the task</h1>
+                      <h1>{t("complate_btn")}</h1>
                     </button>
                   ) : (
                     role?.tasks_edit && (
@@ -137,14 +138,14 @@ const Project = () => {
                             onClick={handleTakeOverModal}
                             className="bg-done hover:bg-done-hover transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
                           >
-                            <h1>Done task</h1>
+                            <h1>{t("done_btn")}</h1>
                           </button>
                         )}
                         <button
                           onClick={() => handleTakeOverModal(true)}
                           className="bg-red-500 hover:bg-red-600 transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
                         >
-                          <h1>Reject task</h1>
+                          <h1>{t("reject_btn")}</h1>
                         </button>
                       </>
                     )
@@ -157,18 +158,18 @@ const Project = () => {
                   <div className=" bg-card rounded-[24px] p-3 sm:p-[24px] flex flex-col gap-4">
                     <div className="flex justify-between items-start w-full">
                       <div className="flex flex-col">
-                        <h1 className="text-thin-color">Task Name</h1>
+                        <h1 className="text-thin-color">{t("tasks_name")}</h1>
                         <p className="font-bold">{tasks?.name}</p>
                       </div>
                     </div>
                     <div className="flex flex-col gap-1">
-                      <h1>Description</h1>
+                      <h1>{t("tasks_desc")}</h1>
                       <p className="text-thin-color">{tasks?.definition}</p>
                     </div>
                     <div className="flex flex-col gap-1">
                       {tasks?.user?.length > 0 && (
                         <div className="col-span-1 flex flex-col w-full">
-                          <p className="text-thin-color clamp4">Assignee</p>
+                          <p className="text-thin-color clamp4">{t("tasks_assignee")}</p>
                           <div className="flex justify-between">
                             <div>
                               {tasks?.users?.slice(0, 3)?.map((user, idx) => (
@@ -193,14 +194,14 @@ const Project = () => {
                               onClick={handleOpenUsersModal}
                               className="px-2 py-1 rounded-md bg-background-secondary font-[500]"
                             >
-                              See all users
+                              {t("see_all_users")}
                             </button>
                           </div>
                         </div>
                       )}
                     </div>
                     <div className="flex flex-col gap-1 justify-start items-start">
-                      <h1 className="text-thin-color">Priority</h1>
+                      <h1 className="text-thin-color">Status</h1>
                       <div
                         className={`
                  ${
@@ -218,11 +219,11 @@ const Project = () => {
                       </div>
                     </div>
                     <div className="flex flex-col gap-1">
-                      <h1 className="text-thin-color">Start Time</h1>
+                      <h1 className="text-thin-color">{t("tasks_add_start")}</h1>
                       <p>{tasks?.start_time?.split("T")[0]}</p>
                     </div>
                     <div className="flex flex-col gap-1">
-                      <h1 className="text-thin-color">End Time</h1>
+                      <h1 className="text-thin-color">{t("tasks_add_end")}</h1>
                       <p>{tasks?.stop_time?.split("T")[0]}</p>
                     </div>
                   </div>
@@ -253,7 +254,7 @@ const Project = () => {
                   alt=""
                 />
               </div>
-              <h1 className="clam3 font-bold">Tasks do not exist!</h1>
+              <h1 className="clam3 font-bold">{t("no_tasks_data")}</h1>
             </div>
           )}
         </>
@@ -300,7 +301,7 @@ function AllUsersModal({ isOpen, handleClose, users }) {
                   className="text-clamp2 font-medium text-text-primary"
                 >
                   <div className="flex items-end justify-between cursor-pointer">
-                    <h1 className="font-[600] clamp3">All users</h1>
+                    <h1 className="font-[600] clamp3">{t("all_user")}</h1>
                     <div className="p-[10px] bg-background-secondary rounded-[12px]">
                       <IoClose
                         onClick={handleClose}

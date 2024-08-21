@@ -4,6 +4,7 @@ import { ApiService } from "../../components/api.server";
 import { chatback, photoUrl } from "../../images";
 import OpenFile from "../../components/open-file";
 import Lottie from "react-lottie";
+import { t } from "i18next";
 
 const ChatMessage = ({ chatMessageData, task_id, req_task_id, status }) => {
   const register = JSON.parse(localStorage.getItem("register"));
@@ -145,7 +146,7 @@ const ChatMessage = ({ chatMessageData, task_id, req_task_id, status }) => {
           <div className="flex h-full w-full justify-center items-center">
             <div className="text-text-primary font-bold text-center">
               <Lottie options={options} height={100} />
-              No messages found.
+              {t("no_message_data")}
             </div>
           </div>
         )}

@@ -1,5 +1,4 @@
 import {
-  Button,
   Dialog,
   DialogPanel,
   DialogTitle,
@@ -7,7 +6,6 @@ import {
   TransitionChild,
 } from "@headlessui/react";
 import { addeventbg, close } from "../../images";
-import SelectListBox from "../../components/listbox/listbox";
 import { IoClose } from "react-icons/io5";
 
 export default function FilterTask({ isOpen, handleClose }) {
@@ -64,7 +62,6 @@ export default function FilterTask({ isOpen, handleClose }) {
                       >
                         Request Subject
                       </label>
-                      <SelectListBox />
                     </div>
                     <div className="flex flex-col gap-3">
                       <label

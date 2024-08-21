@@ -12,6 +12,7 @@ import SimpleLoading from "../../components/loader/simple-loading";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { eventSliceAction } from "../../reducer/event";
+import { t } from "i18next";
 
 export default function TakeOverUser({
   isOpen,
@@ -44,8 +45,8 @@ export default function TakeOverUser({
       dispatch(eventSliceAction());
       toast.success(
         status === "take_over"
-          ? "Task mastered successfully!"
-          : "Task successfully finished!!!",
+          ? t("tasks_take_toast")
+          : t("tasks_finished_toast"),
         {
           style: {
             backgroundColor: "green",
@@ -106,7 +107,7 @@ export default function TakeOverUser({
             register?.access
           );
           dispatch(eventSliceAction());
-          toast.success("Task successfully rejected!!!", {
+          toast.success(t("tasks_reject_toast"), {
             style: {
               backgroundColor: "red",
               border: "1px solid red",
@@ -139,8 +140,8 @@ export default function TakeOverUser({
         dispatch(eventSliceAction());
         toast.success(
           status === "take_over"
-            ? "Task mastered successfully!"
-            : "Task successfully finished!!!",
+            ? t("tasks_take_toast")
+            : t("tasks_finished_toast"),
           {
             style: {
               backgroundColor: "green",
@@ -187,25 +188,33 @@ export default function TakeOverUser({
                   as="h3"
                   className="text-clamp2 font-medium text-text-primary"
                 >
-                  {status === "Asked"
-                    ? "Mastering the task"
-                    : status === "Expected"
-                    ? "Complete the task"
-                    : "Confirmation of completion"}
+                  {reject ? (
+                    t("tasks_reject_title")
+                  ) : (
+                    <>
+                      {status === "Asked"
+                        ? t("tasks_take_title")
+                        : status === "Expected"
+                        ? t("tasks_finished_title")
+                        : t("tasks_done_title")}
+                    </>
+                  )}
                 </DialogTitle>
                 <p className="mt-2 text-sm/6 text-thin-color">
-                  {status === "Asked"
-                    ? "Do you really want to take this task all to yourself?"
+                  {reject
+                    ? t("tasks_reject_info")
+                    : status === "Asked"
+                    ? t("tasks_take_info")
                     : status === "Expected"
-                    ? "Do you sure you want to complete the task?"
-                    : "Are you sure you have completed the task?"}
+                    ? t("tasks_finished_info")
+                    : t("tasks_done_info")}
                 </p>
                 <div className="mt-4 flex justify-between items-center gap-3">
                   <Button
                     className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700"
                     onClick={handleClose}
                   >
-                    No
+                    {t("no")}
                   </Button>
                   <Button
                     className="inline-flex items-center gap-2 rounded-md bg-red-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-red-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700"
@@ -214,10 +223,10 @@ export default function TakeOverUser({
                     {loading ? (
                       <div className="flex justify-start items-center gap-2 opacity-[0.8]">
                         <SimpleLoading />
-                        <h1>Loading...</h1>
+                        <h1>{t("loading")}</h1>
                       </div>
                     ) : (
-                      <h1>Yes</h1>
+                      <h1>{t("yes")}</h1>
                     )}
                   </Button>
                 </div>

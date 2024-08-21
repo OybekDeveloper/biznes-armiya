@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from "react";
+import React, { Suspense } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Saidbar from "./components/sidebar/sidebar";
 import Navbar from "./components/navbar/navbar";
@@ -8,12 +8,8 @@ import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import i18n from "i18next";
 import HttpApi from "i18next-http-backend";
-import i18next from "i18next";
 //dashboard
 const Dashboard = React.lazy(() => import("./interface/dashboard/layout"));
-const NearestOvents = React.lazy(() =>
-  import("./interface/dashboard/nearest-ovents")
-);
 //history
 const History = React.lazy(() => import("./interface/history/layout"));
 //auktion
@@ -105,6 +101,7 @@ const App = () => {
     if (!register && pathname !== "/login" && pathname !== "/register") {
       navigate("/login");
     }
+    //eslint-disable-next-line
   }, [register, pathname]);
 
   useEffect(() => {
@@ -129,6 +126,7 @@ const App = () => {
     return () => {
       socket.close();
     };
+    //eslint-disable-next-line
   }, []);
   return (
     <>
@@ -155,14 +153,6 @@ const App = () => {
               element={
                 <Suspense fallback={<Loader1 />}>
                   <Dashboard />
-                </Suspense>
-              }
-            />
-            <Route
-              path="nearest"
-              element={
-                <Suspense fallback={<Loader1 />}>
-                  <NearestOvents />
                 </Suspense>
               }
             />

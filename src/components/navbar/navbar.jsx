@@ -24,6 +24,7 @@ import { FaCalendarCheck } from "react-icons/fa";
 import { FaNewspaper } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import Loader1 from "../loader/loader1";
+import LengDropdown from "../leng-dropdown";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -250,6 +251,7 @@ const Navbar = () => {
           />
         </div>
         <div className="w-full flex justify-end items-center gap-[24px]">
+          <LengDropdown />
           <div
             onClick={handleToggleTheme}
             className="p-[12px] rounded-[14px] bg-card cursor-pointer shadow-btn_shadow flex justify-center items-center"

@@ -1,22 +1,20 @@
+import { t } from "i18next";
 import React, { useState } from "react";
-import { FaAngleDown } from "react-icons/fa";
-import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-import { NavLink } from "react-router-dom";
 
 const filterData = [
   {
     id: 1,
-    title: "Asked",
+    title: t("status_asked"),
     status: "Asked",
   },
   {
     id: 2,
-    title: "Expected",
+    title: t("status_expected"),
     status: "Expected",
   },
   {
     id: 3,
-    title: "Finished",
+    title: t("status_finished"),
     status: "Finished",
   },
 ];

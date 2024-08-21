@@ -13,64 +13,67 @@ import { MdOndemandVideo } from "react-icons/md";
 import { FaCalendarCheck } from "react-icons/fa";
 import { FaNewspaper } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
+import { useTranslation } from "react-i18next";
+import LengDropdown from "../leng-dropdown";
 
 const Saidbar = () => {
+  const {t}=useTranslation()
   const { pathname } = useLocation();
   const { userData } = useSelector((state) => state.event);
   const { role } = userData;
   const saidbarData = [
     {
       id: 1,
-      title: "Dashboard",
+      title: t("side_dash"),
       icon: <MdSpaceDashboard />,
       link: "/",
       active: role?.side_dash ? true : false,
     },
     {
       id: 2,
-      title: "Tasks",
+      title: t("side_tasks"),
       icon: <FaTasks />,
       link: "/homework",
       active: role?.side_task ? true : false,
     },
     {
       id: 3,
-      title: "VAB history",
+      title:  t("side_history"),
       icon: <MdWorkHistory />,
       link: "/history",
       active: role?.side_history || role?.h_balls_views ? true : false,
     },
     {
       id: 4,
-      title: "Auktsion",
+      title: t("side_auktion"),
       icon: <RiAuctionFill />,
       link: "/auktsion",
       active: role?.side_auction ? true : false,
     },
     {
       id: 5,
-      title: "Requirements",
+      title: t("side_req"),
       icon: <MdOndemandVideo />,
       link: "/requirements",
       active: role?.side_news ? true : false,
     },
     {
       id: 6,
-      title: "Checklist",
+      title: t("side_check"),
       icon: <FaCalendarCheck />,
       link: "/checklist",
       active: role?.side_check_list ? true : false,
     },
     {
       id: 7,
-      title: "News",
+      title: t("side_news"),
       icon: <FaNewspaper />,
       link: "/news",
       active: role?.side_news ? true : false,
     },
     {
       id: 7,
-      title: "Settings",
+      title: t("side_setting"),
       icon: <IoMdSettings />,
       link: "/settings/user",
       active:

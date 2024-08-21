@@ -1,20 +1,16 @@
 import {
-  Button,
   Dialog,
   DialogPanel,
   DialogTitle,
   Transition,
   TransitionChild,
 } from "@headlessui/react";
-import { addeventbg, addGroupBg, close } from "../../images";
-import SelectListBox from "../../components/listbox/listbox";
+import { close } from "../../images";
 import { IoClose } from "react-icons/io5";
-import { FaPlus } from "react-icons/fa";
-import { useRef, useState } from "react";
+import {  useState } from "react";
 import { ApiService } from "../../components/api.server";
 import toast from "react-hot-toast";
 import { IoAddCircleOutline } from "react-icons/io5";
-import axios from "axios";
 import ModalLoader from "../../components/loader/modal-loader";
 import { MdOutlineContentCopy } from "react-icons/md";
 

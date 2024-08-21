@@ -1,24 +1,14 @@
 import React, { useEffect, useState } from "react";
-import {
-  arrowright,
-  calendar,
-  dataempty,
-  emptygrouplogo,
-  newsempty,
-  photoUrl,
-  time,
-  yellowarrow,
-} from "../../images";
+import { dataempty, emptygrouplogo, newsempty } from "../../images";
 import { NavLink } from "react-router-dom";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-import { FaCalendar } from "react-icons/fa";
-import { FaArrowDown } from "react-icons/fa";
 import { ApiService } from "../../components/api.server";
 import Loader1 from "../../components/loader/loader1";
 import { useSelector } from "react-redux";
-import { AiOutlineLike } from "react-icons/ai";
+import { useTranslation } from "react-i18next";
 
 const Dashboard = () => {
+  const {t}=useTranslation()
   const register = JSON.parse(localStorage.getItem("register"));
   const { userData } = useSelector((state) => state.event);
   const [groupData, setGroupData] = useState([]);
@@ -77,9 +67,11 @@ const Dashboard = () => {
           <article className="flex w-full justify-between items-center mb-[20px]">
             <div className="flex flex-col items-start justify-start">
               <p className="text-gray-500">
-                Welcome back, {userData?.first_name}!
+                {t("welcome_back")} , {userData?.first_name}!
               </p>
-              <h1 className="font-bold clamp2 text-text-primary">Dashboard</h1>
+              <h1 className="font-bold clamp2 text-text-primary">
+                {t("side_dash")}
+              </h1>
             </div>
           </article>
           <section className="grid grid-cols-6 gap-4">
@@ -88,13 +80,15 @@ const Dashboard = () => {
               <div className="lg:flex-1 bg-card shadow-btn_shadow rounded-[24px] p-[18px] flex flex-col">
                 <div className="w-full flex justify-between items-center mb-[20px]">
                   <h1 className="text-text-primary text-xl font-bold">
-                    Groups
+                    {t("group")}
                   </h1>
                   <NavLink
                     to={"/groups"}
                     className="flex justify-center items-center"
                   >
-                    <h1 className="text-primary cursor-pointer">View all</h1>
+                    <h1 className="text-primary cursor-pointer">
+                      {t("view_all")}
+                    </h1>
                     <MdOutlineKeyboardArrowRight className="text-primary" />
                   </NavLink>
                 </div>
@@ -152,7 +146,7 @@ const Dashboard = () => {
                         alt=""
                       />
                     </div>
-                    <h1 className="clam3 font-bold">Groups do not exist!</h1>
+                    <h1 className="clam3 font-bold">{t("no_group_data")}</h1>
                   </div>
                 )}
               </div>
@@ -161,12 +155,16 @@ const Dashboard = () => {
             <div className="col-span-2 max-lg:col-span-6">
               <div className="w-full bg-card shadow-btn_shadow rounded-[24px] p-[18px] flex flex-col">
                 <div className="w-full flex justify-between items-center mb-[20px]">
-                  <h1 className="text-text-pimary clamp3 font-bold">News</h1>
+                  <h1 className="text-text-pimary clamp3 font-bold">
+                    {t("d_news")}
+                  </h1>
                   <NavLink
                     to={"/news"}
                     className="flex justify-center items-center"
                   >
-                    <h1 className="text-primary cursor-pointer">View all</h1>
+                    <h1 className="text-primary cursor-pointer">
+                      {t("view_all")}
+                    </h1>
                     <MdOutlineKeyboardArrowRight className="text-primary" />
                   </NavLink>
                 </div>
@@ -187,7 +185,7 @@ const Dashboard = () => {
                         </div>
                         <div className="w-full flex justify-between items-center gap-3 mt-2">
                           <p className="text-thin text-[14px]">
-                          19-07-2024 14:02
+                            19-07-2024 14:02
                           </p>
                           {/* <div className="flex justify-end items-center gap-2">
                             <div className="flex justify-start items-center gap-1">
@@ -227,7 +225,7 @@ const Dashboard = () => {
                         alt=""
                       />
                     </div>
-                    <h1 className="clam3 font-bold">News is not available</h1>
+                    <h1 className="clam3 font-bold">{t("no_news_data")}</h1>
                   </div>
                 )}
               </div>

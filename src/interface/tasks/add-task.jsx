@@ -16,6 +16,7 @@ import { FaPlus } from "react-icons/fa";
 import SimpleLoading from "../../components/loader/simple-loading";
 import { useDispatch, useSelector } from "react-redux";
 import { eventSliceAction } from "../../reducer/event";
+import { t } from "i18next";
 
 export default function AddTasks({ isOpen, handleClose, updateItem }) {
   const [errorMessage, setErrorMessage] = useState();
@@ -183,9 +184,9 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
   useEffect(() => {
     setFormData({ ...formData, user: newUsers });
     if (newUsers?.length > 0) {
-      setStatus([{ id: 2, name: "Expected" }]);
+      setStatus([{ id: 2, name: t("status_expected") }]);
     } else {
-      setStatus([{ id: 1, name: "Asked" }]);
+      setStatus([{ id: 1, name: t("status_asked") }]);
     }
   }, [newUsers, updateItem]);
 
@@ -228,7 +229,7 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
               >
                 <DialogTitle as="h3" className="text-base/7 font-medium">
                   <div className="flex items-end justify-between cursor-pointer">
-                    <h1 className="font-[600] clamp3">Add Task</h1>
+                    <h1 className="font-[600] clamp3">{t("tasks_add")}</h1>
                     <div
                       onClick={handleCloseModal}
                       className="p-[10px] bg-background-secondary rounded-[12px]"
@@ -250,7 +251,7 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
                       className="text-[14px] font-[700] text-thin"
                       htmlFor="name"
                     >
-                      Name
+                      {t("tasks_name")}
                     </label>
                     <input
                       onChange={handleChange}
@@ -259,7 +260,7 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
                       type="text"
                       id="name"
                       name="name"
-                      placeholder="Task name"
+                      placeholder={t("tasks_add_name_pls")}
                     />
                     {errorMessage?.name && (
                       <p className="text-red-500">
@@ -281,7 +282,7 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
                       type="number"
                       id="vab"
                       name="vab"
-                      placeholder="Add VAB"
+                      placeholder={t("tasks_add_vab_pls")}
                     />
                     {errorMessage?.vab && (
                       <p className="text-red-500">
@@ -295,7 +296,7 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
                         className="text-[14px] font-[700] text-thin"
                         htmlFor="start_time"
                       >
-                        Starts
+                        {t("tasks_add_start")}
                       </label>
                       <input
                         value={formData?.start_time}
@@ -304,7 +305,7 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
                         type="datetime-local"
                         id="start_time"
                         name="start_time"
-                        placeholder="Start time is in unity"
+                        placeholder={t("tasks_add_start_pls")}
                       />
                       {errorMessage?.start_time && (
                         <p className="text-red-500">
@@ -317,7 +318,7 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
                         className="text-[14px] font-[700] text-thin"
                         htmlFor="stop_time"
                       >
-                        Dead Line
+                        {t("tasks_add_end")}
                       </label>
                       <input
                         value={formData?.stop_time}
@@ -326,7 +327,7 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
                         type="datetime-local"
                         id="stop_time"
                         name="stop_time"
-                        placeholder="Stop time is in unity"
+                        placeholder={t("tasks_add_end_pls")}
                       />
                       {errorMessage?.stop_time && (
                         <p className="text-red-500">
@@ -340,7 +341,7 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
                       className="text-[14px] font-[700] text-thin"
                       htmlFor="name"
                     >
-                      Task status
+                      {t("tasks_add_status")}
                     </label>
                     <AddListbox
                       handleChangeStatus={handleChangeStatus}
@@ -359,7 +360,7 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
                       className="text-[14px] font-[700] text-thin"
                       htmlFor="definition"
                     >
-                      Definition
+                      {t("tasks_add_desc")}
                     </label>
                     <textarea
                       value={formData?.definition}
@@ -368,7 +369,7 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
                       type="datetime-local"
                       id="definition"
                       name="definition"
-                      placeholder="Strength is in unity"
+                      placeholder={t("tasks_add_desc_pls")}
                     />
                     {errorMessage?.definition && (
                       <p className="text-red-500">
@@ -383,7 +384,7 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
                           className="text-[14px] font-[700] text-thin"
                           htmlFor="name"
                         >
-                          Add a soldier
+                          {t("tasks_add_user")}
                         </label>
                         <AddListbox
                           updateItem={updateItem}
@@ -425,7 +426,7 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
                         className="col-span-3 flex justify-end items-center gap-2 text-red-500"
                       >
                         <FaPlus />
-                        <h1>Delete Tab</h1>
+                        <h1>{t("tasks_delete_tab")}</h1>
                       </button>
                     </div>
                   ))}
@@ -438,7 +439,7 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
                       className="w-full flex justify-start items-center gap-2 text-primary"
                     >
                       <FaPlus />
-                      <h1>Add new user</h1>
+                      <h1>{t("tasks_add_tab")}</h1>
                     </button>
                     <div className="w-full flex justify-end items-center">
                       <button
@@ -448,10 +449,10 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
                         {loading ? (
                           <div className="flex justify-start items-center gap-2 opacity-[0.8]">
                             <SimpleLoading />
-                            <h1>Loading...</h1>
+                            <h1>{t("loading")}</h1>
                           </div>
                         ) : (
-                          <h1>Add task</h1>
+                          <h1>{t("tasks_add")}</h1>
                         )}
                       </button>
                     </div>

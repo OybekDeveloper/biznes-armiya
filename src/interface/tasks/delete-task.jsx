@@ -12,6 +12,7 @@ import SimpleLoading from "../../components/loader/simple-loading";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { eventSliceAction } from "../../reducer/event";
+import { t } from "i18next";
 
 export default function DeleteModal({ isOpen, handleClose, id }) {
   const [loading, setLoading] = useState(false);
@@ -69,17 +70,17 @@ export default function DeleteModal({ isOpen, handleClose, id }) {
                   as="h3"
                   className="text-clamp2 font-medium text-text-primary"
                 >
-                  Delete task
+                  {t("tasks_delete")}
                 </DialogTitle>
                 <p className="mt-2 text-sm/6 text-thin-color">
-                  Are you sure you want to delete this task?
+                  {t("tasks_delete_info")}
                 </p>
                 <div className="mt-4 flex justify-between items-center gap-3">
                   <Button
                     className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700"
                     onClick={handleClose}
                   >
-                    No
+                    {t("no")}
                   </Button>
                   <Button
                     className="inline-flex items-center gap-2 rounded-md bg-red-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-red-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700"
@@ -88,10 +89,10 @@ export default function DeleteModal({ isOpen, handleClose, id }) {
                     {loading ? (
                       <div className="flex justify-start items-center gap-2 opacity-[0.8]">
                         <SimpleLoading />
-                        <h1>Loading...</h1>
+                        <h1>{t("loading")}</h1>
                       </div>
                     ) : (
-                      <h1>Yes</h1>
+                      <h1>{t("yes")}</h1>
                     )}
                   </Button>
                 </div>

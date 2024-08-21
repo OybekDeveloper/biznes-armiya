@@ -1,21 +1,16 @@
 import {
-  Button,
   Dialog,
   DialogPanel,
   DialogTitle,
   Transition,
   TransitionChild,
 } from "@headlessui/react";
-import { addeventbg, addGroupBg, close } from "../../images";
-import SelectListBox from "../../components/listbox/listbox";
+import { addGroupBg, close } from "../../images";
 import { IoClose } from "react-icons/io5";
-import { FaPlus } from "react-icons/fa";
 import { useRef, useState } from "react";
 import { ApiService } from "../../components/api.server";
 import toast from "react-hot-toast";
 import { IoAddCircleOutline } from "react-icons/io5";
-import axios from "axios";
-import ModalLoader from "../../components/loader/modal-loader";
 import SimpleLoading from "../../components/loader/simple-loading";
 
 export default function EditGroup({ isOpen, handleClose, group }) {
@@ -74,7 +69,7 @@ export default function EditGroup({ isOpen, handleClose, group }) {
           formD.append("group_photo", uploadPhoto);
         }
 
-        const res = await ApiService.putMediaData(
+        await ApiService.putMediaData(
           `/group/${group?.id}`,
           formD,
           register?.access
@@ -91,7 +86,7 @@ export default function EditGroup({ isOpen, handleClose, group }) {
   };
 
   const handleCloseModal = () => {
-    if(loading){
+    if (loading) {
       return;
     }
     handleClose();
@@ -122,8 +117,7 @@ export default function EditGroup({ isOpen, handleClose, group }) {
                 <DialogTitle as="h3" className="text-base/7 font-medium">
                   <div className="flex items-end justify-between cursor-pointer">
                     {loading && (
-                      <div className="absolute top-0 left-0 w-full h-full rounded-xl z-[1002] flex justify-center items-center">
-                      </div>
+                      <div className="absolute top-0 left-0 w-full h-full rounded-xl z-[1002] flex justify-center items-center"></div>
                     )}
                     <h1 className="font-[600] clamp3">Add Group</h1>
                     <div className="p-[10px] bg-background-secondary rounded-[12px]">
@@ -209,20 +203,20 @@ export default function EditGroup({ isOpen, handleClose, group }) {
                     )}
                   </div>
                   <div className="w-full flex justify-end items-center">
-                      <button
-                        onClick={handleSubmit}
-                        className="px-[20px] py-[13px] rounded-[14px] bg-button-color text-white clamp4 font-bold"
-                      >
-                        {loading ? (
-                          <div className="flex justify-start items-center gap-2 opacity-[0.8]">
-                            <SimpleLoading />
-                            <h1>Loading...</h1>
-                          </div>
-                        ) : (
-                          <h1>Edit Group</h1>
-                        )}
-                      </button>
-                    </div>
+                    <button
+                      onClick={handleSubmit}
+                      className="px-[20px] py-[13px] rounded-[14px] bg-button-color text-white clamp4 font-bold"
+                    >
+                      {loading ? (
+                        <div className="flex justify-start items-center gap-2 opacity-[0.8]">
+                          <SimpleLoading />
+                          <h1>Loading...</h1>
+                        </div>
+                      ) : (
+                        <h1>Edit Group</h1>
+                      )}
+                    </button>
+                  </div>
                 </form>
               </DialogPanel>
             </TransitionChild>
