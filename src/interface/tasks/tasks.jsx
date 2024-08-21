@@ -111,7 +111,7 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
             .map((item, idx) => {
               const usersInfo = usersInfoMap[item.id] || [];
               return (
-                <div className="relative">
+                <div key={idx} className="relative">
                   <NavLink
                     to={
                       (role?.tasks_views &&

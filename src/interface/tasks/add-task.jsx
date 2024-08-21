@@ -14,7 +14,7 @@ import AddListbox from "./add-listbox";
 import { close } from "../../images";
 import { FaPlus } from "react-icons/fa";
 import SimpleLoading from "../../components/loader/simple-loading";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { eventSliceAction } from "../../reducer/event";
 
 export default function AddTasks({ isOpen, handleClose, updateItem }) {
@@ -24,6 +24,7 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
     { id: 1, name: "Asked" },
     { id: 2, name: "Expected" },
   ]);
+  const { userData } = useSelector((state) => state.event);
 
   const [users, setUsers] = useState([]);
   const [formData, setFormData] = useState({
@@ -44,6 +45,12 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (userData.vab < formData.vab) {
+      toast.error(`You do not have enough VAB!!!Your VAB is ${userData.vab}`);
+      return null;
+    }
+
     const newError = {};
     const register = JSON.parse(localStorage.getItem("register"));
     const groupFetch = async () => {
@@ -57,8 +64,17 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
           );
           toast.success("Group update successfully");
         } else {
-          await ApiService.postData("/tasks", formData, register?.access);
-          toast.success("Group added successfully");
+          const res = await ApiService.patchData(
+            `/users/${userData.id}`,
+            {
+              vab: userData.vab - formData.vab,
+            },
+            register?.access
+          );
+          if (res) {
+            await ApiService.postData("/tasks", formData, register?.access);
+            toast.success("Group added successfully");
+          }
         }
 
         handleClose();
@@ -188,7 +204,6 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
       setNewUsers(updateItem.user || []);
     }
   }, [updateItem]);
-
 
   return (
     <Transition appear show={isOpen}>

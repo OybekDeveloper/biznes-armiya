@@ -15,6 +15,7 @@ import { FaPlus } from "react-icons/fa";
 import AddListbox from "../tasks/add-listbox";
 import AddListboxSetting from "../settings/combobox";
 import SimpleLoading from "../../components/loader/simple-loading";
+import { useSelector } from "react-redux";
 
 export default function AddTasks({ isOpen, handleClose, roles }) {
   const [errorMessage, setErrorMessage] = useState();
@@ -22,6 +23,7 @@ export default function AddTasks({ isOpen, handleClose, roles }) {
     { id: 1, name: "Asked" },
     { id: 2, name: "Expected" },
   ]);
+  const { userData } = useSelector((state) => state.event);
   const [users, setUsers] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
@@ -36,19 +38,30 @@ export default function AddTasks({ isOpen, handleClose, roles }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (userData.vab < formData.vab) {
+      toast.error(`You do not have enough VAB!!!Your VAB is ${userData.vab}`);
+      return null;
+    }
     const newError = {};
     const register = JSON.parse(localStorage.getItem("register"));
 
     const groupFetch = async () => {
       setLoading(true);
       try {
+        const res2 = await ApiService.patchData(
+          `/users/${userData.id}`,
+          {
+            vab: userData.vab - formData.vab,
+          },
+          register?.access
+        );
         const { role_id, ...rest } = formData;
         const res = await ApiService.postData(
           "/tasksreq",
           rest,
           register?.access
         );
-        if (res.id) {
+        if (res.id && res2) {
           const req = await ApiService.postData(
             "/talablar",
             {
@@ -57,8 +70,8 @@ export default function AddTasks({ isOpen, handleClose, roles }) {
             },
             register?.access
           );
-          if (req) {
-            toast.success("Group added successfully");
+          if (req && res) {
+            toast.success("Requirement added successfully");
             handleClose();
             setFormData({
               name: "",
@@ -183,7 +196,7 @@ export default function AddTasks({ isOpen, handleClose, roles }) {
               >
                 <DialogTitle as="h3" className="text-base/7 font-medium">
                   <div className="flex items-end justify-between cursor-pointer">
-                    <h1 className="font-[600] clamp3">Add Task</h1>
+                    <h1 className="font-[600] clamp3">Add Requirement</h1>
                     <div
                       onClick={handleCloseModal}
                       className="p-[10px] bg-background-secondary rounded-[12px]"

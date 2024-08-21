@@ -105,7 +105,7 @@ const Requirements = () => {
         const filteredData = fetchedRequirements.filter(
           (c) => c.start_time !== null && c.endt_time !== null
         );
-        navigate(`?active=${userData.role.id}`);
+        navigate(`?active=${register.role_id}`);
         setRequirement(filteredData);
       }
     } catch (error) {
@@ -152,7 +152,10 @@ const Requirements = () => {
                   <FaPlus />
                   <h1>Add Req</h1>
                 </button>
-                <button className="md:hidden fixed bottom-[16px] right-[16px] bg-button-color  flex justify-start items-center gap-2 rounded-full p-4 text-white shadow-btn_shadow">
+                <button
+                  onClick={handleActive}
+                  className="md:hidden fixed bottom-[16px] right-[16px] bg-button-color  flex justify-start items-center gap-2 rounded-full p-4 text-white shadow-btn_shadow"
+                >
                   <FaPlus />
                 </button>
               </>
