@@ -184,9 +184,9 @@ export default function AddTasks({ isOpen, handleClose, updateItem }) {
   useEffect(() => {
     setFormData({ ...formData, user: newUsers });
     if (newUsers?.length > 0) {
-      setStatus([{ id: 2, name: t("status_expected") }]);
+      setStatus([{ id: 2, name: "Expected" }]);
     } else {
-      setStatus([{ id: 1, name: t("status_asked") }]);
+      setStatus([{ id: 1, name: "Asked" }]);
     }
   }, [newUsers, updateItem]);
 

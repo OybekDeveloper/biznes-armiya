@@ -79,7 +79,7 @@ const Project = () => {
       }
     };
     fetchData();
-  }, [eventSliceBool] );
+  }, [eventSliceBool]);
 
   useEffect(() => {
     const fetchMessage = async () => {
@@ -97,182 +97,205 @@ const Project = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  return (
-    <>
-      {loading ? (
-        <Loader1 />
-      ) : (
-        <>
-          {(tasks && tasks?.user?.find((c) => c.id === userData?.id)) ||
-          role?.tasks_views ? (
-            <main className="md:px-[16px] flex flex-col gap-3">
-              <NavLink
-                to={"/homework"}
-                className="flex justify-start items-center gap-2 text-blue-500"
-              >
-                <IoArrowBack />
-                <h1>{t("back")} </h1>
-              </NavLink>
-              <section className="w-full flex justify-between items-center">
-                <h1 className="font-bold text-text-primary clamp2">{t("tasks")}</h1>
-                <div className="flex justify-start items-center gap-2">
-                  {tasks?.status === "Asked" ? (
-                    <button
-                      onClick={handleTakeOverModal}
-                      className="bg-expected hover:bg-expected-hover transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
-                    >
-                      <h1>{t("take_btn")}</h1>
-                    </button>
-                  ) : tasks?.status === "Expected" ? (
-                    <button
-                      onClick={handleTakeOverModal}
-                      className="bg-finished hover:bg-finished-hover transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
-                    >
-                      <h1>{t("complate_btn")}</h1>
-                    </button>
-                  ) : (
-                    role?.tasks_edit && (
-                      <>
-                        {tasks?.status !== "Done" && (
-                          <button
-                            onClick={handleTakeOverModal}
-                            className="bg-done hover:bg-done-hover transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
-                          >
-                            <h1>{t("done_btn")}</h1>
-                          </button>
-                        )}
-                        <button
-                          onClick={() => handleTakeOverModal(true)}
-                          className="bg-red-500 hover:bg-red-600 transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
-                        >
-                          <h1>{t("reject_btn")}</h1>
-                        </button>
-                      </>
-                    )
-                  )}
-                </div>
-              </section>
-              <section className="relative grid max-lg:grid-cols-2 lg:grid-cols-8 gap-3 mt-2">
-                {/* Project detail */}
-                <div className="max-lg:col-span-2 lg:col-span-3">
-                  <div className=" bg-card rounded-[24px] p-3 sm:p-[24px] flex flex-col gap-4">
-                    <div className="flex justify-between items-start w-full">
-                      <div className="flex flex-col">
-                        <h1 className="text-thin-color">{t("tasks_name")}</h1>
-                        <p className="font-bold">{tasks?.name}</p>
-                      </div>
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <h1>{t("tasks_desc")}</h1>
-                      <p className="text-thin-color">{tasks?.definition}</p>
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      {tasks?.user?.length > 0 && (
-                        <div className="col-span-1 flex flex-col w-full">
-                          <p className="text-thin-color clamp4">{t("tasks_assignee")}</p>
-                          <div className="flex justify-between">
-                            <div>
-                              {tasks?.users?.slice(0, 3)?.map((user, idx) => (
-                                <img
-                                  key={idx}
-                                  className="inline-flex object-cover  h-6 w-6 rounded-full ring-2 ring-white"
-                                  src={
-                                    user?.profile_photo
-                                      ? user?.profile_photo
-                                      : photoUrl
-                                  }
-                                  alt=""
-                                />
-                              ))}
-                              {tasks?.users?.length > 3 && (
-                                <div className="inline-flex h-6 w-6 rounded-full ring-2 ring-white bg-blue-300 text-white text-sm text-center font-bold justify-center items-center">
-                                  <h1>{tasks?.users?.length - 3}+</h1>
-                                </div>
-                              )}
-                            </div>
-                            <button
-                              onClick={handleOpenUsersModal}
-                              className="px-2 py-1 rounded-md bg-background-secondary font-[500]"
-                            >
-                              {t("see_all_users")}
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex flex-col gap-1 justify-start items-start">
-                      <h1 className="text-thin-color">Status</h1>
-                      <div
-                        className={`
-                 ${
-                   tasks?.status === "Asked"
-                     ? "bg-asked"
-                     : tasks?.status === "Expected"
-                     ? "bg-expected"
-                     : tasks?.status === "Finished"
-                     ? "bg-finished"
-                     : "bg-done"
-                 } 
-                 text-[12px] px-2 py-1 rounded-[14px]  text-white`}
+
+  console.log(tasks);
+  if (
+    tasks?.user?.find((c) => +c.user === +userData?.id) ||
+    (role?.tasks_edit && role?.tasks_views && role?.tasks_delete)
+  ) {
+    return (
+      <>
+        {loading ? (
+          <Loader1 />
+        ) : (
+          <>
+            {(tasks && tasks?.user?.find((c) => c.id === userData?.id)) ||
+            role?.tasks_views ? (
+              <main className="md:px-[16px] flex flex-col gap-3">
+                <NavLink
+                  to={"/homework"}
+                  className="flex justify-start items-center gap-2 text-blue-500"
+                >
+                  <IoArrowBack />
+                  <h1>{t("back")} </h1>
+                </NavLink>
+                <section className="w-full flex justify-between items-center">
+                  <h1 className="font-bold text-text-primary clamp2">
+                    {t("tasks")}
+                  </h1>
+                  <div className="flex justify-start items-center gap-2">
+                    {tasks?.status === "Asked" ? (
+                      <button
+                        onClick={handleTakeOverModal}
+                        className="bg-expected hover:bg-expected-hover transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
                       >
-                        {tasks?.status}
+                        <h1>{t("take_btn")}</h1>
+                      </button>
+                    ) : tasks?.status === "Expected" ? (
+                      <button
+                        onClick={handleTakeOverModal}
+                        className="bg-finished hover:bg-finished-hover transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
+                      >
+                        <h1>{t("complate_btn")}</h1>
+                      </button>
+                    ) : (
+                      role?.tasks_edit && (
+                        <>
+                          {tasks?.status !== "Done" && (
+                            <button
+                              onClick={handleTakeOverModal}
+                              className="bg-done hover:bg-done-hover transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
+                            >
+                              <h1>{t("done_btn")}</h1>
+                            </button>
+                          )}
+                          <button
+                            onClick={() => handleTakeOverModal(true)}
+                            className="bg-red-500 hover:bg-red-600 transition-all duration-300  flex justify-start items-center gap-2 rounded-[14px] px-3 py-2 text-white shadow-btn_shadow"
+                          >
+                            <h1>{t("reject_btn")}</h1>
+                          </button>
+                        </>
+                      )
+                    )}
+                  </div>
+                </section>
+                <section className="relative grid max-lg:grid-cols-2 lg:grid-cols-8 gap-3 mt-2">
+                  {/* Project detail */}
+                  <div className="max-lg:col-span-2 lg:col-span-3">
+                    <div className=" bg-card rounded-[24px] p-3 sm:p-[24px] flex flex-col gap-4">
+                      <div className="flex justify-between items-start w-full">
+                        <div className="flex flex-col">
+                          <h1 className="text-thin-color">{t("tasks_name")}</h1>
+                          <p className="font-bold">{tasks?.name}</p>
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <h1>{t("tasks_desc")}</h1>
+                        <p className="text-thin-color">{tasks?.definition}</p>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        {tasks?.user?.length > 0 && (
+                          <div className="col-span-1 flex flex-col w-full">
+                            <p className="text-thin-color clamp4">
+                              {t("tasks_assignee")}
+                            </p>
+                            <div className="flex justify-between">
+                              <div>
+                                {tasks?.users?.slice(0, 3)?.map((user, idx) => (
+                                  <img
+                                    key={idx}
+                                    className="inline-flex object-cover  h-6 w-6 rounded-full ring-2 ring-white"
+                                    src={
+                                      user?.profile_photo
+                                        ? user?.profile_photo
+                                        : photoUrl
+                                    }
+                                    alt=""
+                                  />
+                                ))}
+                                {tasks?.users?.length > 3 && (
+                                  <div className="inline-flex h-6 w-6 rounded-full ring-2 ring-white bg-blue-300 text-white text-sm text-center font-bold justify-center items-center">
+                                    <h1>{tasks?.users?.length - 3}+</h1>
+                                  </div>
+                                )}
+                              </div>
+                              <button
+                                onClick={handleOpenUsersModal}
+                                className="px-2 py-1 rounded-md bg-background-secondary font-[500]"
+                              >
+                                {t("see_all_users")}
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex flex-col gap-1 justify-start items-start">
+                        <h1 className="text-thin-color">Status</h1>
+                        <div
+                          className={`
+                   ${
+                     tasks?.status === "Asked"
+                       ? "bg-asked"
+                       : tasks?.status === "Expected"
+                       ? "bg-expected"
+                       : tasks?.status === "Finished"
+                       ? "bg-finished"
+                       : "bg-done"
+                   } 
+                   text-[12px] px-2 py-1 rounded-[14px]  text-white`}
+                        >
+                          {tasks?.status}
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <h1 className="text-thin-color">
+                          {t("tasks_add_start")}
+                        </h1>
+                        <p>{tasks?.start_time?.split("T")[0]}</p>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <h1 className="text-thin-color">
+                          {t("tasks_add_end")}
+                        </h1>
+                        <p>{tasks?.stop_time?.split("T")[0]}</p>
                       </div>
                     </div>
-                    <div className="flex flex-col gap-1">
-                      <h1 className="text-thin-color">{t("tasks_add_start")}</h1>
-                      <p>{tasks?.start_time?.split("T")[0]}</p>
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <h1 className="text-thin-color">{t("tasks_add_end")}</h1>
-                      <p>{tasks?.stop_time?.split("T")[0]}</p>
+                  </div>
+                  {/* Project CHat */}
+                  <div className="relative max-lg:col-span-2 lg:col-span-5 bg-card rounded-[24px] p-3 sm:p-[24px] flex flex-col gap-4">
+                    {tasks?.status === "Asked" && (
+                      <div className="w-full h-full z-20 absolute top-0 left-0 backdrop-blur-sm"></div>
+                    )}
+                    {/* Chat section */}
+                    <div className="chat-back relative flex justify-between flex-col h-full w-full gap-2">
+                      <ChatMessage
+                        status={tasks?.status}
+                        chatMessageData={chatMessageData}
+                        task_id={id}
+                      />
+                      <SendMessage status={tasks?.status} task_id={id} />
                     </div>
                   </div>
+                </section>
+              </main>
+            ) : (
+              <div className="w-full h-full flex justify-center items-center flex-col mt-4">
+                <div className="w-full h-[200px]">
+                  <img
+                    className="w-full h-full object-contain"
+                    src={dataempty}
+                    alt=""
+                  />
                 </div>
-                {/* Project CHat */}
-                <div className="relative max-lg:col-span-2 lg:col-span-5 bg-card rounded-[24px] p-3 sm:p-[24px] flex flex-col gap-4">
-                  {tasks?.status === "Asked" && (
-                    <div className="w-full h-full z-20 absolute top-0 left-0 backdrop-blur-sm"></div>
-                  )}
-                  {/* Chat section */}
-                  <div className="chat-back relative flex justify-between flex-col h-full w-full gap-2">
-                    <ChatMessage
-                      status={tasks?.status}
-                      chatMessageData={chatMessageData}
-                      task_id={id}
-                    />
-                    <SendMessage status={tasks?.status} task_id={id} />
-                  </div>
-                </div>
-              </section>
-            </main>
-          ) : (
-            <div className="w-full h-full flex justify-center items-center flex-col mt-4">
-              <div className="w-full h-[200px]">
-                <img
-                  className="w-full h-full object-contain"
-                  src={dataempty}
-                  alt=""
-                />
+                <h1 className="clam3 font-bold">{t("no_tasks_data")}</h1>
               </div>
-              <h1 className="clam3 font-bold">{t("no_tasks_data")}</h1>
-            </div>
-          )}
-        </>
-      )}
-      <AllUsersModal
-        isOpen={usersModal}
-        handleClose={handleOpenUsersModal}
-        users={tasks?.users}
-      />
-      <TakeOverUser
-        status={tasks?.status}
-        reject={reject}
-        item={tasks}
-        isOpen={takeOverModal}
-        handleClose={handleTakeOverModal}
-      />
-    </>
-  );
+            )}
+          </>
+        )}
+        <AllUsersModal
+          isOpen={usersModal}
+          handleClose={handleOpenUsersModal}
+          users={tasks?.users}
+        />
+        <TakeOverUser
+          status={tasks?.status}
+          reject={reject}
+          item={tasks}
+          isOpen={takeOverModal}
+          handleClose={handleTakeOverModal}
+        />
+      </>
+    );
+  } else {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <h1 className="font-medium text-yellow-600">
+          Sizda bu vazifaga kirishga huquq mavjud emas!!!
+        </h1>
+      </div>
+    );
+  }
 };
 
 export default Project;

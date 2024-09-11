@@ -11,6 +11,7 @@ import { BiTransfer } from "react-icons/bi";
 import Loader1 from "../../components/loader/loader1";
 import { useSelector } from "react-redux";
 import FilterHistory from "./filter-history";
+import ApexChart from "./pie-chart";
 
 const History = () => {
   const { eventSliceBool, userData, searchMessage } = useSelector(
@@ -134,6 +135,10 @@ const History = () => {
           </button>
         </div>
       </div>
+      <div className="bg-card w-full rounded-md">
+        <ApexChart filteredTransactions={filteredTransactions} />
+      </div>
+      <h1 className="clamp3 font-medium">List of transfers</h1>
       {filteredTransactions.length > 0 ? (
         <section className="grid grid-cols-2 max-xl:grid-cols-1 gap-3">
           {filteredTransactions

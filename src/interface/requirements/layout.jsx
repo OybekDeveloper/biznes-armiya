@@ -207,15 +207,15 @@ const Requirements = () => {
                     ?.slice()
                     ?.reverse()
                     ?.map((item, idx) => {
-                      if (
-                        item.status === "Done" &&
-                        !(role?.talab_edit && role?.talab_delete)
-                      ) {
-                        return null;
-                      }
-                      if (!(item?.role_id === parseInt(active))) {
-                        return null;
-                      }
+                        if (
+                          item.status === "Done" &&
+                          !(role?.talab_edit && role?.talab_delete)
+                        ) {
+                          return null;
+                        }
+                        if (!(item?.role_id === parseInt(active))) {
+                          return null;
+                        }
                       return (
                         <div
                           key={idx}

@@ -97,106 +97,120 @@ const GroupItem = () => {
     setSearchQuery(e.target.value);
     dispatch(groupEventSlice({ searchMessage: e.target.value }));
   };
+  console.log(users);
 
-  return (
-    <>
-      {loading ? (
-        <Loader1 />
-      ) : (
-        <main className="grid xl:grid-cols-4 lg:grid-cols-5 grid-cols-1 gap-4 md:px-[16px]">
-          <section className="xl:col-span-1 lg:col-span-2 col-span-1">
-            <button
-              className="py-2 flex justify-start items-center gap-2 text-blue-600"
-              onClick={() => window.history.back()}
-            >
-              <FaArrowLeft className="text-[14px]" />
-              <p className="text-[14px]">Back to Group</p>
-            </button>
-            <GroupInfo
-              group={group}
-              handleEditGroup={handleEditGroup}
-              handleDelete={handleDelete}
-              isDelete={isDelete}
-              editGroup={editGroup}
-              isGenerate={isGenerate}
-              handleGenerateCode={handleGenerateCode}
-              addUser={addUser}
-              handleAddUser={handleAddUser}
-              groupId={id}
-            />
-          </section>
-          <section className="lg:col-span-3 col-span-1 rounded-[14px] flex flex-col gap-3">
-            <div>
-              <h1 className="font-bold clamp3">Users</h1>
-              {users.length === 0 || !(filteredUsers.length > 0) ? (
-                <div className="flex flex-col justify-center items-center w-full h-full mt-10 gap-4">
-                  <img src={emptyGroup} alt="No tasks" />
-                  <h1 className="font-bold clamp4">
-                    There are no tasks in this group yet. Let's add them.
-                  </h1>
-                  {userData?.role?.chat_edit && (
-                    <button
-                      onClick={handleAddUser}
-                      className="max-md:hidden bg-button-color flex justify-start items-center gap-2 rounded-[14px] py-2 px-4 text-white shadow-btn_shadow"
-                    >
-                      <FaPlus />
-                      <h1>Add people</h1>
-                    </button>
-                  )}
-                </div>
-              ) : (
-                <div className="grid max-sm:grid-cols-1 grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-                  {filteredUsers.map((item, i) => (
-                    <div
-                      className="relative w-full h-full bg-card rounded-[24px] p-[16px] flex flex-col justify-start items-center gap-1"
-                      key={i}
-                    >
-                      <div className="relative flex flex-col gap-1 bg-background-secondary rounded-xl w-full py-2 justify-center items-center">
-                        <img
-                          src={item.user?.profile_photo || photoUrl}
-                          alt="User profile"
-                          className="mb-[10px] w-16 h-16 rounded-full"
-                        />
-                        <h1 className="text-text-primary font-medium">
-                          {item.user?.first_name || "Name"}
-                        </h1>
-                        <p className="text-gray-500 font-bold">
-                          {item.user.last_name || "Familya"}
-                        </p>
-                        <p className="text-gray-500 py-1 px-2 border-border border-[1px] rounded-[4px] text-[12px]">
-                          {item.role.role}
-                        </p>
-                        {userData?.role?.chat_delete && (
-                          <button
-                            onClick={() => handleDeleteUser(item?.id)}
-                            className="absolute right-0 top-0 p-2 rounded-md hover:bg-background mr-1 mt-1 bg-background-secondary"
-                          >
-                            <FaRegTrashAlt className="text-red-500 text-[14px] cursor-pointer" />
-                          </button>
-                        )}
-                      </div>
-                      <div className="flex justify-center items-center gap-1 flex-col">
-                        <h1 className="font-bold clamp3">
-                          {item?.reyting || 0}
-                        </h1>
-                        <p>Reyting</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-              <DeleteUser
+  if (
+    users.find((c) => +c.user?.id === +userData.id) ||
+    userData?.role?.chat_views
+  ) {
+    return (
+      <>
+        {loading ? (
+          <Loader1 />
+        ) : (
+          <main className="grid xl:grid-cols-4 lg:grid-cols-5 grid-cols-1 gap-4 md:px-[16px]">
+            <section className="xl:col-span-1 lg:col-span-2 col-span-1">
+              <button
+                className="py-2 flex justify-start items-center gap-2 text-blue-600"
+                onClick={() => window.history.back()}
+              >
+                <FaArrowLeft className="text-[14px]" />
+                <p className="text-[14px]">Back to Group</p>
+              </button>
+              <GroupInfo
                 group={group}
-                delId={delUserId}
-                isOpen={delUser}
-                handleClose={handleDeleteUser}
+                handleEditGroup={handleEditGroup}
+                handleDelete={handleDelete}
+                isDelete={isDelete}
+                editGroup={editGroup}
+                isGenerate={isGenerate}
+                handleGenerateCode={handleGenerateCode}
+                addUser={addUser}
+                handleAddUser={handleAddUser}
+                groupId={id}
               />
-            </div>
-          </section>
-        </main>
-      )}
-    </>
-  );
+            </section>
+            <section className="lg:col-span-3 col-span-1 rounded-[14px] flex flex-col gap-3">
+              <div>
+                <h1 className="font-bold clamp3">Users</h1>
+                {users.length === 0 || !(filteredUsers.length > 0) ? (
+                  <div className="flex flex-col justify-center items-center w-full h-full mt-10 gap-4">
+                    <img src={emptyGroup} alt="No tasks" />
+                    <h1 className="font-bold clamp4">
+                      There are no tasks in this group yet. Let's add them.
+                    </h1>
+                    {userData?.role?.chat_edit && (
+                      <button
+                        onClick={handleAddUser}
+                        className="max-md:hidden bg-button-color flex justify-start items-center gap-2 rounded-[14px] py-2 px-4 text-white shadow-btn_shadow"
+                      >
+                        <FaPlus />
+                        <h1>Add people</h1>
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <div className="grid max-sm:grid-cols-1 grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+                    {filteredUsers.map((item, i) => (
+                      <div
+                        className="relative w-full h-full bg-card rounded-[24px] p-[16px] flex flex-col justify-start items-center gap-1"
+                        key={i}
+                      >
+                        <div className="relative flex flex-col gap-1 bg-background-secondary rounded-xl w-full py-2 justify-center items-center">
+                          <img
+                            src={item.user?.profile_photo || photoUrl}
+                            alt="User profile"
+                            className="mb-[10px] w-16 h-16 rounded-full"
+                          />
+                          <h1 className="text-text-primary font-medium">
+                            {item.user?.first_name || "Name"}
+                          </h1>
+                          <p className="text-gray-500 font-bold">
+                            {item.user.last_name || "Familya"}
+                          </p>
+                          <p className="text-gray-500 py-1 px-2 border-border border-[1px] rounded-[4px] text-[12px]">
+                            {item.role.role}
+                          </p>
+                          {userData?.role?.chat_delete && (
+                            <button
+                              onClick={() => handleDeleteUser(item?.id)}
+                              className="absolute right-0 top-0 p-2 rounded-md hover:bg-background mr-1 mt-1 bg-background-secondary"
+                            >
+                              <FaRegTrashAlt className="text-red-500 text-[14px] cursor-pointer" />
+                            </button>
+                          )}
+                        </div>
+                        <div className="flex justify-center items-center gap-1 flex-col">
+                          <h1 className="font-bold clamp3">
+                            {item?.reyting || 0}
+                          </h1>
+                          <p>Reyting</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <DeleteUser
+                  group={group}
+                  delId={delUserId}
+                  isOpen={delUser}
+                  handleClose={handleDeleteUser}
+                />
+              </div>
+            </section>
+          </main>
+        )}
+      </>
+    );
+  } else {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <h1 className="font-medium text-yellow-600">
+          Sizda bu guruhga kirishga huquq mavjud emas!!!
+        </h1>
+      </div>
+    );
+  }
 };
 
 export default GroupItem;

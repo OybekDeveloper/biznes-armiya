@@ -135,7 +135,7 @@ export default function AddTasks({ isOpen, handleClose, roles }) {
     ]);
     setFormData((prevData) => ({
       ...prevData,
-      status: "Expected", // Setting the status to Expected
+      status: "Expected",
     }));
     setStatus([{ id: 2, name: "Expected" }]);
   };
