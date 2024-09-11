@@ -166,12 +166,14 @@ const GroupItem = () => {
                         <p className="text-gray-500 py-1 px-2 border-border border-[1px] rounded-[4px] text-[12px]">
                           {item.role.role}
                         </p>
-                        <button
-                          onClick={() => handleDeleteUser(item?.id)}
-                          className="absolute right-0 top-0 p-2 rounded-md hover:bg-background mr-1 mt-1 bg-background-secondary"
-                        >
-                          <FaRegTrashAlt className="text-red-500 text-[14px] cursor-pointer" />
-                        </button>
+                        {userData?.role?.chat_delete && (
+                          <button
+                            onClick={() => handleDeleteUser(item?.id)}
+                            className="absolute right-0 top-0 p-2 rounded-md hover:bg-background mr-1 mt-1 bg-background-secondary"
+                          >
+                            <FaRegTrashAlt className="text-red-500 text-[14px] cursor-pointer" />
+                          </button>
+                        )}
                       </div>
                       <div className="flex justify-center items-center gap-1 flex-col">
                         <h1 className="font-bold clamp3">

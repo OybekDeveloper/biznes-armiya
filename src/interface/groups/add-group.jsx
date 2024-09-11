@@ -63,10 +63,9 @@ export default function AddGroup({ isOpen, handleClose }) {
         const formD = new FormData();
         formD.append("name", formData.name);
         formD.append("admin", "Captain");
+        formD.append("rate", 10);
         formD.append("shiori", formData.shiori);
-        if (uploadPhoto) {
-          formD.append("group_photo", uploadPhoto);
-        }
+        formD.append("group_photo", formData.group_photo);
 
         await ApiService.postMediaData("/group", formD, register?.access);
         setLoading(false);

@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 
 export default function DeleteUser({ group, delId, isOpen, handleClose }) {
   const handleDeleteGroup = () => {
-    const delUser = group?.users?.filter((item) => item !== delId);
+    const delUser = group?.users?.filter((item) => +item!== + delId);
 
     const groupFetch = async () => {
       const register = JSON.parse(localStorage.getItem("register"));

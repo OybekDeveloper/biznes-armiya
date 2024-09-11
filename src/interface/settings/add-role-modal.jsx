@@ -106,15 +106,18 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
 
   const handleCheckboxChange = (category, type) => (e) => {
     const checked = e.target.checked;
-    if (type) {
+
+    if (type === "views" && !checked) {
       setRole((prevRole) => ({
         ...prevRole,
-        [`${category}_${type}`]: checked,
+        [`${category}_views`]: checked,
+        [`${category}_edit`]: false, // Uncheck edit
+        [`${category}_delete`]: false, // Uncheck delete
       }));
     } else {
       setRole((prevRole) => ({
         ...prevRole,
-        [`${category}`]: checked,
+        [`${category}_${type}`]: checked,
       }));
     }
   };
@@ -238,13 +241,13 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {filteredCategories.map(({ name, key, status }) => (
+                    {filteredCategories.map(({ name, key }) => (
                       <div key={key} className="category-group">
                         <button
                           className="flex items-center mb-2 cursor-pointer"
                           onClick={(e) => {
                             e.preventDefault();
-                            handleCategoryClick(key, status);
+                            handleCategoryClick(key);
                           }}
                         >
                           <span className="font-semibold">{name}</span>
@@ -266,7 +269,7 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
                               type="checkbox"
                               id={`${key}_edit`}
                               checked={role[`${key}_edit`]}
-                              disabled={!role[`${key}_views`]}
+                              disabled={!role[`${key}_views`]} // Disable if 'views' is unchecked
                               onChange={handleCheckboxChange(key, "edit")}
                             />
                             <label className="ml-2" htmlFor={`${key}_edit`}>
@@ -278,7 +281,7 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
                               type="checkbox"
                               id={`${key}_delete`}
                               checked={role[`${key}_delete`]}
-                              disabled={!role[`${key}_views`]}
+                              disabled={!role[`${key}_views`]} // Disable if 'views' is unchecked
                               onChange={handleCheckboxChange(key, "delete")}
                             />
                             <label className="ml-2" htmlFor={`${key}_delete`}>

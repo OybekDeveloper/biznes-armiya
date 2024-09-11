@@ -69,7 +69,7 @@ export default function EditGroup({ isOpen, handleClose, group }) {
           formD.append("group_photo", uploadPhoto);
         }
 
-        await ApiService.putMediaData(
+        await ApiService.patchMediaData(
           `/group/${group?.id}`,
           formD,
           register?.access

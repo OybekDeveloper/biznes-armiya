@@ -63,9 +63,9 @@ export const ApiService = {
     });
     return response.data;
   },
-  async putMediaData(url, data, token) {
+  async patchMediaData(url, data, token) {
     const response = await axios({
-      method: "PUT",
+      method: "PATCH",
       url: `${baseUrl}${url}`,
       headers: {
         "Content-Type": "multipart/form-data",
