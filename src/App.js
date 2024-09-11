@@ -105,27 +105,27 @@ const App = () => {
   }, [register, pathname]);
 
   useEffect(() => {
-    const socket = new WebSocket("wss://biznes-armiya-api.uz/ws/chat/");
+    // const socket = new WebSocket("wss://biznes-armiya-api.uz/ws/chat/");
 
-    socket.onopen = () => {
-      console.log("WebSocket connection established");
-    };
+    // socket.onopen = () => {
+    //   console.log("WebSocket connection established");
+    // };
 
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      console.log("Received message:", data.message);
-      console.log(data, "socket message");
-    };
+    // socket.onmessage = (event) => {
+    //   const data = JSON.parse(event.data);
+    //   console.log("Received message:", data.message);
+    //   console.log(data, "socket message");
+    // };
 
-    socket.onclose = () => {
-      console.log("WebSocket connection closed");
-    };
+    // socket.onclose = () => {
+    //   console.log("WebSocket connection closed");
+    // };
     if (pathname === "/login" || pathname === "/register") {
       return;
     }
-    return () => {
-      socket.close();
-    };
+    // return () => {
+    //   socket.close();
+    // };
     //eslint-disable-next-line
   }, []);
   return (

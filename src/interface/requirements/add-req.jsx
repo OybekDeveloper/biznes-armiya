@@ -19,10 +19,7 @@ import { useSelector } from "react-redux";
 
 export default function AddTasks({ isOpen, handleClose, roles }) {
   const [errorMessage, setErrorMessage] = useState();
-  const [status, setStatus] = useState([
-    { id: 1, name: "Asked" },
-    { id: 2, name: "Expected" },
-  ]);
+  const [status, setStatus] = useState([{ id: 1, name: "Asked" }]);
   const { userData } = useSelector((state) => state.event);
   const [users, setUsers] = useState([]);
   const [formData, setFormData] = useState({
@@ -30,7 +27,7 @@ export default function AddTasks({ isOpen, handleClose, roles }) {
     vab: "",
     definition: "",
     status: "",
-    users: "",
+    user: "",
     role_id: "",
   });
   const [newUsers, setNewUsers] = useState([]);
@@ -78,7 +75,7 @@ export default function AddTasks({ isOpen, handleClose, roles }) {
               vab: "",
               definition: "",
               status: "",
-              users: "",
+              user: "",
             });
             setNewUsers([]);
           }
@@ -116,7 +113,7 @@ export default function AddTasks({ isOpen, handleClose, roles }) {
       vab: "",
       definition: "",
       status: "",
-      users: "",
+      user: "",
       role_id: "",
     });
     setNewUsers([]);
@@ -136,6 +133,11 @@ export default function AddTasks({ isOpen, handleClose, roles }) {
         vab: 0,
       },
     ]);
+    setFormData((prevData) => ({
+      ...prevData,
+      status: "Expected", // Setting the status to Expected
+    }));
+    setStatus([{ id: 2, name: "Expected" }]);
   };
 
   const handleDeleteUser = (index) => {
@@ -170,7 +172,14 @@ export default function AddTasks({ isOpen, handleClose, roles }) {
   }, []);
 
   useEffect(() => {
-    setFormData({ ...formData, users: newUsers });
+    if (newUsers.length > 0) {
+      setFormData((prevData) => ({
+        ...prevData,
+        user: newUsers,
+        status: "Expected", // Automatically set the status to Expected
+      }));
+      setStatus([{ id: 2, name: "Expected" }]);
+    }
   }, [newUsers]);
 
   return (
@@ -254,52 +263,6 @@ export default function AddTasks({ isOpen, handleClose, roles }) {
                       </p>
                     )}
                   </div>
-                  {/* <div className="w-full flex justify-between items-center gap-4 max-sm:flex-col">
-                    <div className="w-full">
-                      <label
-                        className="text-[14px] font-[700] text-thin"
-                        htmlFor="start_time"
-                      >
-                        Starts
-                      </label>
-                      <input
-                        value={formData?.start_time}
-                        onChange={handleChange}
-                        className="border-border px-[18px] py-[12px] w-full border-[1.5px] border-solid bg-card rounded-[14px] outline-none focus:border-primary"
-                        type="datetime-local"
-                        id="start_time"
-                        name="start_time"
-                        placeholder="Start time is in unity"
-                      />
-                      {errorMessage?.start_time && (
-                        <p className="text-red-500">
-                          The start time field is not filled
-                        </p>
-                      )}
-                    </div>
-                    <div className="w-full">
-                      <label
-                        className="text-[14px] font-[700] text-thin"
-                        htmlFor="stop_time"
-                      >
-                        Dead Line
-                      </label>
-                      <input
-                        value={formData?.stop_time}
-                        onChange={handleChange}
-                        className="border-border px-[18px] py-[12px] w-full border-[1.5px] border-solid bg-card rounded-[14px] outline-none focus:border-primary"
-                        type="datetime-local"
-                        id="stop_time"
-                        name="stop_time"
-                        placeholder="Stop time is in unity"
-                      />
-                      {errorMessage?.stop_time && (
-                        <p className="text-red-500">
-                          The dead line field is not filled
-                        </p>
-                      )}
-                    </div>
-                  </div> */}
                   <div>
                     <label
                       className="text-[14px] font-[700] text-thin"

@@ -80,7 +80,7 @@ export default function TakeOverUser({
             vab: item.vab,
           },
         ],
-        group_id: 1,
+        group_id: item.group_id,
       };
       const finishedTask = {
         definition: item.definition,

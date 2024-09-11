@@ -209,7 +209,7 @@ const Requirements = () => {
                     ?.map((item, idx) => {
                       if (
                         item.status === "Done" &&
-                        !(role?.talab_delete && role?.talab_delete)
+                        !(role?.talab_edit && role?.talab_delete)
                       ) {
                         return null;
                       }
@@ -221,7 +221,7 @@ const Requirements = () => {
                           key={idx}
                           className="relative flex item-center justify-start gap-1"
                         >
-                          {role?.talab_delete && role?.talab_delete && (
+                          {role?.talab_edit && role?.talab_delete && (
                             <input
                               onChange={(e) => handleCheckData(e, item)}
                               type="checkbox"
