@@ -8,6 +8,7 @@ import { MdOutlineWorkHistory } from "react-icons/md";
 import { NavLink, useParams } from "react-router-dom";
 import { ApiService } from "../../components/api.server";
 import AddItemModal from "./item-add";
+import { useSelector } from "react-redux";
 
 const Auktsion = () => {
   const { id } = useParams();
@@ -15,7 +16,7 @@ const Auktsion = () => {
   const [allItems, setAllItems] = useState([]);
   const [pendingAuction, setPendingAuction] = useState({});
   const [addItem, setAddItem] = useState(false);
-
+  const { userData } = useSelector((state) => state.event);
   const handleAddItem = () => {
     setAddItem(!addItem);
   };
@@ -75,13 +76,15 @@ const Auktsion = () => {
               >
                 <MdOutlineWorkHistory />
               </NavLink>
-              <button
-                onClick={handleAddItem}
-                className="max-md:hidden bg-button-color flex justify-start items-center gap-2 rounded-[14px] py-2.5 px-4 text-white shadow-btn_shadow"
-              >
-                <FaPlus />
-                <h1>Add Item</h1>
-              </button>
+              {userData?.role?.auktsion_edit && (
+                <button
+                  onClick={handleAddItem}
+                  className="max-md:hidden bg-button-color flex justify-start items-center gap-2 rounded-[14px] py-2.5 px-4 text-white shadow-btn_shadow"
+                >
+                  <FaPlus />
+                  <h1>Add Item</h1>
+                </button>
+              )}
               <button
                 onClick={handleAddItem}
                 className="z-[800] md:hidden fixed bottom-[16px] right-[16px] bg-button-color  flex justify-start items-center gap-2 rounded-full p-4 text-white shadow-btn_shadow"
