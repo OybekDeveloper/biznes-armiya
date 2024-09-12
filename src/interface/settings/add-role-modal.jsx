@@ -104,23 +104,34 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
     }
   };
 
-  const handleCheckboxChange = (category, type) => (e) => {
-    const checked = e.target.checked;
+  const handleCheckboxChange =
+    (category, type = null) =>
+    (e) => {
+      const checked = e.target.checked;
 
-    if (type === "views" && !checked) {
-      setRole((prevRole) => ({
-        ...prevRole,
-        [`${category}_views`]: checked,
-        [`${category}_edit`]: false, // Uncheck edit
-        [`${category}_delete`]: false, // Uncheck delete
-      }));
-    } else {
-      setRole((prevRole) => ({
-        ...prevRole,
-        [`${category}_${type}`]: checked,
-      }));
-    }
-  };
+      // If there's no type, it's for simple view categories
+      if (!type) {
+        setRole((prevRole) => ({
+          ...prevRole,
+          [category]: checked,
+        }));
+        return;
+      }
+
+      if (type === "views" && !checked) {
+        setRole((prevRole) => ({
+          ...prevRole,
+          [`${category}_views`]: checked,
+          [`${category}_edit`]: false, // Uncheck edit
+          [`${category}_delete`]: false, // Uncheck delete
+        }));
+      } else {
+        setRole((prevRole) => ({
+          ...prevRole,
+          [`${category}_${type}`]: checked,
+        }));
+      }
+    };
 
   const handleCategoryClick = (category) => {
     const prefix = `${category}_`;
@@ -303,7 +314,7 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
                               type="checkbox"
                               id={`${key}`}
                               checked={role[`${key}`]}
-                              onChange={handleCheckboxChange(key)}
+                              onChange={handleCheckboxChange(key)} // No need to pass a second parameter
                             />
                             <label className="ml-2" htmlFor={`${key}`}>
                               View
