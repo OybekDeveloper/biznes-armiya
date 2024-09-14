@@ -3,6 +3,7 @@ import { ApiService } from "../../components/api.server";
 import Loader1 from "../../components/loader/loader1";
 import SimpleLoading from "../../components/loader/simple-loading";
 import AddListboxSetting from "./combobox";
+import toast from "react-hot-toast";
 
 const UserMenage = () => {
   const register = JSON.parse(localStorage.getItem("register"));
@@ -40,17 +41,18 @@ const UserMenage = () => {
     setSaveLoading(true);
 
     try {
-      const res = await ApiService.putData(
+      await ApiService.putData(
         `/update-user/${selected.user}/`,
         {
           role: selected.role,
         },
         register?.access
       );
+      toast.success("Successfully updated user!");
       // Optionally, update the user list or other state based on the response
     } catch (error) {
       console.log(error);
-      setErrorMessage({ save:"Failed to save data"});
+      setErrorMessage({ save: "Failed to save data" });
     } finally {
       setSaveLoading(false);
     }

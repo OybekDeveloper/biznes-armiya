@@ -62,7 +62,7 @@ const Settings = () => {
     //eslint-disable-next-line
   }, [register?.user_id, editUser]);
 
-  if (!userData?.role?.role_views) {
+  if (!true) {
     return (
       <div className="w-full h-full flex justify-center items-center">
         <h1 className="font-medium text-yellow-600">
