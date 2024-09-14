@@ -291,7 +291,7 @@ const Project = () => {
     return (
       <div className="w-full h-full flex justify-center items-center">
         <h1 className="font-medium text-yellow-600">
-          Sizda bu vazifaga kirishga huquq mavjud emas!!!
+        {t("warning_message")}
         </h1>
       </div>
     );

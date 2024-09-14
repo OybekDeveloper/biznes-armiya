@@ -7,6 +7,7 @@ import Loader1 from "../../components/loader/loader1";
 import EditUser from "./edit-user";
 import { ApiService } from "../../components/api.server";
 import { userDetailSlice } from "../../reducer/event";
+import { useTranslation } from "react-i18next";
 
 const dataNav = [
   {
@@ -22,6 +23,7 @@ const dataNav = [
 ];
 
 const Settings = () => {
+  const {t}=useTranslation()
   const { userData } = useSelector((state) => state.event);
   const register = JSON.parse(localStorage.getItem("register"));
   const [editUser, setEditUser] = useState(false);
@@ -56,8 +58,19 @@ const Settings = () => {
     if (register) {
       fetchUserData();
     }
+
     //eslint-disable-next-line
   }, [register?.user_id, editUser]);
+
+  if (!userData?.role?.role_views) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <h1 className="font-medium text-yellow-600">
+        {t("warning_message")}
+        </h1>
+      </div>
+    );
+  }
 
   return (
     <>

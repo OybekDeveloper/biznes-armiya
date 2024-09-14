@@ -66,6 +66,7 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
   const [role, setRole] = useState(initialRoleState);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  console.log(role);
 
   useEffect(() => {
     if (updateItem) {
@@ -151,15 +152,13 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
 
   const categories = [
     { name: "News", key: "yang", status: "all" },
-    { name: "Request", key: "request", status: "all" },
-    { name: "Sh Rivoj", key: "sh_rivoj", status: "all" },
-    { name: "Price", key: "price", status: "all" },
+    { name: "Group", key: "sh_rivoj", status: "all" },
+    // { name: "Price", key: "price", status: "all" },
     { name: "Vab", key: "vab", status: "all" },
     { name: "Tasks", key: "tasks", status: "all" },
-    { name: "Tasks Users", key: "tasks_users", status: "all" },
-    { name: "Balls", key: "balls", status: "all" },
-    { name: "H Balls", key: "h_balls", status: "all" },
-    { name: "Item", key: "item", status: "all" },
+    { name: "Requirements", key: "tasks_users", status: "all" },
+    // { name: "Balls", key: "balls", status: "all" },
+    // { name: "Vab History", key: "h_balls", status: "all" },
     { name: "Auction", key: "auktsion", status: "all" },
     { name: "Chat", key: "chat", status: "all" },
     { name: "Role", key: "role", status: "all" },

@@ -101,7 +101,7 @@ const GroupItem = () => {
 
   if (
     users.find((c) => +c.user?.id === +userData.id) ||
-    userData?.role?.chat_views
+    userData?.role?.sh_rivoj_views
   ) {
     return (
       <>
@@ -139,7 +139,7 @@ const GroupItem = () => {
                     <h1 className="font-bold clamp4">
                       There are no tasks in this group yet. Let's add them.
                     </h1>
-                    {userData?.role?.chat_edit && (
+                    {userData?.role?.sh_rivoj_edit && (
                       <button
                         onClick={handleAddUser}
                         className="max-md:hidden bg-button-color flex justify-start items-center gap-2 rounded-[14px] py-2 px-4 text-white shadow-btn_shadow"
@@ -171,7 +171,7 @@ const GroupItem = () => {
                           <p className="text-gray-500 py-1 px-2 border-border border-[1px] rounded-[4px] text-[12px]">
                             {item.role.role}
                           </p>
-                          {userData?.role?.chat_delete && (
+                          {userData?.role?.sh_rivoj_delete && (
                             <button
                               onClick={() => handleDeleteUser(item?.id)}
                               className="absolute right-0 top-0 p-2 rounded-md hover:bg-background mr-1 mt-1 bg-background-secondary"

@@ -50,7 +50,7 @@ const GroupInfo = ({
               className="mb-[10px] w-full h-full rounded-xl border-border border object-cover"
             />
           </div>
-          {userData?.role?.chat_edit ? (
+          {userData?.role?.sh_rivoj_edit ? (
             <>
               <div className="flex justify-between items-center w-full gap-3">
                 <div className="flex gap-2">

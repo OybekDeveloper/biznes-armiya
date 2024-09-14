@@ -66,7 +66,7 @@ const Navbar = () => {
       title: "VAB history",
       icon: <MdWorkHistory />,
       link: "/history",
-      active: role?.side_history || role?.h_balls_views ? true : false,
+      active: role?.side_history ? true : false,
     },
     {
       id: 4,
@@ -80,7 +80,7 @@ const Navbar = () => {
       title: "Requirements",
       icon: <MdOndemandVideo />,
       link: "/requirements",
-      active: role?.side_news ? true : false,
+      active: role?.side_requirements ? true : false,
     },
     {
       id: 6,

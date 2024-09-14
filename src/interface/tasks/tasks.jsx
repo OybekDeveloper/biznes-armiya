@@ -226,7 +226,7 @@ const Tasks = ({ toggleFilter, tasks, status }) => {
                             anchor="bottom end"
                             className="w-52 origin-top-right rounded-xl bg-card mt-[5px] z-[999] shadow-btn_shadow outline-none"
                           >
-                            {userData?.role?.yang_delete && (
+                            {userData?.role?.tasks_delete && (
                               <MenuItem onClick={handleDelete}>
                                 <button className="group text-red-400 flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
                                   <FaRegTrashAlt className="size-4 fill-thin " />

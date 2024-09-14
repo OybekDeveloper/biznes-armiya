@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 import LengDropdown from "../leng-dropdown";
 
 const Saidbar = () => {
-  const {t}=useTranslation()
+  const { t } = useTranslation();
   const { pathname } = useLocation();
   const { userData } = useSelector((state) => state.event);
   const { role } = userData;
@@ -34,28 +34,28 @@ const Saidbar = () => {
       title: t("side_tasks"),
       icon: <FaTasks />,
       link: "/homework",
-      active: role?.side_task ? true : false,
+      active: role?.side_task && role?.tasks_views ? true : false,
     },
     {
       id: 3,
-      title:  t("side_history"),
+      title: t("side_history"),
       icon: <MdWorkHistory />,
       link: "/history",
-      active: role?.side_history || role?.h_balls_views ? true : false,
+      active: role?.side_history && role?.vab_views ? true : false,
     },
     {
       id: 4,
       title: t("side_auktion"),
       icon: <RiAuctionFill />,
       link: "/auktsion",
-      active: role?.side_auction ? true : false,
+      active: role?.side_auction && role?.auktsion_views ? true : false,
     },
     {
       id: 5,
       title: t("side_req"),
       icon: <MdOndemandVideo />,
       link: "/requirements",
-      active: role?.side_news ? true : false,
+      active: role?.side_requirements && role?.tasks_users_views ? true : false,
     },
     {
       id: 6,
@@ -69,7 +69,7 @@ const Saidbar = () => {
       title: t("side_news"),
       icon: <FaNewspaper />,
       link: "/news",
-      active: role?.side_news ? true : false,
+      active: role?.side_news && role?.news_views ? true : false,
     },
     {
       id: 7,

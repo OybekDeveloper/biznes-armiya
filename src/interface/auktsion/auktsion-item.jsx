@@ -9,9 +9,11 @@ import { NavLink, useParams } from "react-router-dom";
 import { ApiService } from "../../components/api.server";
 import AddItemModal from "./item-add";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const Auktsion = () => {
   const { id } = useParams();
+  const {t}=useTranslation()
   const [loading, setLoading] = useState(true);
   const [allItems, setAllItems] = useState([]);
   const [pendingAuction, setPendingAuction] = useState({});
@@ -51,7 +53,7 @@ const Auktsion = () => {
     <>
       {loading ? (
         <Loader1 />
-      ) : (
+      ) : userData?.role?.auktsion_views ? (
         <main className="flex flex-col md:px-[16px] gap-2">
           <section className="w-full flex justify-between items-center">
             <div className="flex flex-col justify-start items-center gap-3">
@@ -104,6 +106,12 @@ const Auktsion = () => {
             handleClose={handleAddItem}
           />
         </main>
+      ) : (
+        <div className="w-full h-full flex justify-center items-center">
+          <h1 className="font-medium text-yellow-600">
+            {t("warning_message")}
+          </h1>
+        </div>
       )}
     </>
   );

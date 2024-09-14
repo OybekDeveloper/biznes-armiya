@@ -6,8 +6,10 @@ import { ApiService } from "../../components/api.server";
 import Loader1 from "../../components/loader/loader1";
 import { emptygrouplogo, dataempty } from "../../images";
 import AddGroup from "./add-group";
+import { useTranslation } from "react-i18next";
 
 const Groups = () => {
+  const {t}=useTranslation()
   const { userData, groupEvent, searchMessage } = useSelector(
     (state) => state.event
   );
@@ -47,6 +49,16 @@ const Groups = () => {
     }
   }, [searchMessage, groupData]);
 
+  if (!userData?.role?.sh_rivoj_views) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <h1 className="font-medium text-yellow-600">
+        {t("warning_message")}
+        </h1>
+      </div>
+    );
+  }
+
   return (
     <main className="col-span-3 max-lg:grid-cols-1 flex flex-col gap-2 md:px-[16px]">
       <section className="flex justify-between items-center">
@@ -64,7 +76,7 @@ const Groups = () => {
           </h1>
         </div>
         <div className="col-span-1 flex justify-end items-center gap-3">
-          {userData?.role?.chat_edit && (
+          {userData?.role?.sh_rivoj_edit && (
             <>
               {/* Add group button */}
               <button
@@ -94,12 +106,12 @@ const Groups = () => {
                 <NavLink
                   to={
                     (item.users.find((c) => +c === userData.id) ||
-                      userData?.role?.chat_edit) &&
+                      userData?.role?.sh_rivoj_edit) &&
                     `/groups/${item.id}`
                   }
                   className={`${
                     item.users.find((c) => +c === userData.id) ||
-                    userData?.role?.chat_edit
+                    userData?.role?.sh_rivoj_edit
                       ? "opacity-1"
                       : "opacity-[0.5]"
                   } w-full bg-background rounded-[24px] p-[16px] flex flex-col justify-start items-center gap-1`}
@@ -107,7 +119,9 @@ const Groups = () => {
                 >
                   <div className="w-24 h-24 flex justify-center items-center">
                     <img
-                      src={item?.group_photo ? item?.group_photo : emptygrouplogo}
+                      src={
+                        item?.group_photo ? item?.group_photo : emptygrouplogo
+                      }
                       alt="logo"
                       className="mb-[10px] w-16 h-16 rounded-full object-cover"
                     />

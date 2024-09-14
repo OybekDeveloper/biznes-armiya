@@ -112,5 +112,6 @@
   "back": "Go to Back",
   "yes": "Yes",
   "no": "No",
-  "loading": "Loading..."
+  "loading": "Loading...",
+  "warning_message":"You do not have permission to enter here!!!"
 }

@@ -19,14 +19,15 @@ import { CiMenuKebab } from "react-icons/ci";
 import { groupEventSlice } from "../../reducer/event";
 import DeleteModal from "./delete-task";
 import { useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 };
 
 const Requirements = () => {
+  const { t } = useTranslation();
   const query = useQuery();
   const active = query.get("active");
-
   const { userData, eventSliceBool, searchMessage } = useSelector(
     (state) => state.event
   );
@@ -98,7 +99,10 @@ const Requirements = () => {
         })
       );
 
-      if (userData?.role?.talab_edit && userData?.role?.talab_delete) {
+      if (
+        userData?.role?.tasks_users_edit &&
+        userData?.role?.tasks_users_delete
+      ) {
         setRoles(roles);
         setRequirement(fetchedRequirements);
       } else {
@@ -133,6 +137,16 @@ const Requirements = () => {
     }
   }, [isActive, eventSliceBool]);
 
+  if (!userData?.role?.tasks_users_views) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <h1 className="font-medium text-yellow-600">
+        {t("warning_message")}
+        </h1>
+      </div>
+    );
+  }
+
   return (
     <>
       {loading ? (
@@ -143,7 +157,7 @@ const Requirements = () => {
             <h1 className="text-text-primary font-bold clamp3">
               Requirements and tasks
             </h1>
-            {userData?.role?.talab_edit && (
+            {userData?.role?.tasks_users_edit && (
               <>
                 <button
                   onClick={handleActive}
@@ -162,7 +176,7 @@ const Requirements = () => {
             )}
           </section>
           <section className="grid max-md:grid-cols-1 max-xl:grid-cols-5 xl:grid-cols-4  max-lg:grid-cols-1 lg:gap-3">
-            {role?.talab_delete && role?.talab_delete && (
+            {role?.tasks_users_delete && role?.tasks_users_views && (
               <div className="max-xl:col-span-2 col-span-1">
                 <main className="sticky top-[88px] bg-card shadow-btn_shadow rounded-[14px] flex flex-col gap-3">
                   <section className="w-full p-[8px] flex flex-col gap-[16px]">
@@ -196,7 +210,7 @@ const Requirements = () => {
             )}
             <div
               className={`${
-                role?.talab_delete && role?.talab_delete
+                role?.tasks_users_delete && role?.tasks_users_delete
                   ? "max-md:col-span-1 col-span-3 max-lg:mt-2"
                   : "col-span-5"
               }`}
@@ -207,28 +221,29 @@ const Requirements = () => {
                     ?.slice()
                     ?.reverse()
                     ?.map((item, idx) => {
-                        if (
-                          item.status === "Done" &&
-                          !(role?.talab_edit && role?.talab_delete)
-                        ) {
-                          return null;
-                        }
-                        if (!(item?.role_id === parseInt(active))) {
-                          return null;
-                        }
+                      if (
+                        item.status === "Done" &&
+                        !(role?.tasks_users_edit && role?.tasks_users_delete)
+                      ) {
+                        return null;
+                      }
+                      if (!(item?.role_id === parseInt(active))) {
+                        return null;
+                      }
                       return (
                         <div
                           key={idx}
                           className="relative flex item-center justify-start gap-1"
                         >
-                          {role?.talab_edit && role?.talab_delete && (
-                            <input
-                              onChange={(e) => handleCheckData(e, item)}
-                              type="checkbox"
-                              className="w-4"
-                              disabled={item?.start_time && item?.stop_time}
-                            />
-                          )}
+                          {role?.tasks_users_edit &&
+                            role?.tasks_users_delete && (
+                              <input
+                                onChange={(e) => handleCheckData(e, item)}
+                                type="checkbox"
+                                className="w-4"
+                                disabled={item?.start_time && item?.stop_time}
+                              />
+                            )}
                           <NavLink
                             to={`/requirements/${item?.id}`}
                             className="cursor-pointer hover:bg-hover-card bg-card shadow-btn_shadow rounded-[14px] w-full grid grid-cols-6 max-lg:grid-cols-3 max-xl:grid-cols-4 px-[24px] py-[16px] gap-3"

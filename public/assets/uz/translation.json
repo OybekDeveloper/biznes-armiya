@@ -111,5 +111,6 @@
   "back": "Ortga qaytish",
   "yes": "Ha",
   "no": "Yo‘q",
-  "loading": "Yuklanmoqda..."
+  "loading": "Yuklanmoqda...",
+  "warning_message":"Sizning bu yerga kirish uchun rusxatingiz yo'q!!!"
 }

@@ -10,8 +10,10 @@ import AddAuktsion from "./add-auktsion";
 import { useSelector } from "react-redux";
 import FilterAuktsion from "./filter-auktion";
 import moment from "moment";
+import { useTranslation } from "react-i18next";
 
 const Auktsion = () => {
+  const {t}=useTranslation()
   const [auktsion, setAuktsion] = useState([]);
   const [filteredAuktsion, setFilteredAuktsion] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -72,7 +74,7 @@ const Auktsion = () => {
     <>
       {loading ? (
         <Loader1 />
-      ) : (
+      ) : userData?.role?.auktsion_views ? (
         <main className="w-full sm:px-4 mx-auto flex flex-col gap-3">
           <section className="w-full flex justify-between items-center">
             <h1 className="font-bold text-text-primary clamp2">Auctions</h1>
@@ -162,6 +164,12 @@ const Auktsion = () => {
             </div>
           )}
         </main>
+      ) : (
+        <div className="w-full h-full flex justify-center items-center">
+          <h1 className="font-medium text-yellow-600">
+          {t("warning_message")}
+          </h1>
+        </div>
       )}
       <AddAuktsion isOpen={addAuktsion} handleClose={handleAddAuktsion} />
       <FilterAuktsion

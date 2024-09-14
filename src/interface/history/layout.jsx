@@ -12,8 +12,10 @@ import Loader1 from "../../components/loader/loader1";
 import { useSelector } from "react-redux";
 import FilterHistory from "./filter-history";
 import ApexChart from "./pie-chart";
+import { useTranslation } from "react-i18next";
 
 const History = () => {
+  const {t}=useTranslation()
   const { eventSliceBool, userData, searchMessage } = useSelector(
     (state) => state.event
   );
@@ -93,6 +95,16 @@ const History = () => {
 
   if (loading) {
     return <Loader1 />;
+  }
+
+  if (!userData?.role?.vab_views) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <h1 className="font-medium text-yellow-600">
+        {t("warning_message")}
+        </h1>
+      </div>
+    );
   }
   return (
     <main className="max-w-11/12 sm:px-4 flex flex-col gap-3">
