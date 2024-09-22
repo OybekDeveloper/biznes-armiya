@@ -147,7 +147,7 @@ const History = () => {
           </button>
         </div>
       </div>
-      <div className="bg-card w-full rounded-md">
+      <div className="bg-card w-full rounded-md bg-white">
         <ApexChart filteredTransactions={filteredTransactions} />
       </div>
       <h1 className="clamp3 font-medium">List of transfers</h1>

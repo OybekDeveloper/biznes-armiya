@@ -5,7 +5,7 @@ import { ApiService } from "../../components/api.server";
 const ApexChart = () => {
   const register = JSON.parse(localStorage.getItem("register"));
   const [chartData, setChartData] = useState({
-    series: [0, 0, 0],
+    series: [0, 0, 0, 0], // Include four values for the series
     options: {
       chart: {
         type: "pie",
@@ -15,8 +15,9 @@ const ApexChart = () => {
         "Jami VAB: 0",
         "Odamlardagi VAB: 0",
         "Qarz ko'rinishidagi VAB: 0",
+        "Qozon ko'rinishidagi VAB: 0",
       ],
-      colors: ["#10b981", "#06b6d4", "#ef4444"], // Custom colors
+      colors: ["#10b981", "#06b6d4", "#ef4444", "#9400D3"], // Custom colors
       responsive: [
         {
           breakpoint: 1024,
@@ -75,13 +76,14 @@ const ApexChart = () => {
 
           // Update the chart data and labels based on the calculated values
           setChartData((prevData) => ({
-            series: [totalVAB, peopleVAB, Math.abs(debtVAB)],
+            series: [totalVAB, peopleVAB, Math.abs(debtVAB), Math.abs(qozon.vab)], // Add qozon.vab to the series
             options: {
               ...prevData.options,
               labels: [
                 `Jami VAB: ${totalVAB}`,
                 `Odamlardagi VAB: ${peopleVAB}`,
                 `Qarz ko'rinishidagi VAB: ${Math.abs(debtVAB)}`,
+                `Qozon ko'rinishidagi VAB: ${Math.abs(qozon?.vab)}`, // Ensure qozon.vab is reflected in the label
               ],
             },
           }));
@@ -95,7 +97,14 @@ const ApexChart = () => {
   }, [register.access]);
 
   return (
-    <div style={{ width: "100%", maxWidth: "400px", margin: "0 auto" }}>
+    <div
+      style={{
+        width: "100%",
+        maxWidth: "400px",
+        margin: "0 auto",
+        backgroundColor: "#fff",
+      }}
+    >
       <ReactApexChart
         options={chartData.options}
         series={chartData.series}

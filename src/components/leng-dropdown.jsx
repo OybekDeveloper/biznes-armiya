@@ -45,13 +45,13 @@ import {
         <Listbox value={selected} onChange={changeLanguage}>
           <ListboxButton
             className={clsx(
-              "relative block w-full rounded-lg bg-white py-1.5 pr-8 pl-3 text-left text-sm/6 text-text-primary",
+              "relative block w-full rounded-lg bg-card py-1.5 pr-8 pl-3 text-left text-sm/6 text-text-primary",
               "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25 shadow-btn_shadow"
             )}
           >
             {selected.name}
             <ChevronDownIcon
-              className="group pointer-events-none absolute top-2.5 right-2.5 size-4 fill-black"
+              className="group pointer-events-none absolute top-2.5 right-2.5 size-4 fill-text-primary"
               aria-hidden="true"
             />
           </ListboxButton>
@@ -59,7 +59,7 @@ import {
             anchor="bottom"
             transition
             className={clsx(
-              "z-[999] shadow-btn_shadow w-[var(--button-width)] rounded-md mt-1 border border-white bg-white p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none",
+              "z-[999] shadow-btn_shadow w-[var(--button-width)] rounded-md mt-1 border border-white bg-card p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none",
               "transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0"
             )}
           >
@@ -69,7 +69,7 @@ import {
                 value={language}
                 className="group flex cursor-default items-center gap-2 rounded-lg  select-none data-[focus]:bg-white/10"
               >
-                <CheckIcon className="invisible size-4 fill-black group-data-[selected]:visible" />
+                <CheckIcon className="invisible size-4 fill-text-primary group-data-[selected]:visible" />
                 <div className="text-sm/6 text-text-primary">{language.name}</div>
               </ListboxOption>
             ))}

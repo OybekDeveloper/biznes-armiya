@@ -69,7 +69,7 @@ const Saidbar = () => {
       title: t("side_news"),
       icon: <FaNewspaper />,
       link: "/news",
-      active: role?.side_news && role?.news_views ? true : false,
+      active: role?.side_news && role?.yang_views ? true : false,
     },
     {
       id: 7,

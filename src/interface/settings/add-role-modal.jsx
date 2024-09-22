@@ -197,7 +197,7 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
               leaveFrom="opacity-100 transform-[scale(100%)]"
               leaveTo="opacity-0 transform-[scale(95%)]"
             >
-              <DialogPanel className="mx-auto w-full max-w-[85%] overflow-hidden rounded-xl bg-white p-6 shadow-xl">
+              <DialogPanel className="mx-auto w-full max-w-[85%] overflow-hidden rounded-xl bg-card p-6 shadow-xl">
                 <div className="mb-5 flex items-center justify-between">
                   <DialogTitle
                     as="h3"
@@ -217,7 +217,7 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
                   <div className="mb-4">
                     <label
                       htmlFor="role"
-                      className="mb-1 block text-sm font-medium text-gray-700"
+                      className="mb-1 block text-sm font-medium text-primary"
                     >
                       Role
                     </label>
@@ -230,14 +230,14 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
                         setRole({ ...role, role: e.target.value })
                       }
                       required
-                      className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
+                      className="bg-card px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
                     />
                   </div>
 
                   <div className="mb-4">
                     <label
                       htmlFor="search"
-                      className="mb-1 block text-sm font-medium text-gray-700"
+                      className="mb-1 block text-sm font-medium text-primary"
                     >
                       Search Categories
                     </label>
@@ -246,7 +246,7 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
+                      className="bg-card px-[18px] py-[12px] w-full border-[2px] border-solid border-background-secondary rounded-[14px] outline-none focus:border-primary"
                     />
                   </div>
 
@@ -328,7 +328,7 @@ export default function AddNews({ isOpen, handleClose, updateItem }) {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="px-[18px] py-[12px] bg-primary text-white font-semibold rounded-[14px] w-full"
+                      className="px-[18px] py-[12px] bg-button-color text-primary font-semibold rounded-[14px] w-full"
                     >
                       {loading ? <SimpleLoading /> : "Save"}
                     </button>

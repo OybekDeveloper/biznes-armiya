@@ -96,7 +96,7 @@ const NewsItem = () => {
       await ApiService.patchData(
         `/yangiliklar/${id}`,
         {
-          like: isLiked ? res.like - 1 : res.like + 1,
+          like: isLiked ? Number(res.like) - 1 : Number(res.like) + 1,
         },
         register?.access
       );
@@ -105,9 +105,9 @@ const NewsItem = () => {
       console.error("Error updating like count:", error);
     }
   };
+  console.log(news);
   
 
-  
   return (
     <>
       {loading ? (
